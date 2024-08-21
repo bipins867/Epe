@@ -4,6 +4,7 @@ const express=require('express')
 const cors=require('cors')
 const path=require('path')
 const bodyParser=require('body-parser')
+const { setupRoutes } = require('./Routes/setupRoutes')
 
 // Just check
 app=express()
@@ -16,7 +17,7 @@ app.use(bodyParser.json({extends:false}))
 
 
 
-
+setupRoutes(app);
 
 
 
