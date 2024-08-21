@@ -5,7 +5,7 @@ const cors=require('cors')
 const path=require('path')
 const bodyParser=require('body-parser')
 
-//Made some changes
+// Just check
 app=express()
 
 app.use(cors({
