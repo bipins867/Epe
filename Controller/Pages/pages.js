@@ -2,18 +2,12 @@ const path=require('path')
 
 
 
-exports.getAboutUsPage=async(req,res,next)=>{
+exports.getHomePage=async(req,res,next)=>{
 
-    res.sendFile(path.resolve('views','aboutUs.html'))
+    res.sendFile(path.resolve('views','index.html'))
 }
 
-exports.getServicesPage=async(req,res,next)=>{
-    res.sendFile(path.resolve('views','services.html'))
-}
 
-exports.getCareersPage=async(req,res,next)=>{
-    res.sendFile(path.resolve('views','careers.html'))
-}
-exports.getDashboardPage=async(req,res,next)=>{
-    res.sendFile(path.resolve('views','dashboard.html'))
+exports.getCarrerPage=async(req,res,next)=>{
+    res.sendFile(path.resolve('views','career.html'))
 }
