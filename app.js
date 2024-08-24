@@ -9,10 +9,13 @@ const { setupRoutes } = require('./Routes/setupRoutes')
 // Just check
 app=express()
 app.use(express.static(path.join(__dirname, 'Public')));
+
+
 app.use(cors({
     origin:'*',
     methods:['GET','POST']
 }))
+
 app.use(bodyParser.json({extends:false}))
 
 
