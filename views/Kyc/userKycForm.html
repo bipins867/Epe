@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC Form</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h4>KYC Form</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="kycForm">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input disabled type="text" class="form-control" id="name" placeholder="Enter your name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input disabled type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input disabled type="tel" class="form-control" id="phone" placeholder="Enter your phone number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="dob">Date of Birth</label>
+                                <input type="date" class="form-control" id="dob" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="userImage">User Image</label>
+                                <input type="file" class="form-control-file" id="userImage" accept="image/*" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="aadharNumber">Aadhar Card Number</label>
+                                <input type="text" class="form-control" id="aadharNumber" placeholder="Enter your Aadhar number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="aadharFront">Aadhar Front Image/PDF</label>
+                                <input type="file" class="form-control-file" id="aadharFront" accept="image/*,.pdf" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="aadharBack">Aadhar Back Image/PDF</label>
+                                <input type="file" class="form-control-file" id="aadharBack" accept="image/*,.pdf" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="panNumber">PAN Card Number</label>
+                                <input type="text" class="form-control" id="panNumber" placeholder="Enter your PAN number" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="panFile">PAN Card Image/PDF</label>
+                                <input type="file" class="form-control-file" id="panFile" accept="image/*,.pdf" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Apply</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="/js/Kyc/userKycForm.js">
+        
+    </script>
+</body>
+</html>

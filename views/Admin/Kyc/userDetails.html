@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC Details - Admin Panel</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h3>KYC Details for <strong>John Doe</strong></h3>
+        <hr>
+
+        <div class="row">
+            <!-- Profile Image -->
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="profileImage">Profile Image:</label><br>
+                    <img id="profileImage" src="https://via.placeholder.com/150" alt="Profile Image" class="img-thumbnail">
+                </div>
+            </div>
+            <!-- Basic Details -->
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label for="userId">User ID:</label>
+                    <p id="userId">123456</p>
+                </div>
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <p id="name">John Doe</p>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <p id="email">johndoe@example.com</p>
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">Phone Number:</label>
+                    <p id="phoneNumber">+1-800-555-1234</p>
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <p id="dob">1990-01-01</p>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Aadhar Card Details -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="aadharNumber">Aadhar Number:</label>
+                    <p id="aadharNumber">1234 5678 9101</p>
+                </div>
+                <div class="form-group">
+                    <label for="aadharFront">Aadhar Front Image:</label><br>
+                    <img id="aadharFront" src="https://via.placeholder.com/300x150" alt="Aadhar Front" class="img-thumbnail">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="aadharBack">Aadhar Back Image:</label><br>
+                    <img id="aadharBack" src="https://via.placeholder.com/300x150" alt="Aadhar Back" class="img-thumbnail">
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- PAN Card Details -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="panNumber">PAN Number:</label>
+                    <p id="panNumber">ABCDE1234F</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="panImage">PAN Image:</label><br>
+                    <img id="panImage" src="https://via.placeholder.com/300x150" alt="PAN Image" class="img-thumbnail">
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Approval/Reject Buttons -->
+        <div class="form-group text-center">
+            <button type="button" class="btn btn-success">Approve</button>
+            <button type="button" class="btn btn-danger">Reject</button>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
