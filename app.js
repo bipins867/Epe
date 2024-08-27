@@ -7,11 +7,12 @@ const bodyParser=require('body-parser')
 
 const { setupRoutes } = require('./Routes/setupRoutes')
 const db = require("./database");
-require('./Models/setModels')
 
+require('./Models/setModels')
 // Just check
 app=express()
 app.use(express.static(path.join(__dirname, 'Public')));
+app.use(express.static(path.join(__dirname, 'CustomerFiles')));
 
 
 app.use(cors({
@@ -20,6 +21,7 @@ app.use(cors({
 }))
 
 app.use(bodyParser.json({extends:false}))
+
 
 
 

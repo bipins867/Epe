@@ -7,15 +7,20 @@ const UserKyc = sequelize.define('UserKyc', {
     primaryKey: true,
     autoIncrement: true,
   },
-  dateofbirth: {
+  dob: {
     type: Sequelize.DATEONLY,
     allowNull: false,
   },
-  userImageUrl: {
+  status:{
+    type:Sequelize.STRING,
+    allowNull:false,
+    default:"Pending"
+  },
+  userUrl: {
     type: Sequelize.STRING,
     allowNull: true, // Set to true if the image URL is optional
   },
-  adarcardNumber: {
+  aadharNumber: {
     type: Sequelize.STRING,
     allowNull: false,
     unique: true,
@@ -23,11 +28,11 @@ const UserKyc = sequelize.define('UserKyc', {
       len: [12, 12], // Assuming Aadhar card number is 12 digits
     },
   },
-  adharfrontUrl: {
+  aadharFrontUrl: {
     type: Sequelize.STRING,
     allowNull: true, // Set to true if the URL is optional
   },
-  adharBackUrl: {
+  aadharBackUrl: {
     type: Sequelize.STRING,
     allowNull: true, // Set to true if the URL is optional
   },

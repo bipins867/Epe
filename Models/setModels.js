@@ -1,5 +1,10 @@
 //User-Models
 const User=require('./User/users');
 
-//KYC-Models
-const Userkyc=require('./Kyc/userKyc')
+
+const UserKyc = require('./Kyc/userKyc');
+
+
+
+User.hasOne(UserKyc)
+UserKyc.belongsTo(User);
