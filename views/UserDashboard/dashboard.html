@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/UserDashboard/dashboard.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- User Name Section -->
+        <div class="text-center">
+            <h1 id="userName">Welcome, John Doe!</h1>
+        </div>
+
+        <!-- KYC Status Bar Section -->
+        <div class="mt-4">
+            <div id="kycCompleted" class="progress mb-3 d-none">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    KYC Completed
+                </div>
+            </div>
+
+            <div id="kycNotCompleted" class="progress mb-3 d-none">
+                <div class="progress-bar bg-danger" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                    KYC Not Completed
+                </div>
+            </div>
+        </div>
+
+        <!-- Complete KYC Button -->
+        <center>
+            <a href="/user/kyc/userForm" >Complete KYC</button>
+        </center>
+    </div>
+
+    <script src="/js/UserDashboard/dashboard.js"></script>
+</body>
+</html>

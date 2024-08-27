@@ -1,6 +1,6 @@
 const express=require('express')
 
-const kycController=require('../../Controller/Pages/Kyc/pages')
+const kycController=require('../../../Controller/Pages/Kyc/pages')
 
 const router=express.Router();
 
