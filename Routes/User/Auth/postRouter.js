@@ -1,7 +1,7 @@
 const express=require('express')
 
-const userAuthenticationController=require('../../Controller/Users/users');
-const {  checkValidationErrors, validateLogin, validateSignUp } = require('../../Middleware/validator');
+const userAuthenticationController=require('../../../Controller/Users/Auth/users');
+const {  checkValidationErrors, validateLogin, validateSignUp } = require('../../../Middleware/validator');
 
 const router=express.Router();
 

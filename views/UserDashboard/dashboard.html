@@ -6,6 +6,8 @@
     <title>User Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/UserDashboard/dashboard.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   
 </head>
 <body>
     <div class="container mt-5">
@@ -30,11 +32,12 @@
         </div>
 
         <!-- Complete KYC Button -->
-        <center>
+        <div id="btn-kyc-complete"><center>
             <a href="/user/kyc/userForm" >Complete KYC</button>
-        </center>
+        </center></div>
     </div>
 
     <script src="/js/UserDashboard/dashboard.js"></script>
+    <script src="/js/Utils/utils.js"></script>
 </body>
 </html>

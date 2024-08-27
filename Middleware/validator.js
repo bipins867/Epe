@@ -3,7 +3,7 @@ const { body,validationResult } = require('express-validator');
 
 const validateLogin = [
     body('email').optional().isEmail().withMessage('Invalid email address'),
-    body('phone').optional().isNumeric().withMessage('Phone number must be numeric').isLength({ min: 10, max: 15 }).withMessage('Phone number must be between 10 and 15 digits'),
+    body('phone').optional().isNumeric().withMessage('Phone number must be numeric').isLength({ min: 10, max: 11 }).withMessage('Phone number must be between 10 and 11 digits'),
     body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long'),
     body().custom((value, { req }) => {
         if (!req.body.email && !req.body.phone) {
@@ -21,7 +21,7 @@ const validateLogin = [
 const validateSignUp = [
     body('name').notEmpty().withMessage('Name is required'),
     body('email').isEmail().withMessage('Invalid email address'),
-    body('phone').isNumeric().withMessage('Phone number must be numeric').isLength({ min: 10, max: 15 }).withMessage('Phone number must be between 10 and 15 digits'),
+    body('phone').isNumeric().withMessage('Phone number must be numeric').isLength({ min: 10, max: 11 }).withMessage('Phone number must be between 10 and 11 digits'),
     body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long')
 ];
 

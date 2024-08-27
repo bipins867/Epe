@@ -27,7 +27,7 @@ const User = sequelize.define(
       unique: true,
       validate: {
         isNumeric: true,
-        len: [10, 15], // Adjust based on your requirements
+        len: [10, 11], // Adjust based on your requirements
       },
     },
     password: {

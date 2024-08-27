@@ -1,6 +1,6 @@
 const express=require('express')
 
-const userAuthenticationController=require('../../Controller/Pages/UserAuthentication/pages')
+const userAuthenticationController=require('../../../Controller/Pages/UserAuthentication/pages')
 
 const router=express.Router();
 

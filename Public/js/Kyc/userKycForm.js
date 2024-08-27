@@ -1,23 +1,54 @@
-document.getElementById('kycForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission
+const name = document.getElementById("name");
+const email = document.getElementById("email");
+const phone = document.getElementById("phone");
+const dob = document.getElementById("dob").value;
+const userImage = document.getElementById("userImage").files[0];
+const aadharNumber = document.getElementById("aadharNumber").value;
+const aadharFront = document.getElementById("aadharFront").files[0];
+const aadharBack = document.getElementById("aadharBack").files[0];
+const panNumber = document.getElementById("panNumber").value;
+const panFile = document.getElementById("panFile").files[0];
 
-    // Retrieve form data
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const phone = document.getElementById('phone').value;
-    const dob = document.getElementById('dob').value;
-    const userImage = document.getElementById('userImage').files[0];
-    const aadharNumber = document.getElementById('aadharNumber').value;
-    const aadharFront = document.getElementById('aadharFront').files[0];
-    const aadharBack = document.getElementById('aadharBack').files[0];
-    const panNumber = document.getElementById('panNumber').value;
-    const panFile = document.getElementById('panFile').files[0];
 
-    // Basic validation example (you can expand this as needed)
-    if (name && email && phone && dob && userImage && aadharNumber && aadharFront && aadharBack && panNumber && panFile) {
-        alert('KYC form submitted successfully!');
-        // You can add logic to handle the form data, such as sending it to a server
-    } else {
-        alert('Please fill out all fields and upload all required files.');
-    }
+document.addEventListener("DOMContentLoaded", async function () {
+  const result = await getRequest("user/dashboard/post/info");
+
+  const data = result.data;
+  // Example user data
+
+  name.value = data.name;
+  email.value = data.email;
+  phone.value = data.phone;
+
+  
 });
+
+document.getElementById('kycForm').addEventListener('submit', async function(event) {
+  event.preventDefault();
+
+  const formData = new FormData();
+  formData.append('name', document.getElementById('name').value);
+  formData.append('email', document.getElementById('email').value);
+  formData.append('phone', document.getElementById('phone').value);
+  formData.append('dob', document.getElementById('dob').value);
+  formData.append('userImage', document.getElementById('userImage').files[0]);
+  formData.append('aadharNumber', document.getElementById('aadharNumber').value);
+  formData.append('aadharFront', document.getElementById('aadharFront').files[0]);
+  formData.append('aadharBack', document.getElementById('aadharBack').files[0]);
+  formData.append('panNumber', document.getElementById('panNumber').value);
+  formData.append('panFile', document.getElementById('panFile').files[0]);
+
+  try {
+    const token=localStorage.getItem('token')
+    const response = await axios.post(baseUrl+'user/kyc/post/kycSubmit', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        authorization:token
+      }
+    });
+    console.log('Success:', response.data);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+});
+

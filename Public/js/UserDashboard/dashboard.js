@@ -1,32 +1,33 @@
-// document.addEventListener("DOMContentLoaded", function() {
-//     // Example user data
-//     const user = {
-//         name: "John Doe",
-//         kycCompleted: false // Change this to true if KYC is completed
-//     };
 
-//     // Display user's name
-//     const userNameElement = document.getElementById("userName");
-//     userNameElement.textContent = `Welcome, ${user.name}!`;
 
-//     // Show the appropriate KYC status bar
-//     const kycCompletedElement = document.getElementById("kycCompleted");
-//     const kycNotCompletedElement = document.getElementById("kycNotCompleted");
+document.addEventListener("DOMContentLoaded",async function() {
 
-//     if (user.kycCompleted) {
-//         kycCompletedElement.classList.remove("d-none");
-//     } else {
-//         kycNotCompletedElement.classList.remove("d-none");
-//     }
+    const result=await getRequest('user/dashboard/post/info')
+    
+    const data=result.data;
+    // Example user data
+    const user = {
+        name: data.name,
+        kycCompleted: data.kycStatus // Change this to true if KYC is completed
+    };
 
-//     // Button click handler to simulate KYC completion
-//     const completeKycBtn = document.getElementById("completeKycBtn");
-//     completeKycBtn.addEventListener("click", function() {
-//         // Simulate KYC completion
-//         user.kycCompleted = true;
+    // Display user's name
+    const userNameElement = document.getElementById("userName");
+    userNameElement.textContent = `Welcome, ${user.name}!`;
 
-//         // Update the status bar
-//         kycNotCompletedElement.classList.add("d-none");
-//         kycCompletedElement.classList.remove("d-none");
-//     });
-// });
+    // Show the appropriate KYC status bar
+    const kycCompletedElement = document.getElementById("kycCompleted");
+    const kycNotCompletedElement = document.getElementById("kycNotCompleted");
+    const divKycComplete=document.getElementById('btn-kyc-complete')
+
+    if (user.kycCompleted=='Completed') {
+        kycCompletedElement.classList.remove("d-none");
+        divKycComplete.classList.add('d-none')
+    } else {
+        kycNotCompletedElement.classList.remove("d-none");
+        divKycComplete.classList.remove('d-none')
+    }
+
+    
+    
+});
