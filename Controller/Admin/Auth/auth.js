@@ -1,0 +1,46 @@
+const Admin = require("../../../Models/User/admins");
+
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+
+exports.adminLogin = async (req, res, next) => {
+  const { userName, password } = req.body;
+
+  try {
+    // Check if the admin exists
+    const admin = await Admin.findOne({ where: { userName } });
+
+    if (!admin) {
+      return res.status(404).json({ error: "Admin doesn't exist" }); // 404 Not Found
+    }
+
+    // Compare the provided password with the stored hashed password
+    bcrypt.compare(password, admin.password, (err, isMatch) => {
+      if (err) {
+        console.error("Error comparing passwords:", err);
+        return res
+          .status(500)
+          .json({ error: "Internal server error. Please try again later." });
+      }
+
+      if (isMatch) {
+        // Generate a JWT token
+        const token = jwt.sign({ id: admin.id }, process.env.JWT_SECRET_KEY, {
+          expiresIn: "2h", // Optional: specify token expiration time
+        });
+
+        return res
+          .status(200)
+          .json({ status: "Login Successful", token, adminId: admin.id }); // 200 OK
+      } else {
+        return res.status(401).json({ error: "Invalid Password" }); // 401 Unauthorized
+      }
+    });
+  } catch (err) {
+    console.error("Error during admin login:", err);
+    return res
+      .status(500)
+      .json({ error: "Internal server error. Please try again later." });
+  }
+};

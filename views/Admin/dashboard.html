@@ -1,1 +1,65 @@
-Dashboard Page
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row bg-primary text-white p-3">
+        <div class="col-md-8">
+          <h2>Admin Dashboard</h2>
+        </div>
+        <div class="col-md-4 text-right">
+          <span id="userId">UserID: admin123</span>
+          <button id="logoutBtn" class="btn btn-outline-light ml-3">
+            Logout
+          </button>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-md-4">
+          <div class="list-group" id="adminOptions">
+            <a
+              href="/admin/editAdmin"
+              class="list-group-item list-group-item-action"
+              >Edit Admins</a
+            >
+            <a
+              href="/admin/kyc/dashboard"
+              class="list-group-item list-group-item-action"
+              >KYC Module</a
+            >
+            <!-- More links can be added here -->
+          </div>
+        </div>
+        <div class="col-md-8" id="contentArea">
+          <h3>Welcome to the Admin Dashboard</h3>
+          <p>Select an option from the left to begin.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/js/Utils/adminUtils.js"></script>
+
+    <!-- Custom JS -->
+    <script src="/js/Admin/Dashboard/dashboard.js"></script>
+  </body>
+</html>

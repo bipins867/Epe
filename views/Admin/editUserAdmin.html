@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit SAdmin</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h3>Edit SAdmin</h3>
+        
+        <!-- Display the Username -->
+        <div class="form-group">
+            <label for="userName">Username:</label>
+            <input type="text" class="form-control" id="userName" value="example@example.com" disabled> <!-- Added a default value for testing -->
+        </div>
+
+        <!-- Password Reset Form -->
+        <div class="card mt-4">
+            <div class="card-header">
+                Reset Password
+            </div>
+            <div class="card-body">
+                <form id="resetPasswordForm">
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" class="form-control" id="newPassword" placeholder="Enter new password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Reset Password</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Roles Assignment -->
+        <div class="card mt-4">
+            <div class="card-header">
+                Assign Roles
+            </div>
+            <div class="card-body" id="rolesList">
+                <!-- Roles with checkboxes will be dynamically loaded here -->
+            </div>
+            <div class="card-footer text-right">
+                <button id="updateRolesBtn" class="btn btn-success">Update Roles</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Axios and custom JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/Utils/adminUtils.js"></script>
+    <script src="/js/Admin/EditAdmin/editUserAdmin.js"></script>
+</body>
+</html>

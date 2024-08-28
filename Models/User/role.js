@@ -1,35 +1,27 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../../database"); // Adjust the path to your database configuration
 
-const Admin = sequelize.define(
-  "Admin",
+const Role = sequelize.define(
+  "Role",
   {
     id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    userName: {
+    roleId: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    adminType: {
+    roleName: {
       type: Sequelize.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    freezeStatus: {
-      type: Sequelize.BOOLEAN,
       allowNull: false,
     },
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
-    tableName: "admins", // Optional: specify table name if different from model name
+    tableName: "roles", // Optional: specify table name if different from model name
   }
 );
 
-module.exports = Admin;
+module.exports = Role;

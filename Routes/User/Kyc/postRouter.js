@@ -11,7 +11,7 @@ router.post(
     { name: "aadharFront", maxCount: 1 },
     { name: "aadharBack", maxCount: 1 },
     { name: "panFile", maxCount: 1 }
-  ],2 * 1024 * 1024),
+  ],5 * 1024 * 1024),
   kycController.postFormSubmit
 );
 

@@ -36,9 +36,10 @@ exports.updateKycStatus = async (req, res, next) => {
       const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${number}&message=${message}&format=json`;
 
       // Make the GET request
-      const response = await axios.get(url);
+      //const response = await axios.get(url);
     } else {
       const obj = { status: "Rejected", adminMessage: message };
+
       await userKyc.update(obj);
     }
 

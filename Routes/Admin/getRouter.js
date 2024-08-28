@@ -1,12 +1,22 @@
-const express=require('express')
+const express = require("express");
 
-const adminController=require('../../Controller/Pages/Admin/pages')
+const adminPageController = require("../../Controller/Pages/Admin/pages");
+const dashboardController = require("../../Controller/Admin/Dashboard/dashboard");
+const { adminAuthentication } = require("../../Middleware/auth");
+const adminController = require("../../Controller/Admin/admins");
 
-const router=express.Router();
+const router = express.Router();
 
-router.get('/login',adminController.getLoginPage)
-router.get('/dashboard',adminController.getDashboardPage)
+router.get("/login", adminPageController.getLoginPage);
+router.get("/dashboard", adminPageController.getDashboardPage);
+router.get("/editAdmin", adminPageController.getEditAdminPage);
+router.get("/editUserAdmin", adminPageController.getEditUserAdminPage);
 
+router.get(
+  "/dashboardInfo",
+  adminAuthentication,
+  dashboardController.getDashboardInfo
+);
+router.get("/adminList", adminAuthentication, adminController.getAdminList);
 
-
-module.exports=router;
+module.exports = router;

@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const response = await getRequest("admin/kyc/userDetails/" + emailId);
 
-  const userKyc =  response.data.userKyc;
-  
+  const userKyc = response.data.userKyc;
+
   document.getElementById("profileImage").src = userKyc.userUrl;
   document.getElementById("userId").textContent = userKyc.UserId;
   document.getElementById("name").textContent = "John Doe"; // Update this if name is available in the response
@@ -21,3 +21,63 @@ document.addEventListener("DOMContentLoaded", async function () {
   document.getElementById("panNumber").textContent = userKyc.panNumber;
   document.getElementById("panImage").src = userKyc.panUrl;
 });
+const url = "admin/kyc/post/updateStatus";
+document.getElementById("approve-btn").onclick = async (event) => {
+  // Prevent the default action
+  event.preventDefault();
+
+  // Define the email and status
+  const email = document.getElementById("email").textContent; // Assuming you have an input or a way to get the user's email
+  const status =true;
+
+  // Create the object to send in the request
+  const obj = { email, status };
+  //console.log(obj);
+  // Make the API call
+  try {
+    const result = await postRequest(url, obj);
+
+    if (result.status == 201) {
+      alert("KYC approved successfully.");
+    } else {
+      alert("Failed to approve KYC: " + result.message);
+    }
+  } catch (error) {
+    console.error("Error approving KYC:", error);
+    alert("An error occurred while approving KYC.");
+  }
+};
+
+document.getElementById("reject-btn").onclick = async (event) => {
+  // Prevent the default action
+  event.preventDefault();
+
+  // Create a prompt for the rejection reason
+  const rejectionReason = prompt("Rejection Reason:", "");
+
+  if (rejectionReason) {
+    const email = document.getElementById("email").textContent;// Assuming you have an input or a way to get the user's email
+    const status = false;
+    const message = rejectionReason; // Use the entered rejection reason
+
+    // Create the object to send in the request
+    const obj = { email, status, message };
+   
+    
+    // Make the API call
+    try {
+      const result = await postRequest(url, obj);
+
+      if (result.status == 201) {
+        alert("KYC rejected successfully.");
+      } else {
+        alert("Failed to reject KYC: " + result.message);
+      }
+    } catch (error) {
+      console.error("Error approving KYC:", error);
+      alert("An error occurred while approving KYC.");
+    }
+  } else {
+    alert("Rejection reason is required.");
+  }
+};
