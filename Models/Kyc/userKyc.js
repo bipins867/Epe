@@ -48,6 +48,9 @@ const UserKyc = sequelize.define('UserKyc', {
     type: Sequelize.STRING,
     allowNull: true, // Set to true if the URL is optional
   },
+  adminMessage:{
+    type:Sequelize.STRING
+  }
 }, {
   timestamps: true, // Automatically adds createdAt and updatedAt fields
   tableName: 'userkycs', // Optional: specify table name if different from model name

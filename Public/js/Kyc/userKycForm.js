@@ -46,9 +46,23 @@ document.getElementById('kycForm').addEventListener('submit', async function(eve
         authorization:token
       }
     });
-    console.log('Success:', response.data);
-  } catch (error) {
-    console.error('Error:', error);
+    alert(response.data.message);
+  } catch (err) {
+    const response = await err.response.data;
+
+    if (response.errors) {
+      let err = "";
+      Object.keys(response.errors).forEach((er) => {
+        err = err + response.errors[er] + "\n";
+      });
+      alert(err);
+    } else {
+      if (response.message) {
+        alert(response.message);
+      } else {
+        alert(response.error);
+      }
+    }
   }
 });
 
