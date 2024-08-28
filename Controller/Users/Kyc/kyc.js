@@ -79,7 +79,7 @@ exports.postFormSubmit = async (req, res, next) => {
     const userKyc = await user.getUserKyc();
     obj.status = "Pending";
     if (!userKyc) {
-      await UserKyc.create({ ...obj, UserId: user.UserId });
+     const userKyc= await user.createUserKyc({ ...obj });
     } else {
       await userKyc.update(obj);
     }

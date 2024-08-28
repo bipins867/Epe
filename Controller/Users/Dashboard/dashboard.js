@@ -14,7 +14,10 @@ exports.getUserDasboardInfo = async (req, res, next) => {
     res
       .status(201)
       .json(obj);
-  } catch (err) {
-    res.status(500).json({ message: "Something went wrong!" });
+  }catch (err) {
+    console.log(err);
+    return res
+      .status(500)
+      .json({ error: "Internal server error. Please try again later." });
   }
 };
