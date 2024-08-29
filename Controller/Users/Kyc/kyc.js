@@ -79,7 +79,7 @@ exports.postFormSubmit = async (req, res, next) => {
     const userKyc = await user.getUserKyc();
     obj.status = "Pending";
     if (!userKyc) {
-     const userKyc= await user.createUserKyc({ ...obj });
+      const userKyc = await user.createUserKyc({ ...obj });
     } else {
       await userKyc.update(obj);
     }
@@ -92,5 +92,85 @@ exports.postFormSubmit = async (req, res, next) => {
     return res
       .status(500)
       .json({ error: "Internal server error. Please try again later." });
+  }
+};
+
+exports.getUserAgreementInfo = async (req, res, next) => {
+  try {
+    // Fetch the associated UserKyc data for the logged-in user
+    const userKyc = await UserKyc.findOne({ where: { UserId: req.user.id } });
+
+    // Check if userKyc is null
+    if (!userKyc) {
+      return res.status(200).json({
+        userAgreement: false,
+        userKyc: false,
+        status: userKyc.status,
+        message: "No KYC data available for the user.",
+      });
+    }
+
+    // Check if userAggreementAccepted is true or false
+    const isUserAgreementAccepted = userKyc.userAggreementAccepted;
+
+    // Respond with the result
+    return res.status(200).json({
+      userAgreement: isUserAgreementAccepted,
+      userKyc: true,
+      status: userKyc.status,
+      message: isUserAgreementAccepted
+        ? "User agreement accepted."
+        : "User agreement not accepted.",
+    });
+  } catch (error) {
+    console.error("Error fetching user agreement info:", error);
+    return res.status(500).json({ error: "Internal server error." });
+  }
+};
+
+exports.acceptUserAgreement = async (req, res, next) => {
+  try {
+    // Fetch the associated UserKyc data for the logged-in user
+    const userKyc = await UserKyc.findOne({ where: { UserId: req.user.id } });
+
+    // Check if userKyc is null
+    if (!userKyc) {
+      return res.status(404).json({
+        message: "No KYC data found for the user.",
+      });
+    }
+
+    // Get current date and time in the format DD/MM/YYYY HH:MM:SS
+    const currentDateTime = new Date();
+    const formattedDateTime = `${currentDateTime
+      .getDate()
+      .toString()
+      .padStart(2, "0")}/${(currentDateTime.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}/${currentDateTime.getFullYear()} ${currentDateTime
+      .getHours()
+      .toString()
+      .padStart(2, "0")}:${currentDateTime
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}:${currentDateTime
+      .getSeconds()
+      .toString()
+      .padStart(2, "0")}`;
+
+    // Update the user agreement status and time
+    userKyc.userAggreementAccepted = true;
+    userKyc.timeOfUserAggreementAccept = formattedDateTime;
+    await userKyc.save();
+
+    // Respond with a success message
+    return res.status(200).json({
+      message: "User agreement accepted successfully.",
+      userAgreement: true,
+      timeOfUserAgreementAccept: formattedDateTime,
+    });
+  } catch (error) {
+    console.error("Error accepting user agreement:", error);
+    return res.status(500).json({ error: "Internal server error." });
   }
 };

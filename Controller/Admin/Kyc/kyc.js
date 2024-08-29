@@ -60,7 +60,7 @@ exports.updateKycStatus = async (req, res, next) => {
     const userKyc = await user.getUserKyc();
 
     if (status) {
-      const obj = { status: "Approved", adminMessage: "" };
+      const obj = { status: "Completed", adminMessage: "" };
       await userKyc.update(obj);
 
       const apikey = process.env.SMS_API_KEY;

@@ -29,6 +29,7 @@ document
       localStorage.setItem("token", data.token);
       //console.log(data);
     } catch (err) {
+      console.log(err);
       const response = await err.response.data;
 
       if (response.errors) {

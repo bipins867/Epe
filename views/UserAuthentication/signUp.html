@@ -1,94 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration</title>
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="/css/UserAuthentication/signUp.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
-  </head>
-
-  <body>
-    <div class="container mt-5">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <h3 class="text-center">User Registration</h3>
-          <form id="registrationForm">
-            <!-- Name -->
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input
-                type="text"
-                class="form-control"
-                id="name"
-                placeholder="Enter your name"
-                required
-              />
+</head>
+<body>
+    <!-- Signup Form -->
+    <section class="home show">
+        <div class="form_container">
+            <div class="form signup_form">
+                <form id="registrationForm" action="#">
+                    <h2>Signup</h2>
+                    <!-- Name -->
+                    <div class="input_box">
+                        <input type="text" id="name" name="name" placeholder="Full Name" required>
+                        <i class="uil uil-user-alt"></i>
+                    </div>
+                    <!-- Phone -->
+                    <div class="input_box">
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your Phone Number" required minlength="10" maxlength="10"
+                        oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);"/>
+                        <i class="uil uil-phone-alt"></i>
+                    </div>
+                    <!-- Email -->
+                    <div class="input_box">
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        <i class="uil uil-envelope-alt"></i>
+                    </div>
+                    <!-- Password -->
+                    <div class="input_box">
+                        <input type="password" id="password" name="password" placeholder="Create password" required>
+                        <i class="uil uil-lock"></i>
+                        <i class="uil uil-eye-slash pw_hide"></i>
+                    </div>
+                    <!-- Confirm Password -->
+                    <div class="input_box">
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+                        <i class="uil uil-lock"></i>
+                        <i class="uil uil-eye-slash pw_hide"></i>
+                    </div>
+                    <button class="button" id="signup-button">Signup Now</button>
+                    <div class="login_signup">Already have an account? <a href="/user/auth/login">Login</a></div>
+                </form>
             </div>
-            <!-- Email -->
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input
-                type="email"
-                class="form-control"
-                id="email"
-                placeholder="Enter your email"
-                required
-              />
-            </div>
-            <!-- Phone Number -->
-            <div class="form-group">
-              <label for="phone">Phone Number</label>
-              <input
-                type="tel"
-                class="form-control"
-                id="phone"
-                placeholder="Enter your phone number"
-                required
-              />
-            </div>
-            <!-- Password -->
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-            <!-- Confirm Password -->
-            <div class="form-group">
-              <label for="confirmPassword">Confirm Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="confirmPassword"
-                placeholder="Confirm your password"
-                required
-              />
-              <small id="passwordHelp" class="form-text text-muted"></small>
-            </div>
-            <!-- Signup Button -->
-            <button type="submit" class="btn btn-primary btn-block">
-              Sign Up
-            </button>
-          </form>
         </div>
-      </div>
-    </div>
+    </section>
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- JavaScript to validate passwords -->
     <script src="/js/UserAuthentication/signUp.js"></script>
-  </body>
+</body>
 </html>

@@ -47,3 +47,34 @@ async function getRequest(url) {
 }
 
 async function postRequest() {}
+
+async function getRequestWithToken(url) {
+  const headers = getTokenHeaders();
+  if (!headers) {
+    return;
+  }
+
+try {
+  const result = await axios.get(baseUrl + url,{headers});
+ 
+  return result;
+} catch (err) {
+  
+  await handleErrors(err);
+}
+}
+
+async function postRequestWithToken(url, obj) {
+const headers = getTokenHeaders();
+  if (!headers) {
+    return;
+  }
+try {
+  const result = await axios.post(baseUrl + url, obj,{headers});
+
+  return result;
+} catch (err) {
+  await handleErrors(err);
+}
+}
+
