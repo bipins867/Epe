@@ -37,3 +37,41 @@ exports.adminAuthentication=async(req,res,next)=>{
         return res.status(503).json({error:"Invalid Signature!"})
     }
 }
+
+exports.roleSAuthentication=async(req,res,next)=>{
+    try{
+        const admin=req.admin;
+        
+        if(!(admin.adminType=='SSA' || admin.adminType=='SA')){
+            throw new Error("Un-Authorized Access!")
+        }
+
+        next();
+        
+        
+    }
+    catch(err){
+        return res.status(403).json({error:"Un-Authorized Access!"})
+    }
+}
+
+exports.roleSSAuthentication=async(req,res,next)=>{
+    try{
+        const admin=req.admin;
+        
+        if(admin.adminType!='SSA'){
+            throw new Error("Un-Authorized Access!")
+        }
+
+        next();
+        
+        
+    }
+    catch(err){
+        return res.status(403).json({error:"Un-Authorized Access!"})
+    }
+}
+
+exports.roleAuthentication=async(req,res,next)=>{
+    
+}

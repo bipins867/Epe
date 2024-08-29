@@ -1,10 +1,14 @@
 const baseUrl = "http://localhost:3000/";
 
 async function handleErrors(err) {
+ 
   const re = await err.response;
   const response = re.data;
-  if (re.status == 503) {
-    window.location.replace("/");
+  if (re.status == 503 || re.status==500) {
+    window.location.replace("/admin/login");
+  }
+  else if(re.status==403){
+    window.location.replace("/admin/dashboard");
   }
   if (response.errors) {
     let err = "";
@@ -64,7 +68,7 @@ async function getRequestWithToken(url) {
 
   try {
     const result = await axios.get(baseUrl + url,{headers});
-
+    
     return result;
   } catch (err) {
     await handleErrors(err);

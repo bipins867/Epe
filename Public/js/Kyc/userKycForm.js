@@ -47,6 +47,7 @@ document.getElementById('kycForm').addEventListener('submit', async function(eve
       }
     });
     alert(response.data.message);
+    window.location.replace('/user/dashboard');
   } catch (err) {
     const response = await err.response.data;
 

@@ -24,7 +24,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
 
     try{
         const result=await axios.post(baseUrl+'user/auth/post/signUp',obj)
-        window.location.replace('/userAuthentication/login');
+        window.location.replace('/user/auth/login');
 
             alert('SignUp Successfull!')
     }

@@ -1,7 +1,8 @@
 const express=require('express')
 
 const adminKycPageController=require('../../../Controller/Pages/Admin/Kyc/pages')
-const adminKycController=require('../../../Controller/Admin/Kyc/kyc')
+const adminKycController=require('../../../Controller/Admin/Kyc/kyc');
+const { adminAuthentication } = require('../../../Middleware/auth');
 const router=express.Router();
 
 

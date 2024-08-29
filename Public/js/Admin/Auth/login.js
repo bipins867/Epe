@@ -1,32 +1,35 @@
-document.getElementById('loginForm').addEventListener('submit', async function(event) {
+document
+  .getElementById("loginForm")
+  .addEventListener("submit", async function (event) {
     event.preventDefault(); // Prevent the default form submission
 
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
 
     // Data to be sent in the POST request
     const loginData = {
-        userName: username,
-        password: password
+      userName: username,
+      password: password,
     };
 
-    try{
-        const result=await postRequest('admin/post/login',loginData)
-
+    try {
+      const result = await postRequest("admin/post/login", loginData);
+      console.log(result);
+      if (result.status == 201) {
         window.location.replace("/admin/dashboard");
+      }
+      //
 
       // alert('Login Successfull!')
       const data = result.data;
       localStorage.setItem("adminToken", data.token);
-    }catch (err) {
-        const response = await err.response.data;
-  
-        if (response.message) {
-          alert(response.message);
-        } else {
-          alert(response.error);
-        }
-      }
-    
+    } catch (err) {
+      const response = await err.response.data;
 
-});
+      if (response.message) {
+        alert(response.message);
+      } else {
+        alert(response.error);
+      }
+    }
+  });

@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         );
         alert(result.data.message);
+        location.reload();
       } catch (err) {
         const response = await err.response.data;
 
@@ -102,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "admin/userAndRole/post/updateAdminRoles",
         payload
       );
-      console.log(result);
+      alert(result.data.message);
     } catch (err) {
       const response = await err.response.data;
 

@@ -31,7 +31,7 @@ exports.adminLogin = async (req, res, next) => {
         });
 
         return res
-          .status(200)
+          .status(201)
           .json({ status: "Login Successful", token, adminId: admin.id }); // 200 OK
       } else {
         return res.status(401).json({ error: "Invalid Password" }); // 401 Unauthorized

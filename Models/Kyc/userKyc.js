@@ -37,7 +37,7 @@ const UserKyc = sequelize.define('UserKyc', {
     allowNull: true, // Set to true if the URL is optional
   },
   panNumber: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING, 
     allowNull: false,
     unique: true,
     validate: {
