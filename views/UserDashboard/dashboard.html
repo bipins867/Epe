@@ -2,42 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>KYC Dashboard</title>
     <link rel="stylesheet" href="/css/UserDashboard/dashboard.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-   
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <!-- User Name Section -->
-        <div class="text-center">
-            <h1 id="userName">Welcome, John Doe!</h1>
+    <!-- Header -->
+    <header>
+        <div class="header_container">
+            <h1 id="userName">User Name</h1>
         </div>
+    </header>
 
-        <!-- KYC Status Bar Section -->
-        <div class="mt-4">
-            <div id="kycCompleted" class="progress mb-3 d-none">
-                <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                    KYC Completed
-                </div>
+    <!-- KYC Dashboard -->
+    <section class="home show">
+        <div class="dashboard_container">
+            <div class="status_card" id="incompleteKyc">
+                <i class="uil uil-file-alt status_icon"></i>
+                <h3>Incomplete KYC</h3>
             </div>
-
-            <div id="kycNotCompleted" class="progress mb-3 d-none">
-                <div class="progress-bar bg-danger" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                    KYC Not Completed
-                </div>
+            <div class="status_card" id="completeKyc">
+                <i class="uil uil-check-circle status_icon"></i>
+                <h3>Complete KYC</h3>
             </div>
+            <div class="status_card" id="pendingKyc">
+                <i class="uil uil-clock status_icon"></i>
+                <h3>Pending KYC</h3>
+            </div>
+            <div class="status_card" id="rejectedKyc">
+                <i class="uil uil-times-circle status_icon"></i>
+                <h3>Rejected KYC</h3>
+            </div>
+            <button class="button" id="completeKycButton">Complete KYC</button>
         </div>
-
-        <!-- Complete KYC Button -->
-        <div id="btn-kyc-complete"><center>
-            <a href="/user/kyc/userForm" >Complete KYC</button>
-        </center></div>
-    </div>
+    </section>
 
     <script src="/js/UserDashboard/dashboard.js"></script>
     <script src="/js/Utils/utils.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 </body>
 </html>

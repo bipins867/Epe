@@ -1,16 +1,70 @@
 body {
-    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
 }
 
-h1 {
-    margin-bottom: 20px;
+.header_container {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
 }
 
-.progress {
-    height: 30px;
+#userName {
+    margin: 0;
+    font-size: 24px;
 }
 
-.btn-primary {
+.home.show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 60px); /* Adjusting for header height */
+}
+
+.dashboard_container {
+    width: 90%;
+    max-width: 800px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.status_card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+}
+
+.status_card h3 {
+    margin: 10px 0 0;
     font-size: 18px;
-    padding: 10px 20px;
+}
+
+.status_icon {
+    font-size: 40px;
+    color: #007bff;
+}
+
+.button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.button:hover {
+    background-color: #0056b3;
 }

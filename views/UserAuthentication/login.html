@@ -2,40 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Login</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/UserAuthentication/login.css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
+
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h3 class="text-center">User Login</h3>
+    <!-- Header -->
+    
+    <!-- Login Form -->
+    <section class="home show">
+        <div class="form_container">
+            <div class="form login_form">
                 <form id="loginForm">
+                    <h2>Login</h2>
                     <!-- Email or Phone -->
-                    <div class="form-group">
-                        <label for="emailOrPhone">Email or Phone</label>
-                        <input type="text" class="form-control" id="emailOrPhone" placeholder="Enter your email or phone number" required>
+                    <div class="input_box">
+                        <input type="text" id="emailOrPhone" name="emailOrPhone" placeholder="Enter your email or phone number" required>
+                        <i class="uil uil-envelope-alt email"></i>
                     </div>
                     <!-- Password -->
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+                    <div class="input_box">
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <i class="uil uil-lock password"></i>
+                        <i class="uil uil-eye-slash pw_hide"></i>
                     </div>
                     <!-- Login Button -->
-                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    <button class="button">Login Now</button>
+                    <div class="login_signup">Don't have an account? <a href="/user/auth/signUp">Signup</a></div>
                 </form>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="/js/UserAuthentication/login.js"></script>
 </body>
 </html>
