@@ -21,10 +21,13 @@ document
     const obj = { email, phone, password, name };
 
     try {
-      const result = await axios.post(baseUrl + "user/auth/post/signUp", obj);
-      window.location.replace("/user/auth/login");
-
-      alert("SignUp Successfull!");
+      const result = await axios.post(
+        baseUrl + "user/auth/post/verifyOtp",
+        obj
+      );
+      alert(result.data.message);
+      window.location.replace("/user/auth/otpVerify");
+      localStorage.setItem("signUpToken", result.data.signUpToken);
     } catch (err) {
       const response = await err.response.data;
 

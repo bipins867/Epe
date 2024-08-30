@@ -2,10 +2,10 @@ const baseUrl = "http://localhost:3000/";
 
 async function handleErrors(err) {
   const re = await err.response;
-  const response=re.data;
-   if(re.status==503){
+  const response = re.data;
+  if (re.status == 503) {
     window.location.replace("/");
-   }
+  }
   if (response.errors) {
     let err = "";
     Object.keys(response.errors).forEach((er) => {
@@ -37,16 +37,23 @@ async function getRequest(url) {
   }
 
   try {
-    const result=await axios.get(baseUrl+url,{headers})
-    
+    const result = await axios.get(baseUrl + url, { headers });
+
     return result;
   } catch (err) {
-    
     await handleErrors(err);
   }
 }
 
-async function postRequest() {}
+async function postRequest(url, obj) {
+  try {
+    const result = await axios.post(baseUrl+url, obj);
+
+    return result;
+  } catch (err) {
+    await handleErrors(err);
+  }
+}
 
 async function getRequestWithToken(url) {
   const headers = getTokenHeaders();
@@ -54,27 +61,25 @@ async function getRequestWithToken(url) {
     return;
   }
 
-try {
-  const result = await axios.get(baseUrl + url,{headers});
- 
-  return result;
-} catch (err) {
-  
-  await handleErrors(err);
-}
+  try {
+    const result = await axios.get(baseUrl + url, { headers });
+
+    return result;
+  } catch (err) {
+    await handleErrors(err);
+  }
 }
 
 async function postRequestWithToken(url, obj) {
-const headers = getTokenHeaders();
+  const headers = getTokenHeaders();
   if (!headers) {
     return;
   }
-try {
-  const result = await axios.post(baseUrl + url, obj,{headers});
+  try {
+    const result = await axios.post(baseUrl + url, obj, { headers });
 
-  return result;
-} catch (err) {
-  await handleErrors(err);
+    return result;
+  } catch (err) {
+    await handleErrors(err);
+  }
 }
-}
-

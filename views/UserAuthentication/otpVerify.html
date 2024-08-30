@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="/css/UserAuthentication/otpVerify.css" />
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+    />
+  </head>
+  <body>
+    <!-- OTP Form -->
+    <section class="home show">
+      <div class="form_container">
+        <div class="form otp_form">
+          <form action="#">
+            <h2>OTP Verification</h2>
+            <div class="input_box">
+              <input
+                type="text"
+                placeholder="Enter Email OTP"
+                required
+                maxlength="6"
+              />
+              <i class="uil uil-envelope-alt"></i>
+            </div>
+            <div class="input_box">
+              <input
+                type="text"
+                placeholder="Enter Phone OTP"
+                required
+                maxlength="6"
+              />
+              <i class="uil uil-phone-alt"></i>
+            </div>
+            <button class="button" id="otp-submit">Submit OTP</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/js/UserAuthentication/otpVerify.js"></script>
+    <script src="/js/Utils/utils.js"></script>
+  </body>
+</html>
