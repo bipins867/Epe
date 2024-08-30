@@ -1,4 +1,4 @@
-var baseUrl = `${window.location.protocol}//${window.location.host}`;
+const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
 async function handleErrors(err) {
   const re = await err.response;
