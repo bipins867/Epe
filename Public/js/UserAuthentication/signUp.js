@@ -1,5 +1,3 @@
-const baseUrl = "http://localhost:3000/";
-
 document
   .getElementById("registrationForm")
   .addEventListener("submit", async function (event) {
@@ -29,6 +27,11 @@ document
       window.location.replace("/user/auth/otpVerify");
       localStorage.setItem("signUpToken", result.data.signUpToken);
     } catch (err) {
+      if (!err.response) {
+        console.log(err);
+        alert(err);
+        return;
+      }
       const response = await err.response.data;
 
       if (response.errors) {
