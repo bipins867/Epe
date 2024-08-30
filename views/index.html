@@ -80,8 +80,15 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#Contact" data-after="Contact">Contact</a>
                         </li>
-                        <li class="nav-item">
-                            <button class="button" id="form-open">Login</button>
+                        <li class="nav-item dropdown">
+                            <button class="button dropdown-toggle" id="loginDropdown" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                Login
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="loginDropdown">
+                                <a class="dropdown-item" href="/wallet-login">Wallet Login</a>
+                                <a class="dropdown-item" href="/kyc-login">KYC Login</a>
+                            </div>
                         </li>
                         
 
