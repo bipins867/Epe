@@ -107,6 +107,17 @@
   margin-top: 20px;
   width: 100%;
 }
+.input_box i.user,
+.input_box i.phone,
+.input_box i.email,
+.input_box i.calendar,
+.input_box i.map-marker,
+.input_box i.id-card,
+.input_box i.briefcase,
+.input_box i.card-atm,
+.input_box i.credit-card {
+  left: 0;
+}
 
 @media (min-width: 768px) {
   .input_box,
