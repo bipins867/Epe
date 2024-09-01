@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
         attachEventListeners();
       })
       .catch(function (error) {
-        console.error("Error fetching admins:", error);
+        handleErrors(error);
       });
   }
 
@@ -48,18 +48,24 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".edit-btn").forEach(function (button) {
       button.addEventListener("click", function () {
         const adminId = this.getAttribute("data-id");
-       
-        localStorage.setItem('tempAdminId',adminId)
+
+        localStorage.setItem("tempAdminId", adminId);
         window.location.replace("/admin/editUserAdmin");
         // Add your edit logic here
       });
     });
 
     document.querySelectorAll(".delete-btn").forEach(function (button) {
-      button.addEventListener("click",async function () {
+      button.addEventListener("click", async function () {
         const adminId = this.getAttribute("data-id");
 
-        await postRequestWithToken(`admin/userAndRole/post/deleteAdmin/${adminId}`);
+        try {
+          await postRequestWithToken(
+            `admin/userAndRole/post/deleteAdmin/${adminId}`
+          );
+        } catch (err) {
+          handleErrors(err);
+        }
         // Add your delete logic here
         location.reload();
       });
@@ -78,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const obj = { password: password };
       try {
+        document.getElementById('create-admin-btn').disabled=true;
         let result;
         if (role == "A") {
           result = await postRequestWithToken(
@@ -95,13 +102,8 @@ document.addEventListener("DOMContentLoaded", function () {
         alert(`${admin.userName} is created successfullly!`);
         location.reload();
       } catch (err) {
-        const response = await err.response.data;
-
-        if (response.message) {
-          alert(response.message);
-        } else {
-          alert(response.error);
-        }
+        document.getElementById('create-admin-btn').disabled=false;
+        handleErrors(err);
       }
     });
 

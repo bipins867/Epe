@@ -10,21 +10,25 @@ const panNumber = document.getElementById("panNumber").value;
 const panFile = document.getElementById("panFile").files[0];
 
 document.addEventListener("DOMContentLoaded", async function () {
-  const result = await getRequest("user/dashboard/post/info");
+  try {
+    const result = await getRequest("user/dashboard/post/info");
 
-  const data = result.data;
-  // Example user data
-  const userKyc = data.userKyc;
+    const data = result.data;
+    // Example user data
+    const userKyc = data.userKyc;
 
-  if (userKyc) {
-    if (userKyc.status == "Completed" || userKyc.status == "Pending") {
-      window.location.href = "/user/dashboard";
+    if (userKyc) {
+      if (userKyc.status == "Completed" || userKyc.status == "Pending") {
+        window.location.href = "/user/dashboard";
+      }
     }
-  }
 
-  name.value = data.name;
-  email.value = data.email;
-  phone.value = data.phone;
+    name.value = data.name;
+    email.value = data.email;
+    phone.value = data.phone;
+  } catch (err) {
+    handleErrors(err);
+  }
 });
 
 document
@@ -57,6 +61,7 @@ document
 
     try {
       const token = localStorage.getItem("token");
+      document.getElementById("kyc-submit").disabled = true;
       const response = await axios.post(
         baseUrl + "user/kyc/post/kycSubmit",
         formData,
@@ -70,20 +75,8 @@ document
       alert(response.data.message);
       window.location.replace("/user/dashboard");
     } catch (err) {
-      const response = await err.response.data;
-
-      if (response.errors) {
-        let err = "";
-        Object.keys(response.errors).forEach((er) => {
-          err = err + response.errors[er] + "\n";
-        });
-        alert(err);
-      } else {
-        if (response.message) {
-          alert(response.message);
-        } else {
-          alert(response.error);
-        }
-      }
+      document.getElementById("kyc-submit").disabled = false;
+      // Check if there's no response from the server (network error, etc.)
+      handleErrors(err);
     }
   });

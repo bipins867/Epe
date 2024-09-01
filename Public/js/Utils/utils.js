@@ -1,25 +1,38 @@
 const baseUrl = `${window.location.protocol}//${window.location.host}/`;
 
 async function handleErrors(err) {
-  const re = await err.response;
-  const response = re.data;
-  if (re.status == 503) {
-    window.location.replace("/");
+  
+  if (!err.response) {
+    console.log("Network error or server is not responding:", err);
+    alert("Network error or server is not responding. Please try again later.");
+    return;
   }
-  if (response.errors) {
-    let err = "";
-    Object.keys(response.errors).forEach((er) => {
-      err = err + response.errors[er] + "\n";
+  const { response } = err;
+
+
+  if (response.status==503){
+    window.location.replace('/user/auth/login')
+  }
+  // Extract the response data
+  
+  // Handle specific error responses
+  if (response.data && response.data.errors) {
+    let errorMessage = "Please fix the following errors:\n";
+    Object.keys(response.data.errors).forEach((er) => {
+      errorMessage += response.data.errors[er] + "\n";
     });
-    alert(err);
+    alert(errorMessage);
+  } else if (response.data && response.data.message) {
+    alert(response.data.message); // Display message from server
+  } else if (response.data && response.data.error) {
+    alert(response.data.error); // Display error from server if message is not available
   } else {
-    if (response.message) {
-      alert(response.message);
-    } else {
-      alert(response.error);
-    }
+    alert("An unexpected error occurred. Please try again.");
   }
+
+  console.log("Error response:", response);
 }
+
 function getTokenHeaders() {
   const token = localStorage.getItem("token");
 
@@ -36,23 +49,15 @@ async function getRequest(url) {
     return;
   }
 
-  try {
-    const result = await axios.get(baseUrl + url, { headers });
+  const result = await axios.get(baseUrl + url, { headers });
 
-    return result;
-  } catch (err) {
-    await handleErrors(err);
-  }
+  return result;
 }
 
 async function postRequest(url, obj) {
-  try {
-    const result = await axios.post(baseUrl+url, obj);
+  const result = await axios.post(baseUrl + url, obj);
 
-    return result;
-  } catch (err) {
-    await handleErrors(err);
-  }
+  return result;
 }
 
 async function getRequestWithToken(url) {
@@ -61,13 +66,9 @@ async function getRequestWithToken(url) {
     return;
   }
 
-  try {
-    const result = await axios.get(baseUrl + url, { headers });
+  const result = await axios.get(baseUrl + url, { headers });
 
-    return result;
-  } catch (err) {
-    await handleErrors(err);
-  }
+  return result;
 }
 
 async function postRequestWithToken(url, obj) {
@@ -75,11 +76,8 @@ async function postRequestWithToken(url, obj) {
   if (!headers) {
     return;
   }
-  try {
-    const result = await axios.post(baseUrl + url, obj, { headers });
 
-    return result;
-  } catch (err) {
-    await handleErrors(err);
-  }
+  const result = await axios.post(baseUrl + url, obj, { headers });
+
+  return result;
 }

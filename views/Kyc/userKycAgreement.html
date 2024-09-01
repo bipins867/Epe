@@ -2,12 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Agreement</title>
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <title>User Agreement</title>
     <link rel="stylesheet" href="/css/Kyc/userKycAgreement.css" />
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
@@ -15,36 +12,785 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-  </head>
-  <body>
-    <div class="container mt-5">
-      <div class="row justify-content-center">
-        <div class="col-md-8">
-          <div class="card">
-            <div class="card-header text-center">
-              <h4>Agreement</h4>
-            </div>
-            <div class="card-body">
-              <p>
-                By clicking "Accept," you agree to the terms and conditions of
-                our service. You acknowledge that you have read and understood
-                the agreement, and you consent to the use of your information as
-                described in the document.
-              </p>
-              <p>
-                Please ensure you have reviewed all the details carefully. If
-                you have any questions, contact our support team before
-                proceeding.
-              </p>
-              <button id="acceptButton" class="btn btn-primary btn-block">
-                Accept
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <script src="/js/Kyc/userKycAgreement.js"></script>
     <script src="/js/Utils/utils.js"></script>
+  </head>
+
+  <body>
+    <!-- Header Section -->
+    <section id="header">
+      <header class="header_area">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <a class="navbar-brand" href="/">
+            <img src="/img/EPE logo.jpg" height="40px" width="70px" alt="EPE Logo" />
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="/" data-after="Home">Home</a>
+              </li>
+              <!-- Add more links here as needed -->
+            </ul>
+          </div>
+        </nav>
+      </header>
+    </section>
+
+    <!-- Main Content Section -->
+    <main>
+      <div class="user-agreement-section">
+        <p>
+          <strong
+            >Techfin Innovations Private Limited (“E PE” or “we” or “our” or
+            “us”)</strong
+          >
+          owns and proposes to operate a Digital wallet (Closed PPI),
+          Consultancy and Third-Party Loan Service platform, which will be made
+          available at the website
+          <a href="http://www.epeindia.in" target="_blank">www.epeindia.in</a>
+          and our upcoming mobile application (collectively referred to as the
+          “Platform”) through which users (“Users” or “you”), as per their
+          suitability, can avail services offered and/or made available by us.
+        </p>
+
+        <p>
+          This user agreement (“User Agreement”) constitutes a legally binding
+          agreement made between you and E PE, concerning your access to and use
+          of our Platform. You agree that by accessing the Platform and/or
+          availing services from our Platform, you have read, understood, and
+          agree to be bound by:
+        </p>
+        <ul>
+          <li>(i) this User Agreement; and</li>
+          <li>(ii) our Privacy Notice</li>
+        </ul>
+
+        <p>
+          <strong
+            >IF YOU DO NOT AGREE WITH THE TERMS OF THIS USER AGREEMENT AND/OR
+            OUR PRIVACY NOTICE, THEN YOU ARE PROHIBITED FROM USING THE PLATFORM
+            AND YOU MUST DISCONTINUE USE OF OUR PLATFORM IMMEDIATELY.</strong
+          >
+        </p>
+
+        <p>
+          Supplemental terms and conditions or documents that may be posted on
+          the Platform from time to time are hereby expressly incorporated
+          herein by reference. We reserve the right, in our discretion, to make
+          changes or modifications to this User Agreement at any time and for
+          any reason. We will alert you about any changes by updating the ‘Last
+          updated’ date of this User Agreement and you waive any right to
+          receive specific notice of each such change. It is your responsibility
+          to periodically review this User Agreement to stay informed of
+          updates. You will be subject to and will be deemed to have been made
+          aware of and to have accepted, the changes in any revised User
+          Agreement by your continued use of the Platform after the date such
+          revised terms are posted.
+        </p>
+      </div>
+
+      <div class="user-agreement-section">
+        <h2>1. REGISTRATION</h2>
+        <h3>1.1 Eligibility</h3>
+        <p>
+          <strong>1.1.1</strong> E PE allows you to use/visit/browse the
+          Platform without creating an account. Your access to and/or usage of
+          our Platform is subject to your compliance with all the terms and
+          conditions set forth in this User Agreement and our Privacy Notice.
+        </p>
+        <p>
+          <strong>1.1.2</strong> In order to avail services offered on our
+          Platform, you may have to create an account-based relationship with us
+          (“PiggyBox” or “Account”).
+        </p>
+        <p>
+          <strong>1.1.3</strong> To access and/or use our Platform, you must be
+          at least 18 years of age. If you are a minor, you may access and/or
+          use the Platform through a legal guardian.
+        </p>
+        <p>
+          <strong>1.1.4</strong> If you do not meet our eligibility
+          requirements, you may not be able to maintain an Account and your use
+          of the Platform will be limited. All activities under an Account shall
+          be deemed to be those of the registered user. You shall update
+          registration information promptly upon any change so that it is at all
+          times complete and accurate.
+        </p>
+        <p>
+          <strong>1.1.5</strong> We reserve the right to refuse to provide
+          access to our Platform or to discontinue our services to any person or
+          entity at any time for any reason.
+        </p>
+
+        <h3>1.2 Verification</h3>
+        <p>
+          We may require you to provide additional information to establish your
+          identity as a condition for providing services to you or before we
+          permit you to make use of services. We may make, directly or through
+          any third party, any inquiries we consider necessary to validate
+          information that you provide to us.
+        </p>
+
+        <h3>1.3 User Representations</h3>
+        <p>
+          <strong>1.3.1</strong> By using the Platform, you represent and
+          warrant that:
+        </p>
+        <ul>
+          <li>
+            (i) all information you submit will be true, accurate, current,
+            complete, and not misleading;
+          </li>
+          <li>
+            (ii) you will maintain the accuracy of such information and promptly
+            update such information as necessary;
+          </li>
+          <li>
+            (iii) you have the legal capacity, and you agree to comply with the
+            terms of this User Agreement and our Privacy Notice;
+          </li>
+          <li>
+            (iv) you are not under the age of 18 or a minor in the jurisdiction
+            in which you reside. If you are a minor, you will only access the
+            Platform through your legal guardian;
+          </li>
+          <li>
+            (v) you will not access the Platform through automated or non-human
+            means, whether through a bot, script or otherwise; and
+          </li>
+          <li>
+            (vi) you will not use the Platform for any illegal or unauthorized
+            purpose.
+          </li>
+        </ul>
+        <p>
+          <strong>1.3.2</strong> In case of a breach of the representations in
+          this Clause 1.3 or of any other part of this User Agreement, we have
+          the right to: (a) suspend or terminate your Account; (b) refuse any
+          and all current or future use of the Platform (or any portion
+          thereof); and (d) take any such recourse, as available to us under
+          applicable law.
+        </p>
+
+        <h3>1.4 Credentials and Security</h3>
+        <p>
+          <strong>1.4.1</strong> Your email address/phone number will be used to
+          grant you access to the Platform and for communications with you,
+          including as described in Clause 3. You also may be prompted to answer
+          several security questions, provide access to your location, mobile
+          camera etc. or select other security access keys or credentials
+          (“Credentials”) that may be used to enable your access to the services
+          and authorize transactions.
+        </p>
+        <p>
+          <strong>1.4.2</strong> You are responsible for maintaining the secrecy
+          and security of your Credentials and for restricting access to
+          personal devices and systems that may store the Credentials, and you
+          agree to accept responsibility for all activities that occur under
+          your Account or Credentials. You should take all necessary steps to
+          ensure that the Credentials are kept confidential and secure. You
+          should not disclose your Credentials to any third party. If any of
+          your Credentials are compromised, you must notify us immediately at
+          <a href="mailto:care@epeindia.in">care@epeindia.in</a> so that we can
+          suspend use of your Account in order to avoid unauthorized
+          transactions.
+        </p>
+        <p>
+          <strong>1.4.3</strong> In the event that any unauthorized use of your
+          Account has occurred, you must inform us immediately at:
+          <a href="mailto:care@epeindia.in">care@epeindia.in</a>.
+        </p>
+        <p>
+          <strong>1.4.4</strong> You are responsible for all losses relating to
+          an unauthorized transaction from your Account if you have acted
+          fraudulently or failed, either intentionally or negligently, to use
+          your Account in accordance with this User Agreement, to protect your
+          Credentials, or to notify us of any unauthorized transaction in the
+          manner set out in Clause 1.4.3. We will not be responsible for any
+          unauthorized transactions undertaken through your Account.
+        </p>
+        <p>
+          <strong>1.4.5</strong> You must notify us through
+          <a href="mailto:care@epeindia.in">care@epeindia.in</a> if you wish to
+          request us to block/unblock your Account.
+        </p>
+
+        <h3>1.5 Acceptable Use</h3>
+        <p>
+          <strong>1.5.1</strong> You will at all times adhere to all applicable
+          laws, rules, and regulations applicable to your use of the Platform.
+          We may inspect your Account for any reason, including without
+          limitation to investigate any alleged violation of this User Agreement
+          or any third-party complaints.
+        </p>
+        <p>
+          <strong>1.5.2</strong> You understand that you are responsible for all
+          electronic communications and information sent from your computer or
+          other systems to us.
+        </p>
+
+        <h3>1.6 Prohibited Activities</h3>
+        <p>
+          You may not access or use the Platform for any purpose other than that
+          for which we make the Platform available. The Platform may not be used
+          in connection with any commercial endeavors except those that are
+          specifically endorsed or approved by us.
+        </p>
+        <p>As a User of the Platform, you agree not to:</p>
+        <ul>
+          <li>
+            (i) access and/or use the Platform for fraudulent purposes, or in
+            connection with a criminal offense or other activity that violates
+            any applicable law and/or this User Agreement;
+          </li>
+          <li>(ii) cause annoyance or inconvenience to any other person;</li>
+          <li>
+            (iii) make any unauthorized use of the Platform, including
+            collecting usernames and/or email addresses of users by electronic
+            or other means for the purpose of sending unsolicited email, or
+            creating user accounts by automated means or under false pretenses;
+          </li>
+          <li>
+            (iv) use the Platform to advertise or offer to sell goods and
+            services;
+          </li>
+          <li>
+            (v) circumvent, disable, or otherwise interfere with
+            security-related features of the Platform, including features that
+            prevent or restrict the use or copying of any content or enforce
+            limitations on the use of the Platform and/or the content contained
+            therein;
+          </li>
+          <li>
+            (vi) engage in unauthorized framing of or linking to the Platform;
+          </li>
+          <li>
+            (vii) trick, defraud, or mislead us and other users, especially in
+            any attempt to learn sensitive account information such as user
+            passwords;
+          </li>
+          <li>
+            (viii) make improper use of our support services or submit false
+            reports of abuse or misconduct;
+          </li>
+          <li>
+            (ix) engage in any automated use of the system, such as using
+            scripts to send comments or messages, or using any data mining,
+            robots, or similar data gathering and extraction tools;
+          </li>
+          <li>
+            (x) interfere with, disrupt, or create an undue burden on the
+            Platform or the networks or services connected to the Platform;
+          </li>
+          <li>
+            (xi) attempt to impersonate another user or person or use the
+            username or Account of another user;
+          </li>
+          <li>(xii) sell or otherwise transfer your Account;</li>
+          <li>
+            (xiii) use any information obtained from the Platform in order to
+            harass, abuse, or harm another person;
+          </li>
+          <li>
+            (xiv) use the Platform as part of any effort to compete with us or
+            otherwise use the Platform and/or the content for any
+            revenue-generating endeavor or commercial enterprise;
+          </li>
+          <li>
+            (xv) decipher, decompile, disassemble, or reverse engineer any of
+            the software comprising or in any way making up a part of the
+            Platform;
+          </li>
+          <li>
+            (xvi) attempt to bypass any measures of the Platform designed to
+            prevent or restrict access to the Platform, or any portion of the
+            Platform;
+          </li>
+          <li>
+            (xvii) harass, annoy, intimidate, or threaten any of our employees
+            or agents engaged in providing any services to you;
+          </li>
+          <li>
+            (xviii) delete the copyright or other proprietary rights notice from
+            any content;
+          </li>
+          <li>(xix) copy or adapt the Platform’s software;</li>
+          <li>
+            (xx) upload or transmit (or attempt to upload or to transmit)
+            viruses, trojan horses, spyware, or other similar material,
+            including excessive use of capital letters and spamming (continuous
+            posting of repetitive text), that interferes with any party’s
+            uninterrupted use and enjoyment of the Platform or modifies,
+            impairs, disrupts, alters, or interferes with the use, features,
+            functions, operation, or maintenance of the Platform;
+          </li>
+          <li>
+            (xxi) except as may be the result of standard search engine or
+            internet browser usage, use, launch, develop, or distribute any
+            automated system, including without limitation, any spider, robot,
+            cheat utility, scraper, or offline reader that accesses the
+            Platform, or using or launching any unauthorized script or other
+            software;
+          </li>
+          <li>
+            (xxii) disparage, tarnish, or otherwise harm, in our opinion, us,
+            our reputation or goodwill and/or the Platform;
+          </li>
+          <li>
+            (xxiii) share any information that:
+            <ul>
+              <li>
+                (a) belongs to another person and to which the user does not
+                have any right;
+              </li>
+              <li>
+                (b) is obscene, pornographic, paedophilic, invasive of another’s
+                privacy including bodily privacy, insulting or harassing on the
+                basis of gender, racially or ethnically objectionable, relating
+                or encouraging money laundering or gambling, or promoting enmity
+                between different groups on the grounds of religion or caste
+                with the intent to incite violence;
+              </li>
+              <li>(c) is harmful to child;</li>
+              <li>
+                (d) infringes any patent, trademark, copyright or other
+                proprietary rights;
+              </li>
+              <li>
+                (e) deceives or misleads the addressee about the origin of the
+                message or knowingly and intentionally communicates any
+                misinformation or information which is patently false and untrue
+                or misleading in nature;
+              </li>
+              <li>
+                (f) threatens the unity, integrity, defence, security or
+                sovereignty of India, friendly relations with foreign States, or
+                public order, or causes incitement to the commission of any
+                cognisable offence, or prevents investigation of any offence, or
+                is insulting other nation;
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <h3>1.7 Privacy</h3>
+        <p>
+          <strong>1.7.1</strong> We care about data privacy and security. By
+          using our Platform, you agree to be bound by our Privacy Notice of our
+          Platformand consent to the collection, use, and disclosure of your
+          personal data in accordance with it.
+        </p>
+      </div>
+      <div class="user-agreement-section">
+        <h3>2. SUSPENSION AND TERMINATION</h3>
+        <h4>2.1 Suspension or Termination by E PE</h4>
+        <p>
+          We may terminate this User Agreement, for any reason at any time
+          without written notice. Further, we may suspend your access to our
+          Platform and block access to your Account and deactivate it under the
+          following circumstances:
+        </p>
+        <ul>
+          <li>(i) you have violated the terms of this User Agreement;</li>
+          <li>(ii) we determine that you pose a fraud risk to us;</li>
+          <li>
+            (iii) you provide or have provided false, incomplete, inaccurate, or
+            misleading information (including without limitation any
+            registration information) or otherwise engage in fraudulent or
+            illegal conduct;
+          </li>
+          <li>
+            (iv) we have security concerns regarding your Account, including
+            your Credentials; or
+          </li>
+          <li>
+            (v) we suspect unauthorized or fraudulent use of your Account.
+          </li>
+        </ul>
+        <p>
+          In such cases we will inform you of the deactivation of your Account
+          and the reasons for it, where possible, before the deactivation and in
+          any event promptly thereafter, unless we determine that giving such
+          information would compromise security concerns or is prohibited by
+          applicable law. We will reactivate your Account or Credentials, or
+          replace it or them, as applicable, once we have resolved the reasons
+          for deactivation to our satisfaction.
+        </p>
+
+        <h4>2.2 Effect of Termination</h4>
+        <p>
+          We will not be liable to you for compensation, reimbursement, or
+          damages of any kind, direct or indirect, including any business loss
+          (including loss of profits, revenue, contracts, anticipated savings,
+          data, goodwill or wasted expenditure) or any other indirect or
+          consequential loss that is not reasonably foreseeable to both you and
+          us in connection with your use of our Platform, or in connection with
+          any termination or suspension of your Account. Upon termination of
+          this User Agreement for any reason:
+        </p>
+        <ul>
+          <li>
+            (i) all license or other rights granted to either party under this
+            User Agreement will immediately terminate;
+          </li>
+          <li>
+            (ii) your access to the account and Platform will be terminated.
+          </li>
+        </ul>
+      </div>
+      <div class="user-agreement-section">
+        <h3>3. COMMUNICATIONS</h3>
+        <p>
+          When you use our Platform or communicate with us, you will be required
+          to provide a valid phone number to process a transaction using our
+          Platform. We may communicate with you by e-mail, SMS, phone call or by
+          posting notices on the Platform or by any other mode of communication.
+          Through your use of our Platform, you consent to receiving
+          communications including SMS, WhatsApp, e-mail or phone calls from us
+          with respect to your use of our Platform, including for the following
+          purposes:
+        </p>
+        <ul>
+          <li>
+            (i) providing you with the functionalities of our Platform and
+            transactional or account related information;
+          </li>
+          <li>(ii) sending you payment related reminders/updates;</li>
+          <li>
+            (iii) promoting the Platform or any other products and services of E
+            PE;
+          </li>
+          <li>(iv) promoting new products and activities;</li>
+          <li>(v) investigating or resolving any grievances; or</li>
+          <li>(vi) obtaining your invaluable feedback.</li>
+        </ul>
+        <p>
+          In order to serve you better, we may also send you surveys to
+          understand: (i) your experience with E PE, and/or (ii) your needs and
+          requirements.
+        </p>
+        <p>
+          You may choose to, or we may invite you to, submit comments or ideas
+          about Us, including without limitation about how to improve our
+          Platform. By submitting any idea, you agree that your disclosure is
+          gratuitous, unsolicited and without restriction and will not place us
+          under any fiduciary or other obligation, and that we are free to use
+          the idea without any compensation to you, and/or to disclose the idea
+          on a non-confidential basis or otherwise to anyone.
+        </p>
+      </div>
+
+      <div class="user-agreement-section">
+        <h3>4. ACCESS TO PLATFORM</h3>
+        <p>
+          E PE undertakes to make best efforts to ensure the uninterrupted
+          availability of the Platform and to ensure that transmissions and
+          communications in this regard are error-free. However, due to the
+          nature of the internet, this cannot be guaranteed and E PE shall not
+          be held liable for any interruptions in providing the services.
+          Further, Users’ access to the Platform or Account for availing
+          services may also be occasionally suspended or restricted to allow for
+          repairs, maintenance, or the introduction of new facilities or
+          services at any time without prior notice.
+        </p>
+      </div>
+      <div class="user-agreement-section">
+        <h3>5. THIRD-PARTY WEBSITES AND CONTENT</h3>
+        <h4>5.1 Third-Party Content</h4>
+        <p>
+          The Platform may contain (or you may be sent via the Platform) links
+          to third-party websites as well as articles, photographs, text,
+          graphics, pictures, designs, music, sound, video, information,
+          software, and other content or items belonging to or originating from
+          third parties (“Third-Party Content”).
+        </p>
+        <ul>
+          <li>
+            5.1.1 Such third-party websites and Third-Party Content are not
+            investigated, monitored, or checked for accuracy, appropriateness,
+            or completeness by us, and we are not responsible for any
+            Third-Party Websites accessed through the Platform or any
+            Third-Party Content posted on, available through, or installed from
+            the Platform, including the content, accuracy, offensiveness,
+            opinions, reliability, privacy practices, or other policies of or
+            contained in the third-party websites or the Third-Party Content.
+          </li>
+          <li>
+            5.1.2 Inclusion of, linking to, or permitting the use or
+            installation of any third-party websites or any Third-Party Content
+            does not imply approval or endorsement thereof by us.
+          </li>
+          <li>
+            5.1.3 If you decide to leave the Platform and access the third-party
+            websites or to use or install any Third-Party Content, you do so at
+            your own risk, and you should be aware that this User Agreement no
+            longer governs. You should review the applicable terms and policies,
+            including privacy and data gathering practices, of any website to
+            which you navigate from the Platform or relating to any applications
+            you use or install from the Platform.
+          </li>
+          <li>
+            5.1.4 Any purchases you make or any services you avail through
+            third-party websites will be through other websites and from other
+            companies, and we take no responsibility whatsoever in relation to
+            such purchases which are exclusively between you and the applicable
+            third party. You agree and acknowledge that we do not endorse the
+            products or services offered on third-party websites and you shall
+            hold us harmless from any harm caused by your purchase of such
+            products or services. Additionally, you shall not hold us liable for
+            any losses sustained by you or harm caused to you relating to or
+            resulting in any way from any Third-Party Content or any contact
+            with third-party websites.
+          </li>
+        </ul>
+      </div>
+      <div class="user-agreement-section">
+        <h3>6. INTELLECTUAL PROPERTY</h3>
+        <h4>6.1 Ownership</h4>
+        <p>
+          E PE, its licensors and their respective affiliates, as the case may
+          be, are the sole and exclusive owners or licensees of the trademarks,
+          service marks, trade names, logos, and copyrighted or copyrightable
+          materials of E PE and its affiliates. Users shall not, directly or
+          indirectly, interfere with, challenge, file applications for, or claim
+          ownership of these trademarks anywhere in the world.
+        </p>
+
+        <h4>6.2 Use of Marks</h4>
+        <p>
+          You shall not make any public statement related to or use E PE’s or
+          any of our affiliates’ names, trademarks or logos in any way without
+          our prior written permission, or misrepresent or embellish the
+          relationship between us in any way.
+        </p>
+      </div>
+      <div class="user-agreement-section">
+        <h3>7. INDEMNITY AND LIMITATION OF LIABILITY</h3>
+        <h4>7.1 Indemnity</h4>
+        <p>
+          You shall indemnify and hold harmless E PE and its affiliates, and
+          their respective officers, directors, agents, employees and
+          representatives, from any claim or demand, or actions including
+          reasonable attorney's fees, made by any third party or penalty imposed
+          due to or arising out of:
+        </p>
+        <ul>
+          <li>(i) your use of services;</li>
+          <li>(ii) your use of our Platform;</li>
+          <li>
+            (iii) breach of your representations, warranties, or obligations set
+            forth in this User Agreement;
+          </li>
+          <li>
+            (iv) any dispute or litigation caused by your actions or omissions;
+          </li>
+          <li>
+            (v) your negligence or violation or alleged violation of any
+            applicable law, rules or regulations or the rights of any other
+            person.
+          </li>
+        </ul>
+
+        <h4>7.2 Release</h4>
+        <p>
+          7.2.1 You hereby expressly release E PE and its affiliates and/or any
+          of their directors, officers, employees, agents and representatives
+          from any cost, damage, liability or other consequence of (a) any
+          unauthorized transaction through your Account (b) unauthorized
+          utilization of the services availed by You; (c) any acts or omissions
+          of third parties; or (d) any errors published in relation to this User
+          Agreement, including, without limitation, any typographical errors, we
+          reserve the right to correct, without notice, any errors.
+        </p>
+
+        <h4>7.3 Limitation of Liability</h4>
+        <p>
+          We will not be held responsible for any delay or failure to comply
+          with our obligations if the delay or failure arises from any cause
+          which is beyond our reasonable control.
+        </p>
+      </div>
+      <div class="user-agreement-section">
+        <h3>8. MISCELLANEOUS</h3>
+
+        <h4>8.1 DISCLAIMER OF WARRANTIES AND LIMITATION OF LIABILITY</h4>
+        <p>
+          THE PLATFORM AND ALL RELATED INFORMATION, CONTENT, MATERIALS, AND
+          SERVICES MADE AVAILABLE TO YOU ARE PROVIDED BY E PE ON AN "AS IS" AND
+          "AS AVAILABLE" BASIS. E PE MAKES NO REPRESENTATIONS OR WARRANTIES OF
+          ANY KIND, EXPRESS OR IMPLIED, AS TO SERVICES OR THE PLATFORM INCLUDING
+          WITHOUT LIMITATION: (A) ANY IMPLIED WARRANTIES OF MERCHANTABILITY,
+          SATISFACTORY QUALITY, SUITABILITY, RELAIBILITY, COMPLETENESS,
+          PERFORMANCE, FITNESS FOR A PARTICULAR PURPOSE, TITLE, OR
+          NON-INFRINGEMENT; (B) THAT THE PLATFORM WILL MEET YOUR REQUIREMENTS,
+          WILL ALWAYS BE AVAILABLE, ACCESSIBLE, UNINTERRUPTED, TIMELY, SECURE,
+          OPERATE WITHOUT ERROR, OR WILL CONTAIN ANY PARTICULAR FEATURES OR
+          FUNCTIONALITY; (C) ANY IMPLIED WARRANTY ARISING FROM COURSE OF DEALING
+          OR TRADE USAGE, UNLESS OTHERWISE SPECIFIED IN WRITING. YOU EXPRESSLY
+          AGREE THAT YOUR USE OF OUR PLATFORM IS AT YOUR SOLE RISK AND THAT YOU
+          ARE USING YOUR BEST AND PRUDENT JUDGMENT BEFORE ENTERING INTO ANY
+          TRANSACTIONS USING OUR PLATFORM; (D) ELECTRONIC COMMUNICATIONS SENT
+          FROM E PE OR ITS AFFILIATES ARE FREE OF VIRUSES OR OTHER MALWARE OR
+          HARMFUL COMPONENTS.
+        </p>
+        <p>
+          AT NO TIME SHALL ANY RIGHT, TITLE OR INTEREST IN THE PRODUCTS AND/OR
+          SERVICES MADE AVAILABLE ON THE PLATFORM BY THIRD PARTIES, VEST WITH E
+          PE NOR SHALL E PE HAVE ANY OBLIGATIONS OR LIABILITIES IN RESPECT OF
+          ANY TRANSACTIONS BETWEEN USERS AND SUCH THIRD PARTIES. WE SHALL
+          NEITHER BE LIABLE NOR BE RESPONSIBLE FOR ANY ACTIONS OR INACTIONS OR
+          ANY BREACH OF CONDITIONS, REPRESENTATIONS OR WARRANTIES BY SUCH THIRD
+          PARTIES AND HEREBY EXPRESSLY DISCLAIM ANY AND ALL RESPONSIBILITY AND
+          LIABILITY IN THAT REGARD. WE DO NOT IMPLICITLY OR EXPLICITLY SUPPORT
+          OR ENDORSE THE PRODUCTS AND/OR SERVICES OFFERED BY THIRD PARTIES.
+        </p>
+        <p>
+          TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, WE AND OUR
+          AFFILIATES (AND OUR AND THEIR RESPECTIVE EMPLOYEES, DIRECTORS, AGENTS
+          AND REPRESENTATIVES) WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL,
+          PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR IN CONNECTION
+          WITH THIS USER AGREEMENT OR THE PLATFORM (INCLUDING THE INABILITY TO
+          USE THE PLATFORM UNLESS OTHERWISE SPECIFIED IN WRITING. IN ADDITION,
+          AND WITHOUT LIMITING THE FOREGOING, TO THE FULLEST EXTENT PERMITTED BY
+          APPLICABLE LAW, WE AND OUR AFFILIATES (AND OUR AND THEIR RESPECTIVE
+          EMPLOYEES, DIRECTORS, AGENTS AND REPRESENTATIVES) WILL NOT BE LIABLE
+          FOR ANY DAMAGES ARISING OUT OF OR IN CONNECTION WITH ANY SERVICES OR
+          PRODUCTS PURCHASED OR TRANSACTIONS ENTERED INTO THROUGH OUR PLATFORM.
+        </p>
+        <p>
+          WITHOUT LIMITING THE FOREGOING, IN NO EVENT WILL WE OR ANY OF OUR
+          AFFILIATES BE LIABLE TO YOU FOR ANY FAILURE OR DELAY BY US (OR OUR
+          EMPLOYEES, AGENTS, OR REPRESENTATIVES) IN PERFORMING OUR OBLIGATIONS
+          UNDER THIS USER AGREEMENT, WHERE SUCH FAILURE OR DELAY IS CAUSED BY
+          UNFORESEEABLE CIRCUMSTANCES OR CIRCUMSTANCES BEYOND OUR CONTROL, OR
+          WHERE WE ARE BOUND BY OTHER LEGAL OBLIGATIONS UNDER APPLICABLE LAW.
+          NOTWITHSTANDING ANYTHING TO THE CONTRARY, OUR MAXIMUM LIABILITY TO YOU
+          FOR ANY CLAIMS ARISING OUT OF YOUR USE OF OR ACCESS TO THE PLATFORM
+          AND/OR ANY PRODUCTS OR SERVICES, SHALL NOT EXCEED INR 1000/- (RUPEES
+          ONE THOUSAND ONLY).
+        </p>
+
+        <h4>8.2 APPLICABLE LAW</h4>
+        <p>
+          The laws of India without regard to the principles of conflict of laws
+          will govern this User Agreement and any dispute of any kind that may
+          arise between you and E PE.
+        </p>
+
+        <h4>8.3 DISPUTES</h4>
+        <p>
+          To expedite resolution and control the cost of any dispute,
+          controversy, or claim under and/or related to this User Agreement
+          (each a "Dispute") brought by either you or us (individually, a
+          “Party” and collectively, the “Parties”), the Parties agree to first
+          attempt to negotiate any Dispute (except those Disputes expressly
+          provided below) informally for at least ninety (90) days before
+          initiating arbitration. Such informal negotiations commence upon
+          written notice from one Party to the other Party.
+        </p>
+        <p>
+          If the Parties are unable to resolve a Dispute through informal
+          negotiations, the Dispute (except those Disputes expressly excluded
+          below) will be finally and exclusively resolved by binding arbitration
+          in accordance with the Arbitration and Conciliation Act, 1996, as
+          amended, and judgment upon the award rendered by the arbitrators may
+          be entered in any court having jurisdiction in respect thereof. Each
+          Party shall nominate and appoint a competent arbitrator. The two
+          nominee arbitrators shall jointly appoint the third arbitrator who
+          shall be the chairman of the arbitration panel. The seat and venue of
+          such arbitration shall be at New Delhi.
+        </p>
+        <p>
+          <strong>Exceptions to Arbitration</strong>
+          The Parties agree that the following Disputes are not subject to the
+          above provisions concerning binding arbitration:
+        </p>
+        <ul>
+          <li>
+            any Dispute seeking to enforce or protect, or concerning the
+            validity of, any of the intellectual property rights of a Party;
+          </li>
+          <li>
+            any Dispute related to, or arising from, allegations of theft,
+            piracy, invasion of privacy, or unauthorized use; and
+          </li>
+          <li>any claim for injunctive relief.</li>
+        </ul>
+        <p>
+          Subject to foregoing provisions of this Clause 8.3, Disputes arising
+          from or relating to Platform shall be subject to the exclusive
+          jurisdiction of courts at New Delhi, India.
+        </p>
+
+        <h4>8.4 SEVERABILITY</h4>
+        <p>
+          If any of the terms and conditions of this User Agreement shall be
+          deemed invalid, void, or for any reason unenforceable, such terms and
+          conditions shall be deemed severable and shall not affect the validity
+          and enforceability of any remaining terms and conditions of this User
+          Agreement.
+        </p>
+
+        <h4>8.5 ASSIGNMENT</h4>
+        <p>
+          You may not assign or transfer any rights, obligations, or privileges
+          that you have under this User Agreement without our prior written
+          consent. Subject to the foregoing, this User Agreement will be binding
+          on each party’s successors and permitted assigns. Any assignment or
+          transfer in violation of this User Agreement will be deemed null and
+          void. E PE shall have the right to assign this User Agreement without
+          your prior written consent or intimation to you.
+        </p>
+
+        <h4>8.6 WAIVER</h4>
+        <p>
+          E PE’s waiver of any breach of this User Agreement by any User will
+          not constitute a waiver of any other prior or subsequent breach of
+          this User Agreement. E PE’s failure to insist upon strict compliance
+          with the provisions of this User Agreement by any User will not be
+          deemed a waiver of any rights or remedies E PE may have against that
+          or any other User. E PE may waive compliance with this User Agreement
+          in its sole discretion and may provide enhanced functionalities from
+          time to time in respect of the Platform to select Users.
+        </p>
+
+        <h4>8.7 ENTIRE AGREEMENT</h4>
+        <p>
+          This User Agreement, together with any other terms and conditions,
+          rules, or regulations incorporated herein or referred to herein
+          constitute the entire agreement between E PE and the Users relating to
+          the subject matter hereof, and supersede any prior understandings or
+          agreements (whether oral or written) regarding the subject matter, and
+          may not be amended or modified except in writing or by making such
+          amendments or modifications available on the Platform.
+        </p>
+
+        <h4>8.8 LEGAL ACTION</h4>
+        <p>
+          Nothing contained in this User Agreement will limit E PE or its
+          affiliates in the exercise of any legal or equitable rights or
+          remedies.
+        </p>
+      </div>
+      <div class="agreement-section">
+        <label class="checkbox-container">
+          <input type="checkbox" id="agreement-checkbox" />
+          <span class="checkmark"></span>
+          I accept the <a href="#">Terms and Conditions</a>
+        </label>
+        <button id="acceptButton" class="button" disabled>Accept</button>
+      </div>
+    </main>
+    
   </body>
 </html>

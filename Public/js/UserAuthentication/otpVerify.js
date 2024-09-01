@@ -14,7 +14,7 @@ document
 
     try {
       const obj = { userEmailOtp, userPhoneOtp, signUpToken };
-
+      document.getElementById('otp-submit').disabled=true;
       const response = await postRequest("user/auth/post/signUp", obj);
 
       if (response.status == 201) {
@@ -22,17 +22,7 @@ document
         window.location.replace("/user/auth/login");
       }
     } catch (err) {
-      if (!err.response) {
-        console.log(err);
-        alert(err);
-        return;
-      }
-      const response = await err.response.data;
-
-      if (response.message) {
-        alert(response.message);
-      } else {
-        alert(response.error);
-      }
+      document.getElementById('otp-submit').disabled=false;
+      handleErrors(err);
     }
   });

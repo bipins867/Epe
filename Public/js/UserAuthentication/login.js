@@ -19,6 +19,7 @@ document
     }
 
     try {
+      document.getElementById('login-btn').disabled=true;
       const result = await axios.post(
         baseUrl + "user/auth/post/login",
         obj
@@ -30,25 +31,7 @@ document
       localStorage.setItem("token", data.token);
       //console.log(data);
     } catch (err) {
-      if (!err.response) {
-        console.log(err);
-        alert(err);
-        return;
-      }
-      const response = await err.response.data;
-
-      if (response.errors) {
-        let err = "";
-        Object.keys(response.errors).forEach((er) => {
-          err = err + response.errors[er] + "\n";
-        });
-        alert(err);
-      } else {
-        if (response.message) {
-          alert(response.message);
-        } else {
-          alert(response.error);
-        }
-      }
+      document.getElementById('login-btn').disabled=false;
+      handleErrors(err);
     }
   });

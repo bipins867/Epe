@@ -13,6 +13,7 @@ document
     };
 
     try {
+      document.getElementById('login-btn').disabled=true;
       const result = await postRequest("admin/post/login", loginData);
       console.log(result);
       if (result.status == 201) {
@@ -24,12 +25,7 @@ document
       const data = result.data;
       localStorage.setItem("adminToken", data.token);
     } catch (err) {
-      const response = await err.response.data;
-
-      if (response.message) {
-        alert(response.message);
-      } else {
-        alert(response.error);
-      }
+      document.getElementById('login-btn').disabled=false;
+      handleErrors(err);
     }
   });

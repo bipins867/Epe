@@ -2,26 +2,22 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Get the accept button element by ID
 
   try {
-    const response = await getRequestWithToken(
-      "user/kyc/userKycAgreementInfo"
-    );
-   
+    const response = await getRequestWithToken("user/kyc/userKycAgreementInfo");
+
     const userAgreement = response.data.userAgreement;
     const userKyc = response.data.userKyc;
-    const status=response.data.status;
+    const status = response.data.status;
 
-    if (!userKyc || userAgreement ||status=='Pending' || status=='Rejected') {
+    if (
+      !userKyc ||
+      userAgreement ||
+      status == "Pending" ||
+      status == "Rejected"
+    ) {
       window.location.href = "/user/dashboard";
     }
   } catch (err) {
-    console.log(err);
-    const response = await err.response.data;
-
-    if (response.message) {
-      alert(response.message);
-    } else {
-      alert(response.error);
-    }
+    handleErrors(err);
   }
 
   const acceptButton = document.getElementById("acceptButton");
@@ -29,6 +25,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Add a click event listener to the accept button
   acceptButton.addEventListener("click", async function () {
     try {
+      document.getElementById("acceptButton").disabled = true;
       // Make a POST request to accept the user agreement
       const response = await getRequestWithToken(
         "user/kyc/acceptUserAgreement"
@@ -40,10 +37,13 @@ document.addEventListener("DOMContentLoaded", async function () {
         window.location.href = "/user/dashboard"; // Redirect to the dashboard or desired page
       }
     } catch (error) {
-      console.error("Error accepting agreement:", error);
-      alert(
-        "An error occurred while accepting the agreement. Please try again later."
-      );
+      document.getElementById("acceptButton").disabled = false;
+      handleErrors(error);
     }
   });
+
+  document.getElementById('agreement-checkbox').addEventListener('change', function() {
+    var button = document.getElementById('acceptButton');
+    button.disabled = !this.checked;
+});
 });

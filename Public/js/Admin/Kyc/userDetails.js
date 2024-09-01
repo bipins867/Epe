@@ -45,8 +45,7 @@ document.getElementById("approve-btn").onclick = async (event) => {
       alert("Failed to approve KYC: " + result.message);
     }
   } catch (error) {
-    console.error("Error approving KYC:", error);
-    alert("An error occurred while approving KYC.");
+    handleErrors(error);
   }
 };
 
@@ -76,8 +75,7 @@ document.getElementById("reject-btn").onclick = async (event) => {
         alert("Failed to reject KYC: " + result.message);
       }
     } catch (error) {
-      console.error("Error approving KYC:", error);
-      alert("An error occurred while approving KYC.");
+      handleErrors(error);
     }
   } else {
     alert("Rejection reason is required.");

@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
         populateRoles(response.data.roles, response.data.activeRoles);
       })
       .catch(function (error) {
-        console.error("Error fetching admin data:", error);
+        handleErrors(error);
       });
   }
 
@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       try {
+        document.getElementById('btn-reset').disabled=true;
         const result = await postRequestWithToken(
           "admin/userAndRole/post/changePassword",
           {
@@ -47,13 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
         alert(result.data.message);
         location.reload();
       } catch (err) {
-        const response = await err.response.data;
-
-        if (response.message) {
-          alert(response.message);
-        } else {
-          alert(response.error);
-        }
+        document.getElementById('btn-reset').disabled=false;
+        handleErrors(err);
       }
     });
 
@@ -99,19 +95,16 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     try {
+      document.getElementById("updateRolesBtn").disabled=true;
       const result = await postRequestWithToken(
         "admin/userAndRole/post/updateAdminRoles",
         payload
       );
+      document.getElementById("updateRolesBtn").disabled=false;
       alert(result.data.message);
     } catch (err) {
-      const response = await err.response.data;
-
-      if (response.message) {
-        alert(response.message);
-      } else {
-        alert(response.error);
-      }
+      document.getElementById("updateRolesBtn").disabled=false;
+      handleErrors(err);
     }
   };
 

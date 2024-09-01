@@ -19,6 +19,7 @@ document
     const obj = { email, phone, password, name };
 
     try {
+      document.getElementById('signup-button').disabled=true;
       const result = await axios.post(
         baseUrl + "user/auth/post/verifyOtp",
         obj
@@ -27,25 +28,7 @@ document
       window.location.replace("/user/auth/otpVerify");
       localStorage.setItem("signUpToken", result.data.signUpToken);
     } catch (err) {
-      if (!err.response) {
-        console.log(err);
-        alert(err);
-        return;
-      }
-      const response = await err.response.data;
-
-      if (response.errors) {
-        let err = "";
-        Object.keys(response.errors).forEach((er) => {
-          err = err + response.errors[er] + "\n";
-        });
-        alert(err);
-      } else {
-        if (response.message) {
-          alert(response.message);
-        } else {
-          alert(response.error);
-        }
-      }
+      document.getElementById('signup-button').disabled=false;
+      handleErrors(err);
     }
   });

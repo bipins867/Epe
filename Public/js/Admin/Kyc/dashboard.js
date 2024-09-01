@@ -20,13 +20,7 @@ async function populateUserTable() {
       userTableBody.appendChild(row);
     });
   } catch (err) {
-    const response = await err.response;
-    console.log(err);
-    if (response.message) {
-      alert(response.message);
-    } else {
-      alert(response.error);
-    }
+    handleErrors(err);
   }
 }
 

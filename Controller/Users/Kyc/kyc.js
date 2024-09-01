@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const UserKyc = require("../../../Models/Kyc/userKyc");
+const { Op } = require("sequelize");
 
 exports.postFormSubmit = async (req, res, next) => {
   try {
@@ -26,7 +27,6 @@ exports.postFormSubmit = async (req, res, next) => {
       "CustomerFiles",
       email
     );
-
     const baseUrl = "/files/" + email;
 
     // Create directories if they don't exist
@@ -76,13 +76,37 @@ exports.postFormSubmit = async (req, res, next) => {
 
     const user = req.user;
 
+    // Fetch existing KYC entry for the user
     const userKyc = await user.getUserKyc();
+
+    // Check for duplicate Aadhaar or PAN numbers, excluding the current user's record
+    const duplicateKyc = await UserKyc.findOne({
+      where: {
+        [Op.or]: [
+          { aadharNumber: req.body.aadharNumber },
+          { panNumber: req.body.panNumber },
+        ],
+        id: { [Op.ne]: userKyc ? userKyc.id : null }, // Exclude the current user's record
+      },
+    });
+
+    if (duplicateKyc) {
+      return res
+        .status(400)
+        .json({
+          error: "Aadhaar or PAN number already exists for another user.",
+        });
+    }
+
     obj.status = "Pending";
     if (!userKyc) {
-      const userKyc = await user.createUserKyc({ ...obj });
+      // If no existing KYC entry, create a new one
+      await user.createUserKyc({ ...obj });
     } else {
+      // Update the existing KYC entry
       await userKyc.update(obj);
     }
+
     // Responding to the client
     res.status(201).json({
       message: "Files and Data saved successfully",
