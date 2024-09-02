@@ -42,6 +42,180 @@
 }
 
 
+
+/* General styles for the nav item */
+.nav-item {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+}
+
+/* Style for the button triggering the dropdown */
+.button {
+    background-color: #9f31df; /* Adjust color as needed */
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #47066d; /* Slightly darker shade on hover */
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: 100%; /* Positions the dropdown below the button */
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds shadow for depth */
+    z-index: 500;
+    min-width: 300px; /* Adjust width as needed */
+}
+
+/* Show the dropdown when hovering over the nav item */
+.nav-item:hover .dropdown-menu {
+    display: block;
+}
+
+/* Flex container for section titles and links */
+.dropdown-menu > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: left;
+    margin-bottom: 5px; /* Space between sections */
+}
+
+.dropdown-menu > div:last-child {
+    margin-bottom: 0; /* Removes margin for the last section */
+}
+
+/* Style for span titles */
+.dropdown-menu span {
+    font-weight: bold;
+    color: #e0348a; /* Adjust as needed */
+}
+
+/* Styles for dropdown links */
+.dropdown-item {
+    padding: 0 5px;
+    color: #3098d4;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    color: #4a37f3; /* Darker shade on hover */
+    text-decoration: underline;
+}
+
+
+/* General styles for navigation items */
+.nav-item {
+    display: inline-flex;
+    align-items: left;
+    margin-right: 20px;
+}
+
+/* Flex container for wallet and KYC sections */
+.nav-item .wallet-container,
+.nav-item .kyc-container {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Adjust spacing between items */
+}
+
+.nav-item .wallet-container a,
+.nav-item .kyc-container a {
+    font: normal 500 15px/2px var(--roboto);
+    text-transform: uppercase;
+    color: var(--title-color);
+    padding: 0 5px;
+    transition: color 0.3s ease;
+    text-decoration: none;
+}
+
+.nav-item .wallet-container a:hover,
+.nav-item .kyc-container a:hover {
+    color: #a01549; /* Adjust hover color as needed */
+}
+
+/* Responsive Styling */
+@media (max-width: 600px) {
+    .nav-item {
+        flex-direction: column;
+        margin-right: 10px;
+    }
+    
+    .nav-item .wallet-container,
+    .nav-item .kyc-container {
+        flex-wrap: wrap;
+        gap: 5px; /* Reduce spacing for smaller screens */
+    }
+
+    .nav-item .wallet-container a,
+    .nav-item .kyc-container a {
+        font-size: 14px; /* Adjust font size for readability */
+        padding: 5px;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+    .nav-item {
+        margin-right: 15px;
+    }
+
+    .nav-item .wallet-container,
+    .nav-item .kyc-container {
+        gap: 8px;
+    }
+
+    .nav-item .wallet-container a,
+    .nav-item .kyc-container a {
+        font-size: 14px;
+        padding: 5px 10px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .nav-item {
+        margin-right: 20px;
+    }
+
+    .nav-item .wallet-container,
+    .nav-item .kyc-container {
+        gap: 10px;
+    }
+
+    .nav-item .wallet-container a,
+    .nav-item .kyc-container a {
+        font-size: 15px;
+        padding: 0 5px;
+    }
+}
+
+/* Dropdown menu adjustments for different screen sizes */
+.dropdown-menu {
+    min-width: 40px; /* Reduce width for better responsiveness */
+}
+
+/* Button and dropdown alignment improvements */
+.button,
+.dropdown-menu > div {
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
 /* end navigation */ 
 
 /* Banner Area */ 
