@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
-@import url(./fonts.css); /* import fonts from fonts.css file */
-@import url(./partials/_variables.css); /* css variables */
-@import url(./partials/_global.css); /* import global styling */
+@import url(/css/fonts.css); /* import fonts from fonts.css file */
+@import url(/css/partials/_variables.css); /* css variables */
+@import url(/css/partials/_global.css); /* import global styling */
 
 /* Base Styling */
 .header {
@@ -152,6 +152,26 @@
 .button:hover {
   background-color: #0056b3; /* Matching previous hover effect */
 }
+
+
+
+.logout-button {
+  background-color: #ff4d4d; /* Red background */
+  color: #fff; /* White text */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 20px;
+  margin: 10% 20%; /* Padding around text */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.logout-button:hover {
+  background-color: #e63946; /* Darker red on hover */
+}
+
+
 
 /* Responsive Media Queries */
 @media (max-width: 1200px) {

@@ -2,6 +2,8 @@
 document.addEventListener("DOMContentLoaded", async function () {
   // Fetch the user data from the server
   try {
+    
+
     const result = await getRequest("user/dashboard/post/info");
     const data = result.data;
 
@@ -36,6 +38,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         alert("Wait for Admin to Verify!");
       }
     };
+
+    document.getElementById('logout-button').onclick=function(){
+      localStorage.removeItem('token')
+      
+      window.location.replace("/user/auth/login")
+    }
   } catch (err) {
     handleErrors(err);
   }
@@ -90,3 +98,5 @@ function handleKYCStatus(user) {
     }
   }
 }
+
+

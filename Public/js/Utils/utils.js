@@ -12,6 +12,7 @@ async function handleErrors(err) {
 
   if (response.status==503){
     window.location.replace('/user/auth/login')
+    localStorage.removeItem('token')
   }
   // Extract the response data
   

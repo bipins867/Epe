@@ -1,12 +1,14 @@
 const name = document.getElementById("name");
 const email = document.getElementById("email");
 const phone = document.getElementById("phone");
-const dob = document.getElementById("dob").value;
+const dob = document.getElementById("dob");
+const address = document.getElementById("address");
 const userImage = document.getElementById("userImage").files[0];
-const aadharNumber = document.getElementById("aadharNumber").value;
+const aadharNumber = document.getElementById("aadharNumber");
+const customerId = document.getElementById("customerId");
 const aadharFront = document.getElementById("aadharFront").files[0];
 const aadharBack = document.getElementById("aadharBack").files[0];
-const panNumber = document.getElementById("panNumber").value;
+const panNumber = document.getElementById("panNumber");
 const panFile = document.getElementById("panFile").files[0];
 
 document.addEventListener("DOMContentLoaded", async function () {
@@ -26,6 +28,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     name.value = data.name;
     email.value = data.email;
     phone.value = data.phone;
+
+    if (userKyc) {
+      dob.value = userKyc.dob;
+      aadharNumber.value = userKyc.aadharNumber;
+      panNumber.value = userKyc.panNumber;
+      address.value = userKyc.address;
+      customerId.value = userKyc.customerId;
+    }
   } catch (err) {
     handleErrors(err);
   }

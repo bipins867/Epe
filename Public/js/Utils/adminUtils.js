@@ -9,7 +9,10 @@ async function handleErrors(err) {
 
   // Extract the response data
   const { response } = err;
-
+  if (response.status==503){
+    window.location.replace('/user/auth/login')
+    localStorage.removeItem('adminToken')
+  }
   // Handle specific error responses
   if (response.data && response.data.errors) {
     let errorMessage = "Please fix the following errors:\n";

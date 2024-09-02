@@ -1,4 +1,12 @@
 // Additional functionality like validating OTP or handling submit can be added here
+document.addEventListener("DOMContentLoaded", async function () {
+  const token=localStorage.getItem('token')
+
+  if(token){
+    window.location.replace("/user/dashboard");
+  }
+});
+
 document
   .getElementById("otp-submit")
   .addEventListener("click", async (event) => {

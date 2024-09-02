@@ -1,6 +1,12 @@
 
 
+document.addEventListener("DOMContentLoaded", async function () {
+  const token=localStorage.getItem('token')
 
+  if(token){
+    window.location.replace("/user/dashboard");
+  }
+});
 document
   .getElementById("loginForm")
   .addEventListener("submit", async function (event) {
