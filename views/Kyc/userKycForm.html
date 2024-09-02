@@ -1,24 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KYC Form</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/UserAuthentication/login.css"> <!-- Use login.css for consistent styling -->
-    <link rel="stylesheet" href="/css/Kyc/userKycForm.css"> <!-- Include specific styles for KYC form -->
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/UserAuthentication/login.css" />
+    <!-- Use login.css for consistent styling -->
+    <link rel="stylesheet" href="/css/Kyc/userKycForm.css" />
+    <!-- Include specific styles for KYC form -->
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+    />
+  </head>
+  <body>
     <!-- Header -->
     <section id="header">
       <header class="header_area">
         <div class="main-menu">
           <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand" href="/">
-              <img src="/img/EPE logo.jpg" height="40px" width="70px" alt="Logo"/>
+              <img
+                src="/img/EPE logo.jpg"
+                height="40px"
+                width="70px"
+                alt="Logo"
+              />
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -36,82 +54,152 @@
 
     <!-- KYC Form -->
     <section class="home show">
-        <div class="form_container">
-            <div class="form kyc_form">
-                <form id="kycForm">
-                    <h2>KYC Form</h2>
-                    <div class="form_row">
-                        <div class="input_box">
-                            <input disabled type="text" id="name" name="name" placeholder="Enter your name" required />
-                            <i class="uil uil-user user"></i>
-                        </div>
-                        <div class="input_box">
-                            <input disabled type="email" id="email" name="email" placeholder="Enter your email" required />
-                            <i class="uil uil-envelope-alt email"></i>
-                        </div>
-                    </div>
-                    <div class="form_row">
-                        <div class="input_box">
-                            <input disabled type="tel" id="phone" name="phone" placeholder="Enter your phone number" required />
-                            <i class="uil uil-phone-alt phone"></i>
-                        </div>
-                        <div class="input_box">
-                            <input type="date" id="dob" name="dob" required />
-                            <i class="uil uil-calendar-alt calendar"></i>
-                        </div>
-                    </div>
-                    <div class="form_row">
-                        <div class="input_box">
-                            <input type="text" id="address" name="address" placeholder="Enter your address" required />
-                            <i class="uil uil-map-marker map-marker"></i>
-                        </div>
-                        <div class="input_box">
-                            <input type="text" id="customerId" name="customerId" placeholder="Enter your customer ID" required />
-                            <i class="uil uil-id-card id-card"></i>
-                        </div>
-                    </div>
-                    <div class="form_row">
-                        <div class="input_box">
-                            <input type="text" id="employId" name="employId" placeholder="Enter your employee ID (optional)" />
-                            <i class="uil uil-briefcase-alt briefcase"></i>
-                        </div>
-                        <div class="file_input_box">
-                            <label for="userImage">User Image:</label>
-                            <input type="file" id="userImage" name="userImage" accept="image/*" required />
-                        </div>
-                    </div>
-                    <div class="form_row">
-                        <div class="input_box">
-                            <input type="text" id="aadharNumber" name="aadharNumber" placeholder="Enter your Aadhar number" required />
-                            <i class="uil uil-card-atm card-atm"></i>
-                        </div>
-                        <div class="file_input_box">
-                            <label for="aadharFront">Aadhar Front Image/PDF:</label>
-                            <input type="file" id="aadharFront" name="aadharFront" accept="image/*,.pdf" required />
-                        </div>
-                    </div>
-                    <div class="form_row">
-                        <div class="file_input_box">
-                            <label for="aadharBack">Aadhar Back Image/PDF:</label>
-                            <input type="file" id="aadharBack" name="aadharBack" accept="image/*,.pdf" required />
-                        </div>
-                        <div class="input_box">
-                            <input type="text" id="panNumber" name="panNumber" placeholder="Enter your PAN number" required />
-                            <i class="uil uil-credit-card credit-card"></i>
-                        </div>
-                    </div>
-                    <div class="file_input_box">
-                        <label for="panFile">PAN Card Image/PDF:</label>
-                        <input type="file" id="panFile" name="panFile" accept="image/*,.pdf" required />
-                    </div>
-                    <button type="submit" class="button" id="kyc-submit">Apply</button>
-                </form>
+      <div class="form_container">
+        <div class="form kyc_form">
+          <form id="kycForm">
+            <h2>KYC Form</h2>
+            <div class="form_row">
+              <div class="input_box">
+                <input
+                  disabled
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Enter your name"
+                  required
+                />
+                <i class="uil uil-user user"></i>
+              </div>
+              <div class="input_box">
+                <input
+                  disabled
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  required
+                />
+                <i class="uil uil-envelope-alt email"></i>
+              </div>
             </div>
+            <div class="form_row">
+              <div class="input_box">
+                <input
+                  disabled
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  placeholder="Enter your phone number"
+                  required
+                />
+                <i class="uil uil-phone-alt phone"></i>
+              </div>
+              <div class="input_box">
+                <input type="date" id="dob" name="dob" required />
+                <i class="uil uil-calendar-alt calendar"></i>
+              </div>
+            </div>
+            <div class="form_row">
+              <div class="input_box">
+                <input
+                  type="text"
+                  id="address"
+                  name="address"
+                  placeholder="Enter your address"
+                  required
+                />
+                <i class="uil uil-map-marker map-marker"></i>
+              </div>
+              <div class="input_box">
+                <input
+                  type="text"
+                  id="customerId"
+                  name="customerId"
+                  placeholder="Enter your customer ID"
+                  required
+                />
+                <i class="uil uil-id-card id-card"></i>
+              </div>
+            </div>
+            <div class="form_row">
+              <div class="input_box">
+                <input
+                  type="text"
+                  id="aadharNumber"
+                  name="aadharNumber"
+                  placeholder="Enter your Aadhar number"
+                  required
+                />
+                <i class="uil uil-card-atm card-atm"></i>
+              </div>
+              <div class="input_box">
+                <input
+                  type="text"
+                  id="panNumber"
+                  name="panNumber"
+                  placeholder="Enter your PAN number"
+                  required
+                />
+                <i class="uil uil-credit-card credit-card"></i>
+              </div>
+            </div>
+            <div class="form_row">
+              <div class="file_input_box">
+                <label for="userImage">User Image:</label>
+                <input
+                  type="file"
+                  id="userImage"
+                  name="userImage"
+                  accept="image/*"
+                  required
+                />
+              </div>
+              <div class="file_input_box">
+                <label for="panFile">PAN Card Image/PDF:</label>
+                <input
+                  type="file"
+                  id="panFile"
+                  name="panFile"
+                  accept="image/*,.pdf"
+                  required
+                />
+              </div>
+            </div>
+            <div class="form_row">
+              <div class="file_input_box">
+                <label for="aadharFront">Aadhar Front Image/PDF:</label>
+                <input
+                  type="file"
+                  id="aadharFront"
+                  name="aadharFront"
+                  accept="image/*,.pdf"
+                  required
+                />
+              </div>
+              <div class="file_input_box">
+                <label for="aadharBack">Aadhar Back Image/PDF:</label>
+                <input
+                  type="file"
+                  id="aadharBack"
+                  name="aadharBack"
+                  accept="image/*,.pdf"
+                  required
+                />
+              </div>
+            </div>
+            <button type="submit" class="button" id="kyc-submit">Apply</button>
+          </form>
         </div>
+      </div>
     </section>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script src="/js/Kyc/userKycForm.js"></script>
     <script src="/js/Utils/utils.js"></script>
-</body>
+  </body>
 </html>
