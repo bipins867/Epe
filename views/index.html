@@ -14,6 +14,7 @@
 
     <!--  font awesome icons  -->
     <link rel="stylesheet" href="/css/all.min.css" />
+    <link rel="stylesheet" href="/css/index.css" />
 
     <!--  Magnific Popup css file  -->
     <link
@@ -49,6 +50,17 @@
       domain="www.chatbase.co"
       defer
     ></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
   </head>
 
   <body>
@@ -58,8 +70,8 @@
         <div class="main-menu">
           <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand" href="/">
-              <img src="./img/EPE logo.jpg" height="40px" width="70px" alt=""
-            /></a>
+              <img src="./img/EPE logo.jpg" height="40px" width="70px" alt="" />
+            </a>
             <button
               class="navbar-toggler"
               type="button"
@@ -88,7 +100,6 @@
                 <li class="nav-item">
                   <a class="nav-link" href="/career">Career</a>
                 </li>
-
                 <li class="nav-item">
                   <a class="nav-link" href="#Event">Event</a>
                 </li>
@@ -97,28 +108,37 @@
                     >Contact</a
                   >
                 </li>
+                <!-- Updated Dropdown for Login -->
+                <!-- Updated Dropdown for Login -->
                 <li class="nav-item dropdown">
                   <button
-                    class="button dropdown-toggle"
+                    class="btn btn-primary"
                     id="loginDropdown"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
+                    data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
                     Login
                   </button>
                   <div class="dropdown-menu" aria-labelledby="loginDropdown">
-                    <div>
-                      <span>Wallet</span>
-                      <a class="dropdown-item" href="/wallet-login">Register</a>
-                      <a class="dropdown-item" href="/wallet-login">Login</a>
-                    </div>
-                    <div>
-                      <span>KYC </span>
-                      <a class="dropdown-item" href="/user/auth/signUp"
-                        >Register</a
-                      >
-                      <a class="dropdown-item" href="/user/auth/login">Login</a>
+                    <div class="cards custom-dropdown-card">
+                      <div class="custom-popup">
+                        <div class="custom-popup-title">Piggy Bank</div>
+                        <div class="custom-sub-popup">
+                          <span>Piggy Wallet</span>
+                          <span class="custom-auth-links"
+                            >Login | Register</span
+                          >
+                        </div>
+                        <hr />
+                        <div class="custom-popup-title">KYC Module</div>
+                        <div class="custom-sub-popup">
+                          <span>User Registration</span>
+                          <span class="custom-links"
+                            ><a href="/user/auth/login">Login</a> |
+                            <a href="/user/auth/signUp">Register</a></span
+                          >
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </li>

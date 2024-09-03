@@ -67,42 +67,9 @@
 }
 
 /* Dropdown menu styles */
-.dropdown-menu {
-    display: none; /* Hidden by default */
-    position: absolute;
-    top: 100%; /* Positions the dropdown below the button */
-    left: 0;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds shadow for depth */
-    z-index: 500;
-    min-width: 300px; /* Adjust width as needed */
-}
+
 
 /* Show the dropdown when hovering over the nav item */
-.nav-item:hover .dropdown-menu {
-    display: block;
-}
-
-/* Flex container for section titles and links */
-.dropdown-menu > div {
-    display: flex;
-    justify-content: space-between;
-    align-items: left;
-    margin-bottom: 5px; /* Space between sections */
-}
-
-.dropdown-menu > div:last-child {
-    margin-bottom: 0; /* Removes margin for the last section */
-}
-
-/* Style for span titles */
-.dropdown-menu span {
-    font-weight: bold;
-    color: #e0348a; /* Adjust as needed */
-}
 
 /* Styles for dropdown links */
 .dropdown-item {
@@ -203,16 +170,7 @@
 }
 
 /* Dropdown menu adjustments for different screen sizes */
-.dropdown-menu {
-    min-width: 40px; /* Reduce width for better responsiveness */
-}
 
-/* Button and dropdown alignment improvements */
-.button,
-.dropdown-menu > div {
-    justify-content: space-between;
-    align-items: center;
-}
 
 
 

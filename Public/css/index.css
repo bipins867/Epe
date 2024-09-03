@@ -1,0 +1,57 @@
+/* Custom styles for dropdown */
+.custom-popup-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  white-space: nowrap; /* Prevent text from wrapping */
+  margin-bottom: 5px;
+}
+
+.custom-sub-popup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.custom-links {
+  
+ 
+  font-size: 14px;
+  margin-left: 10px; /* Add space before "Login | Register" */
+}
+
+
+
+/* Custom dropdown styles */
+.dropdown-menu {
+  min-width: 300px; /* Adjust width as needed */
+  padding: 0; /* Remove default padding */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateX(-50%);
+  left: 50%;
+  overflow: hidden; /* Prevent overflow */
+}
+
+/* Styling for card inside dropdown */
+.custom-dropdown-card {
+  width: 95%; /* Ensures the card takes the full width */
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 5px;
+   /* Ensure there is enough padding */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
+  overflow: hidden; /* Prevent overflow */
+}
+
+/* Flexbox styling to align elements */
+.custom-popup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
