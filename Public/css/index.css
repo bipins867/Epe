@@ -22,8 +22,51 @@
   margin-left: 10px; /* Add space before "Login | Register" */
 }
 
+/* Style for button with arrow */
+.with-arrow {
+  position: relative; /* Position relative to allow absolute positioning of the arrow */
+  padding: 5px; /* Space for the arrow and padding around text */
+  display: inline-flex; /* Aligns text and arrow properly */
+  align-items: center; /* Centers content vertically */
+  background-color: #007bff; /* Example button color */
+  color: #fff; /* Example text color */
+  border: none; /* Remove default button border */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 16px; /* Example font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  min-width: 100px;
+  max-height: 80%; 
+  margin-top: 8%;/* Ensure button is wide enough */
+}
+
+.with-arrow::after {
+  content: "";
+  position: absolute;
+  right: 10px; /* Distance from the right edge of the button */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Align arrow vertically */
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #fff; /* Arrow color */
+}
+
+/* Adjust arrow position on hover if needed */
+.nav-item.dropdown:hover .with-arrow::after {
+  border-top-color: #0056b3; /* Change arrow color on hover if needed */
+}
+
+
+
+
+.nav-item.dropdown:hover .custom-dropdown-menu {
+  display: block; /* Show dropdown on hover */
+}
+
 /* Custom dropdown styles */
 .custom-dropdown-menu {
+  display: none;
   min-width: 320px; /* Adjust width as needed */
   padding: 2px; /* Remove default padding */
   background-color: #fff;
@@ -33,6 +76,8 @@
   left: 50%;
   transform: translateX(-50%);
   overflow: hidden; /* Prevent overflow */
+  position: absolute; /* Absolute positioning to float dropdown */
+  z-index: 1000;
 }
 
 /* Custom card container to avoid conflict with Bootstrap */

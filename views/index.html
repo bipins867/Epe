@@ -112,20 +112,26 @@
                 <!-- Updated Dropdown for Login -->
                 <li class="nav-item dropdown">
                   <button
-                    class="btn btn-primary"
+                    class="btn btn-primary with-arrow"
                     id="loginDropdown"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
                     Login
                   </button>
-                  <div class="dropdown-menu custom-dropdown-menu" aria-labelledby="loginDropdown">
+                  <div
+                    class="dropdown-menu custom-dropdown-menu"
+                    aria-labelledby="loginDropdown"
+                  >
                     <div class="custom-card-container">
                       <div class="custom-popup">
                         <div class="custom-popup-title">Piggy Bank</div>
                         <div class="custom-sub-popup">
                           <span>Piggy Wallet</span>
-                          <span class="custom-auth-links">Login | Register</span>
+                          <span class="custom-links"
+                            ><a href="#">Login</a> |
+                            <a href="#">Register</a></span
+                          >
                         </div>
                         <hr class="my-2" />
                         <div class="custom-popup-title">KYC Module</div>
@@ -135,14 +141,11 @@
                             ><a href="/user/auth/login">Login</a> |
                             <a href="/user/auth/signUp">Register</a></span
                           >
-
                         </div>
                       </div>
                     </div>
                   </div>
                 </li>
-                
-                
               </ul>
             </div>
           </nav>
