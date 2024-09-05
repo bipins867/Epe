@@ -1,0 +1,33 @@
+/* Make the page scrollable */
+.scrollable-content {
+    overflow-y: auto;
+    max-height: 100vh;
+  }
+  
+  /* Styles for the chat messages */
+  .message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 75%;
+  }
+  
+  .server-message {
+    background-color: #e9ecef;
+    text-align: left;
+  }
+  
+  .client-message {
+    background-color: #007bff;
+    color: white;
+    text-align: right;
+    margin-left: auto;
+  }
+  
+  /* Make the chat box larger and scrollable */
+  .chat-box {
+    border: 1px solid #ddd;
+    height: 500px; /* Increased height for larger chat box */
+    overflow-y: auto; /* Enable scrolling within chat box */
+  }
+  

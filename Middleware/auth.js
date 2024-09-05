@@ -1,6 +1,10 @@
 const jwt = require("jsonwebtoken");
 const User=require('../Models/User/users');
 const Admin = require("../Models/User/admins");
+const CaseMessage = require("../Models/CustomerSupport/caseMessage");
+const CaseUser = require("../Models/CustomerSupport/caseUser");
+const CustomerCase = require("../Models/CustomerSupport/customerCase");
+
 
 
 exports.userAuthentication=async (req,res,next)=>{
@@ -28,6 +32,31 @@ exports.adminAuthentication=async(req,res,next)=>{
         const admin=await Admin.findByPk(payload.id)
         
         req.admin=admin;
+        
+        next();
+        
+        
+    }
+    catch(err){
+        return res.status(503).json({error:"Invalid Signature!"})
+    }
+}
+exports.userChatSupportAuthentication=async(req,res,next)=>{
+    try{
+        const token=req.headers.chattoken;
+       
+        const payload=jwt.verify(token,process.env.JWT_SECRET_KEY)
+        
+        
+        const customerCase=await CustomerCase.findOne({where:{caseId:payload.caseNumber}})
+        
+        const caseUser=await CaseUser.findByPk(customerCase.CaseUserId)
+        
+        if(!caseUser && !customerCase){
+            throw new Error("User or Case not found!")
+        }
+        req.caseUser=caseUser;
+        req.customerCase=customerCase
         
         next();
         
@@ -75,3 +104,4 @@ exports.roleSSAuthentication=async(req,res,next)=>{
 exports.roleAuthentication=async(req,res,next)=>{
     
 }
+

@@ -15,6 +15,7 @@
     <!--  font awesome icons  -->
     <link rel="stylesheet" href="/css/all.min.css" />
     <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/customerSupport.css" />
 
     <!--  Magnific Popup css file  -->
     <link
@@ -60,6 +61,12 @@
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     ></script>
   </head>
 
@@ -877,6 +884,47 @@
       </div>
     </main>
 
+    <div>
+      <div class="chat-button" id="chatButton">
+        <i class="fas fa-comments"></i>
+      </div>
+
+      <!-- Chat Box -->
+      <div class="chat-box" id="chatBox">
+        <div class="chat-header">
+          <h5>Chat with Us</h5>
+          <button
+            class="btn btn-link close-case"
+            id="closeCase"
+            style="display: box; background-color: red"
+          >
+            Close Case
+          </button>
+          <button class="close" id="closeChat">&times;</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+          <!-- Predefined Messages -->
+        </div>
+        <div class="chat-footer" id="chatFooter" style="display: none">
+          <div>
+            <input type="file" id="fileInput" />
+            <button class="btn btn-secondary" id="fileSendButton">
+              Send File
+            </button>
+          </div>
+          <div>
+            <input
+              type="text"
+              class="form-control"
+              id="messageInput"
+              placeholder="Type a message"
+            />
+            <button class="btn btn-primary" id="sendMessage">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!--  ======================== End Footer Area ==============================  -->
 
     <!--  Jquery js file  -->
@@ -896,5 +944,8 @@
 
     <!--  custom js file  -->
     <script src="/js/main.js"></script>
+    <script src="/js/customerSupport.js"></script>
+    <script src="/js/customerChatUtils.js"></script>
+    <script src="/js/Utils/utils.js"></script>
   </body>
 </html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/Admin/CustomerSupport/caseMessages.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Case Details Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title d-flex justify-content-between">
+                    Case Details
+                    <!-- Close Case Button -->
+                    <button class="btn btn-danger" id="closeCaseButton">Close Case</button>
+                </h4>
+                <p><strong>Case ID:</strong> CS001</p>
+                <p><strong>User ID:</strong> 101</p>
+                <p><strong>Name:</strong> John Doe</p>
+                <p><strong>Email:</strong> john.doe@example.com</p>
+                <p><strong>Candidate ID:</strong> C1023</p>
+                <p><strong>Is Existing User:</strong> Yes</p>
+                <p><strong>Creation Time:</strong> 2024-09-04 10:00 AM</p>
+                <p><strong>Close Time:</strong> 2024-09-06 04:15 PM</p>
+                <p><strong>Status:</strong> Closed</p>
+                <p><strong>Closed By:</strong> Admin</p>
+            </div>
+        </div>
+
+        <!-- Chat Body Section -->
+        <div class="chat-box mb-3">
+            <div id="chatBody" class="p-3">
+                <!-- Dummy Chat Messages -->
+                <!-- Server and Client Messages will be added dynamically here -->
+            </div>
+        </div>
+
+        <!-- Chat Input Section -->
+        <div class="input-group mb-3">
+            <input type="text" id="messageInput" class="form-control" placeholder="Type your message...">
+            <button class="btn btn-primary" id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script src="/js/Admin/CustomerSupport/caseMessages.js"></script>
+</body>
+</html>

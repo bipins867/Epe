@@ -5,14 +5,18 @@ const cors=require('cors')
 const path=require('path')
 const bodyParser=require('body-parser')
 
+
 const { setupRoutes } = require('./Routes/setupRoutes')
 const db = require("./database");
 
 require('./Models/setModels')
+require('./Server-Socket/server')
+
 // Just check
 app=express()
 app.use(express.static(path.join(__dirname, 'Public')));
 app.use(express.static(path.join(__dirname, 'CustomerFiles')));
+app.use(express.static(path.join(__dirname,'PublicFiles')))
 
 
 app.use(cors({
