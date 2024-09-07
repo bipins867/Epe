@@ -1,4 +1,7 @@
-const socketUrl = "http://localhost:3030";
+const host=getAddressWithoutPort(window.location.host);
+const socketPort=localStorage.getItem('socketPort');
+
+const socketUrl = `http://${host}:${socketPort}`;
 
 // Connect to the socket server
 const socket = io(socketUrl);
@@ -22,7 +25,7 @@ function handleCaseInfo(info) {
 }
 
 // Event listeners for messages
-socket.on("case-message", handleCaseMessage);
+socket.on("case-user-message", handleCaseMessage);
 socket.on("case-info", handleCaseInfo);
 
 // Example function to join a case room

@@ -1,5 +1,17 @@
 const baseUrl = `${window.location.protocol}//${window.location.host}/`;
 
+function getAddressWithoutPort(url) {
+  // Regular expression to match the address part between protocol and port/path
+  const regex = /^(?:https?:\/\/)?([^/:?#]+)(?::\d+)?/;
+
+  // Use regex to extract the match
+  const match = url.match(regex);
+
+  // If a match is found, return the matched group; otherwise, return null
+  return match ? match[1] : null;
+}
+
+
 async function handleErrors(err) {
   if (!err.response) {
     console.log("Network error or server is not responding:", err);
@@ -52,12 +64,10 @@ function getChatTokenHeaders() {
 }
 
 async function getRequest(url) {
-  const headers = getTokenHeaders();
-  if (!headers) {
-    return;
-  }
+  
+  
 
-  const result = await axios.get(baseUrl + url, { headers });
+  const result = await axios.get(baseUrl + url);
 
   return result;
 }

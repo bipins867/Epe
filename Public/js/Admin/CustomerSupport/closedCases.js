@@ -48,7 +48,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const actionButtons = document.querySelectorAll(".action-btn");
             actionButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    console.log('Action button clicked for case:', this.closest('tr').querySelector('td:nth-child(2)').textContent);
+                   const caseId= this.closest('tr').querySelector('td:nth-child(2)').textContent;
+                   window.location.replace(`/admin/customerSupport/caseMessages/${caseId}`)
                     // Leave the function blank for now
                 });
             });

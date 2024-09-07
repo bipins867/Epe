@@ -27,7 +27,10 @@ app.use(cors({
 app.use(bodyParser.json({extends:false}))
 
 
+app.use('/getServerInfo',(req,res,next)=>{
 
+  return res.status(200).json({socketPort:process.env.SOCKET_PORT})
+})
 
 setupRoutes(app);
 

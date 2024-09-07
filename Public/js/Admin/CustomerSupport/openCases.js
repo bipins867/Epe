@@ -27,10 +27,11 @@ document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll(".open-case-btn").forEach((button) => {
         button.addEventListener("click", function () {
           // Add logic to handle opening the case
-          console.log(
-            "Case opened:",
-            this.closest("tr").querySelector("td:nth-child(2)").textContent
-          );
+
+          const caseId =
+            this.closest("tr").querySelector("td:nth-child(2)").textContent;
+          
+          window.location.replace(`/admin/customerSupport/caseMessages/${caseId}`)
         });
       });
     })

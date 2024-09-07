@@ -1,7 +1,15 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  const token=localStorage.getItem('adminToken')
+  try {
+    const response = await getRequest("getServerInfo");
 
-  if(token){
+    const socketPort = response.data.socketPort;
+    localStorage.setItem("socketPort", socketPort);
+  } catch (err) {
+    handleErrors(err);
+  }
+  const token = localStorage.getItem("adminToken");
+
+  if (token) {
     window.location.replace("/user/dashboard");
   }
 });
@@ -20,7 +28,7 @@ document
     };
 
     try {
-      document.getElementById('login-btn').disabled=true;
+      document.getElementById("login-btn").disabled = true;
       const result = await postRequest("admin/post/login", loginData);
       console.log(result);
       if (result.status == 201) {
@@ -32,7 +40,7 @@ document
       const data = result.data;
       localStorage.setItem("adminToken", data.token);
     } catch (err) {
-      document.getElementById('login-btn').disabled=false;
+      document.getElementById("login-btn").disabled = false;
       handleErrors(err);
     }
   });

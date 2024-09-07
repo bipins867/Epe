@@ -1,4 +1,15 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+
+  try{
+    const response=await getRequest('getServerInfo');
+
+    const socketPort=response.data.socketPort;
+    localStorage.setItem('socketPort',socketPort);
+  }
+  catch(err){
+   
+    handleErrors(err);
+  }
   // Check for chatToken in localStorage
   const chatToken = localStorage.getItem("chatToken");
   if (chatToken) {

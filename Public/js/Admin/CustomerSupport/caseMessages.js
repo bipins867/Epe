@@ -14,52 +14,16 @@ document.addEventListener("DOMContentLoaded", function () {
       const caseInfo = response.data.caseInfo;
 
       // Populate case details in the HTML
-      document.querySelector(
-        ".card-body p:nth-child(2)"
-      ).childNodes[1].textContent = ` ${caseInfo.caseId}`;
-      document.querySelector(
-        ".card-body p:nth-child(3)"
-      ).childNodes[1].textContent = ` ${caseInfo.CaseUser.id}`;
-      document.querySelector(
-        ".card-body p:nth-child(4)"
-      ).childNodes[1].textContent = ` ${caseInfo.CaseUser.name}`;
-      document.querySelector(
-        ".card-body p:nth-child(5)"
-      ).childNodes[1].textContent = ` ${caseInfo.CaseUser.email}`;
-      document.querySelector(
-        ".card-body p:nth-child(6)"
-      ).childNodes[1].textContent = ` ${
-        caseInfo.CaseUser.candidateId || "N/A"
-      }`;
-      document.querySelector(
-        ".card-body p:nth-child(7)"
-      ).childNodes[1].textContent = ` ${
-        caseInfo.CaseUser.isExistingUser ? "Yes" : "No"
-      }`;
-      document.querySelector(
-        ".card-body p:nth-child(8)"
-      ).childNodes[1].textContent = ` ${new Date(
-        caseInfo.creationTime
-      ).toLocaleString()}`;
-      document.querySelector(
-        ".card-body p:nth-child(9)"
-      ).childNodes[1].textContent = ` ${
-        caseInfo.closeTime
-          ? new Date(caseInfo.closeTime).toLocaleString()
-          : "N/A"
-      }`;
-      document.querySelector(
-        ".card-body p:nth-child(10)"
-      ).childNodes[1].textContent = ` ${caseInfo.status}`;
-      document.querySelector(
-        ".card-body p:nth-child(11)"
-      ).childNodes[1].textContent = ` ${
-        caseInfo.isClosedByAdmin
-          ? "Admin"
-          : caseInfo.isClosedByUser
-          ? "User"
-          : "N/A"
-      }`;
+      document.querySelector(".card-body p:nth-child(2)").childNodes[1].textContent = ` ${caseInfo.caseId}`;
+      document.querySelector(".card-body p:nth-child(3)").childNodes[1].textContent = ` ${caseInfo.CaseUser.id}`;
+      document.querySelector(".card-body p:nth-child(4)").childNodes[1].textContent = ` ${caseInfo.CaseUser.name}`;
+      document.querySelector(".card-body p:nth-child(5)").childNodes[1].textContent = ` ${caseInfo.CaseUser.email}`;
+      document.querySelector(".card-body p:nth-child(6)").childNodes[1].textContent = ` ${caseInfo.CaseUser.candidateId || "N/A"}`;
+      document.querySelector(".card-body p:nth-child(7)").childNodes[1].textContent = ` ${caseInfo.CaseUser.isExistingUser ? "Yes" : "No"}`;
+      document.querySelector(".card-body p:nth-child(8)").childNodes[1].textContent = ` ${new Date(caseInfo.creationTime).toLocaleString()}`;
+      document.querySelector(".card-body p:nth-child(9)").childNodes[1].textContent = ` ${caseInfo.closeTime ? new Date(caseInfo.closeTime).toLocaleString() : "N/A"}`;
+      document.querySelector(".card-body p:nth-child(10)").childNodes[1].textContent = ` ${caseInfo.status}`;
+      document.querySelector(".card-body p:nth-child(11)").childNodes[1].textContent = ` ${caseInfo.isClosedByAdmin ? "Admin" : caseInfo.isClosedByUser ? "User" : "N/A"}`;
 
       // Hide the "Close Case" button, input field, and send button if the case is already closed
       if (caseInfo.isClosedByAdmin || caseInfo.isClosedByUser) {
@@ -89,9 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
         chatBody.appendChild(noMessageElement);
       } else {
         messages.forEach((message) => {
-          const formattedMessage = message.isAdminSend
-            ? formatServerMessage(`${message.message}`)
-            : formatClientMessage(` ${message.message}`);
+          const formattedMessage = message.isAdminSend ? formatServerMessage(`${message.message}`) : formatClientMessage(` ${message.message}`);
           chatBody.innerHTML += formattedMessage;
         });
       }
@@ -107,10 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (messageText) {
       try {
         const obj = { message: messageText, caseId: caseId };
-        const response = await postRequestWithToken(
-          "admin/customerSupport/post/addMessage",
-          obj
-        );
+        const response = await postRequestWithToken("admin/customerSupport/post/addMessage", obj);
 
         // Remove "No message found..." if it exists
         const noMessageElement = document.getElementById("noMessageFound");
@@ -134,19 +93,22 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("Case has been closed.");
     }
   });
+
+  // Listen for page unload (user closes the tab, refreshes, or navigates away)
+  window.addEventListener("beforeunload", function () {
+    socket.emit("leave-case", caseId);
+  });
 });
+
 // Function to format server and client messages
 function formatServerMessage(message) {
-  return `<div class="message server-message">
-          ${message}
-        </div>`;
+  return `<div class="message server-message">${message}</div>`;
 }
 
 function formatClientMessage(message) {
-  return `<div class="message client-message">
-          ${message}
-        </div>`;
+  return `<div class="message client-message">${message}</div>`;
 }
+
 function checkAndUpdateChatBoxLength() {
   const chatBody = document.getElementById("chatBody");
   const messageElements = chatBody.children;
@@ -158,6 +120,7 @@ function checkAndUpdateChatBoxLength() {
     }
   }
 }
+
 function addUserResponseMessage(message) {
   const chatBody = document.getElementById("chatBody");
 

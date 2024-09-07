@@ -3,7 +3,7 @@ const CaseUser = require("../../Models/CustomerSupport/caseUser");
 const CustomerCase = require("../../Models/CustomerSupport/customerCase");
 
 const CaseMessage = require("../../Models/CustomerSupport/caseMessage");
-const { sendMessage2Case } = require("../../Server-Socket/server");
+const { sendMessage2Admin } = require("../../Server-Socket/server");
 
 // Helper function to generate a random string with 4 alphabets and 4 numbers
 function generateRandomCaseNumber() {
@@ -237,7 +237,7 @@ exports.addUserMessage = async (req, res, next) => {
       }
     );
 
-    sendMessage2Case(customerCase.caseId,newMessage.message)
+    sendMessage2Admin(customerCase.caseId,newMessage.message)
 
     // 3. Return the created message
     res.status(201).json({

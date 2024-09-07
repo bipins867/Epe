@@ -1,4 +1,16 @@
 const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+function getAddressWithoutPort(url) {
+  // Regular expression to match the address part between protocol and port/path
+  const regex = /^(?:https?:\/\/)?([^/:?#]+)(?::\d+)?/;
+
+  // Use regex to extract the match
+  const match = url.match(regex);
+
+  // If a match is found, return the matched group; otherwise, return null
+  return match ? match[1] : null;
+}
+
+
 
 async function handleErrors(err) {
   if (!err.response) {

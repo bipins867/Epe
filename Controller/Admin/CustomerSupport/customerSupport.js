@@ -3,7 +3,7 @@ const CaseUser = require("../../../Models/CustomerSupport/caseUser");
 const CustomerCase = require("../../../Models/CustomerSupport/customerCase");
 
 const { Op } = require("sequelize");
-const { sendMessage2Case } = require("../../../Server-Socket/server");
+const {  sendMessage2User } = require("../../../Server-Socket/server");
 
 exports.getDashboardInfo = async (req, res, next) => {
   try {
@@ -276,7 +276,7 @@ exports.addAdminMessage = async (req, res, next) => {
         },
       }
     );
-    sendMessage2Case(caseId, newMessage.message);
+    sendMessage2User(caseId, newMessage.message);
     // 4. Return the created message as a response
     res.status(201).json({
       message:
