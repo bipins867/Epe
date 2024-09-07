@@ -13,7 +13,7 @@ socket.on("disconnect", () => {
 // Function to handle messages broadcasted to the case room
 function handleCaseMessage(message) {
   
-  addAdminResponseMessage(message);
+  addUserResponseMessage(message);
 }
 
 // Function to handle case info broadcasted to all clients

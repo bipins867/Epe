@@ -1,7 +1,6 @@
 const baseUrl = `${window.location.protocol}//${window.location.host}/`;
 
 async function handleErrors(err) {
-  
   if (!err.response) {
     console.log("Network error or server is not responding:", err);
     alert("Network error or server is not responding. Please try again later.");
@@ -9,13 +8,12 @@ async function handleErrors(err) {
   }
   const { response } = err;
 
-
-  if (response.status==503){
-    window.location.replace('/user/auth/login')
-    localStorage.removeItem('token')
+  if (response.status == 503) {
+    window.location.replace("/user/auth/login");
+    localStorage.removeItem("token");
   }
   // Extract the response data
-  
+
   // Handle specific error responses
   if (response.data && response.data.errors) {
     let errorMessage = "Please fix the following errors:\n";
@@ -41,6 +39,15 @@ function getTokenHeaders() {
     window.location.replace("/user/auth/login");
   }
   const headers = { authorization: token };
+  return headers;
+}
+function getChatTokenHeaders() {
+  const token = localStorage.getItem("chatToken");
+
+  if (token == null) {
+    window.location.reload();
+  }
+  const headers = { chattoken: token };
   return headers;
 }
 
@@ -74,6 +81,16 @@ async function getRequestWithToken(url) {
 
 async function postRequestWithToken(url, obj) {
   const headers = getTokenHeaders();
+  if (!headers) {
+    return;
+  }
+
+  const result = await axios.post(baseUrl + url, obj, { headers });
+
+  return result;
+}
+async function postRequestWithChatToken(url, obj) {
+  const headers = getChatTokenHeaders();
   if (!headers) {
     return;
   }

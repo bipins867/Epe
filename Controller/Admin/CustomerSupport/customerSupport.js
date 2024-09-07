@@ -3,6 +3,7 @@ const CaseUser = require("../../../Models/CustomerSupport/caseUser");
 const CustomerCase = require("../../../Models/CustomerSupport/customerCase");
 
 const { Op } = require("sequelize");
+const { sendMessage2Case } = require("../../../Server-Socket/server");
 
 exports.getDashboardInfo = async (req, res, next) => {
   try {
@@ -57,13 +58,21 @@ exports.getDashboardInfo = async (req, res, next) => {
 };
 exports.getOpenCases = async (req, res, next) => {
   try {
-    // Fetch all cases with status 'Open'
+    // Fetch all cases with status 'Open' and associated user information
     const openCases = await CustomerCase.findAll({
       where: { status: "Open" },
-      order: [["creationTime", "DESC"]], // Optionally, you can order by creation time or any other field
+      order: [["creationTime", "DESC"]],
+      include: [
+        {
+          model: CaseUser, // Include CaseUser details
+          attributes: ["id", "name", "email", "isExistingUser"], // Specify the attributes you want to return for the user
+        },
+      ],
     });
 
-    // Return the list of open cases
+    // Optionally format the response if you want to control the output structure
+
+    // Return the list of open cases with associated user info
     res.status(200).json(openCases);
   } catch (error) {
     console.error(error);
@@ -80,7 +89,13 @@ exports.getClosedCases = async (req, res, next) => {
       where: {
         [Op.or]: [{ isClosedByUser: true }, { isClosedByAdmin: true }],
       },
-      order: [["closeTime", "DESC"]], // Optionally, you can order by close time or any other field
+      order: [["closeTime", "DESC"]],
+      include: [
+        {
+          model: CaseUser, // Include CaseUser details
+          attributes: ["id", "name", "email", "isExistingUser"], // Specify the attributes you want to return for the user
+        },
+      ], // Optionally, you can order by close time or any other field
     });
 
     // Return the list of closed cases
@@ -95,7 +110,7 @@ exports.getClosedCases = async (req, res, next) => {
 
 exports.getPendingCases = async (req, res, next) => {
   try {
-    // Fetch all cases where the status is 'Pending'
+    // Fetch all cases where the status is 'Pending' and include associated user and latest message info
     const pendingCases = await CustomerCase.findAll({
       where: {
         status: "Pending",
@@ -113,12 +128,15 @@ exports.getPendingCases = async (req, res, next) => {
           order: [["createdAt", "DESC"]], // To get the latest message first
           limit: 1, // Limit to the latest message
         },
+        {
+          model: CaseUser, // Include associated user information
+          attributes: ["id", "name", "email", "isExistingUser"], // Specify user attributes to return
+        },
       ],
     });
 
     // Prepare the response to include the 'seenByAdmin' condition of the last message for each case
     const result = pendingCases.map((caseData) => {
-      // Use the correct property name to access the associated messages
       const latestMessage = caseData.CaseMessages && caseData.CaseMessages[0]; // The latest message based on the query
       return {
         caseId: caseData.caseId,
@@ -126,11 +144,13 @@ exports.getPendingCases = async (req, res, next) => {
         latestMessageSeenByAdmin: latestMessage
           ? latestMessage.seenByAdmin
           : null, // Return 'null' if no messages are associated
+        latestMessage: latestMessage ? latestMessage.message : null, // The latest message content
+        caseUser: caseData.CaseUser, // Associated user information
       };
     });
 
     // Return the list of pending cases with associated 'seenByAdmin' information
-    res.status(200).json(result);
+    res.status(200).json(pendingCases);
   } catch (error) {
     console.error(error);
     res
@@ -193,7 +213,7 @@ exports.getCaseMessages = async (req, res, next) => {
     }
 
     // Return the list of messages
-    res.status(200).json({ messages });
+    res.status(200).json({ messages:messages.reverse() });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -256,7 +276,7 @@ exports.addAdminMessage = async (req, res, next) => {
         },
       }
     );
-
+    sendMessage2Case(caseId, newMessage.message);
     // 4. Return the created message as a response
     res.status(201).json({
       message:

@@ -3,6 +3,7 @@ const CaseUser = require("../../Models/CustomerSupport/caseUser");
 const CustomerCase = require("../../Models/CustomerSupport/customerCase");
 
 const CaseMessage = require("../../Models/CustomerSupport/caseMessage");
+const { sendMessage2Case } = require("../../Server-Socket/server");
 
 // Helper function to generate a random string with 4 alphabets and 4 numbers
 function generateRandomCaseNumber() {
@@ -180,12 +181,12 @@ exports.getCaseMessages = async (req, res, next) => {
     // Check if messages were found
     if (!messages || messages.length === 0) {
       return res
-        .status(404)
+        .status(201)
         .json({ message: "No messages found for the provided case ID." });
     }
 
     // Return the list of messages
-    res.status(200).json({ messages });
+    res.status(200).json({ messages:messages.reverse() });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -236,10 +237,12 @@ exports.addUserMessage = async (req, res, next) => {
       }
     );
 
+    sendMessage2Case(customerCase.caseId,newMessage.message)
+
     // 3. Return the created message
     res.status(201).json({
       message: "Message created successfully, and admin messages marked as seen.",
-      data: newMessage,
+      infoMessage: newMessage,
     });
   } catch (error) {
     console.error("Error creating user message:", error);

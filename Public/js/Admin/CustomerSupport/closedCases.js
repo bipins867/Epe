@@ -1,37 +1,59 @@
-// Dummy list of closed case information
-const closedCases = [
-    { UserId: 301, caseId: 'CL001', name: 'George Hall', email: 'george.hall@example.com', isExistingUser: true, creationTime: '2024-09-04 08:00 AM', closedBy: 'admin', closedTime: '2024-09-06 02:00 PM' },
-    { UserId: 302, caseId: 'CL002', name: 'Emma Scott', email: 'emma.scott@example.com', isExistingUser: false, creationTime: '2024-09-04 08:30 AM', closedBy: 'user', closedTime: '2024-09-06 02:30 PM' },
-    { UserId: 303, caseId: 'CL003', name: 'Henry Adams', email: 'henry.adams@example.com', isExistingUser: true, creationTime: '2024-09-04 09:00 AM', closedBy: 'admin', closedTime: '2024-09-06 03:00 PM' },
-    { UserId: 304, caseId: 'CL004', name: 'Olivia Martinez', email: 'olivia.martinez@example.com', isExistingUser: false, creationTime: '2024-09-04 09:45 AM', closedBy: 'user', closedTime: '2024-09-06 03:45 PM' },
-    { UserId: 305, caseId: 'CL005', name: 'Liam Parker', email: 'liam.parker@example.com', isExistingUser: true, creationTime: '2024-09-04 10:15 AM', closedBy: 'admin', closedTime: '2024-09-06 04:15 PM' }
-];
+document.addEventListener("DOMContentLoaded", function () {
+    postRequestWithToken("admin/customerSupport/post/closedCases")
+        .then((response) => {
+            const cases = response.data;
+            
+            
+            // Get the table body and total count elements
+            const closedCaseListBody = document.getElementById("closedCaseListBody");
+            const closedCasesCount = document.getElementById("closedCasesCount");
 
-// Display the number of closed cases
-document.getElementById('closedCasesCount').textContent = closedCases.length;
+            // Update the total closed cases count
+            closedCasesCount.textContent = cases.length;
 
-// Populate the table with closed case data
-const closedCaseListBody = document.getElementById('closedCaseListBody');
-closedCases.forEach(caseInfo => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${caseInfo.UserId}</td>
-        <td>${caseInfo.caseId}</td>
-        <td>${caseInfo.name}</td>
-        <td>${caseInfo.email}</td>
-        <td>${caseInfo.isExistingUser ? 'Yes' : 'No'}</td>
-        <td>${caseInfo.creationTime}</td>
-        <td>${caseInfo.closedBy}</td>
-        <td>${caseInfo.closedTime}</td>
-        <td><button class="btn btn-secondary btn-sm open-case-btn">Open</button></td>
-    `;
-    closedCaseListBody.appendChild(row);
-});
+            // Loop through each case in the response data
+            cases.forEach((caseItem) => {
+                const { CaseUser, caseId, createdAt, closeTime, isClosedByAdmin, isClosedByUser } = caseItem;
 
-// Event listener for the "Open" action buttons
-document.querySelectorAll('.open-case-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        // Add logic to handle opening the closed case
-        console.log('Closed Case opened:', this.closest('tr').querySelector('td:nth-child(2)').textContent);
-    });
+                // Determine who closed the case
+                let closedBy = "Unknown";
+                if (isClosedByAdmin) closedBy = "Admin";
+                else if (isClosedByUser) closedBy = "User";
+
+                // Create a new table row
+                const row = document.createElement("tr");
+
+                // Add table cells with case information
+                row.innerHTML = `
+                    <td>${CaseUser.id}</td>
+                    <td>${caseId}</td>
+                    <td>${CaseUser.name}</td>
+                    <td>${CaseUser.email}</td>
+                    <td>${CaseUser.isExistingUser ? 'Yes' : 'No'}</td>
+                    <td>${new Date(createdAt).toLocaleString()}</td>
+                    <td>${closedBy}</td>
+                    <td>${closeTime ? new Date(closeTime).toLocaleString() : 'N/A'}</td>
+                    <td>
+                        <button class="btn btn-outline-primary action-btn">
+                            Open
+                        </button>
+                    </td>
+                `;
+
+                // Append the new row to the table body
+                closedCaseListBody.appendChild(row);
+            });
+
+            // Add click event listeners for all action buttons
+            const actionButtons = document.querySelectorAll(".action-btn");
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    console.log('Action button clicked for case:', this.closest('tr').querySelector('td:nth-child(2)').textContent);
+                    // Leave the function blank for now
+                });
+            });
+        })
+        .catch((error) => {
+            handleErrors(error);
+        });
 });

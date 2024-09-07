@@ -3,11 +3,13 @@ const io = require("socket.io")(process.env.SOCKET_PORT, {
       origin: "*",
     },
   });
+  console.log("Socket Server is running!");
   const socketUsers = new Map();
   
   
   function sendMessage2Case(caseId, message) {
       // Broadcast the message to the specific room
+      console.log(caseId,message);
       io.to(caseId).emit('case-message', message);
   }
   function sendCaseInfo(info) {

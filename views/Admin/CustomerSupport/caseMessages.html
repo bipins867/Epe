@@ -17,17 +17,17 @@
                     <!-- Close Case Button -->
                     <button class="btn btn-danger" id="closeCaseButton">Close Case</button>
                 </h4>
-                <p><strong>Case ID:</strong> CS001</p>
-                <p><strong>User ID:</strong> 101</p>
-                <p><strong>Name:</strong> John Doe</p>
-                <p><strong>Email:</strong> john.doe@example.com</p>
-                <p><strong>Candidate ID:</strong> C1023</p>
-                <p><strong>Is Existing User:</strong> Yes</p>
-                <p><strong>Creation Time:</strong> 2024-09-04 10:00 AM</p>
-                <p><strong>Close Time:</strong> 2024-09-06 04:15 PM</p>
-                <p><strong>Status:</strong> Closed</p>
-                <p><strong>Closed By:</strong> Admin</p>
-            </div>
+                <p><strong>Case ID:</strong> <span id="caseIdLabel"></span></p>
+                <p><strong>User ID:</strong> <span id="userIdLabel"></span></p>
+                <p><strong>Name:</strong> <span id="userNameLabel"></span></p>
+                <p><strong>Email:</strong> <span id="userEmailLabel"></span></p>
+                <p><strong>Candidate ID:</strong> <span id="candidateIdLabel"></span></p>
+                <p><strong>Is Existing User:</strong> <span id="existingUserLabel"></span></p>
+                <p><strong>Creation Time:</strong> <span id="creationTimeLabel"></span></p>
+                <p><strong>Close Time:</strong> <span id="closeTimeLabel"></span></p>
+                <p><strong>Status:</strong> <span id="statusLabel"></span></p>
+                <p><strong>Closed By:</strong> <span id="closedByLabel"></span></p>
+           
         </div>
 
         <!-- Chat Body Section -->
@@ -45,6 +45,11 @@
         </div>
     </div>
 
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" ></script>
     <script src="/js/Admin/CustomerSupport/caseMessages.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
+    <script src="/js/Utils/adminUtils.js"></script>
+    <script src="/js/Admin/CustomerSupport/socketScript.js" defer></script>
 </body>
 </html>

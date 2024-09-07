@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // If chatToken exists, show input field and call getInitialMessage function
     showInputField(true);
     getInitialMessage();
+    document.getElementById("sendMessage").onclick = function () {
+      handleSendingInputMessage();
+    };
   } else {
     // If chatToken does not exist, hide input field and show initial options
     showInputField(false);
@@ -31,11 +34,10 @@ function finishPreTemplateConversation() {
 
 function handleOption(option) {
   const chatBody = document.getElementById("chatBody");
-  chatBody.innerHTML+=formatClientMessage(option)
+  chatBody.innerHTML += formatClientMessage(option);
   clearOptions();
-  
+
   if (option === "existing") {
-    
     chatBody.innerHTML += formatServerMessage("Please enter your email:");
     showInputField(true);
     document.getElementById("sendMessage").onclick = function () {
@@ -60,7 +62,7 @@ function handleOption(option) {
               const candidateId = document
                 .getElementById("messageInput")
                 .value.trim();
-                document.getElementById("messageInput").value = "";
+              document.getElementById("messageInput").value = "";
               if (candidateId) {
                 chatBody.innerHTML += formatClientMessage(candidateId);
                 createCaseFunction(name, email, candidateId);
@@ -80,7 +82,6 @@ function handleOption(option) {
       }
     };
   } else if (option === "new") {
-    
     chatBody.innerHTML += formatServerMessage(
       "Would you like to know about our services or talk to an agent?"
     );
@@ -91,7 +92,6 @@ function handleOption(option) {
           </div>
       `;
   } else if (option === "services") {
-   
     knowService(); // Call the function and log to the console
     finishPreTemplateConversation(); // Finish conversation setup
 
@@ -138,8 +138,6 @@ function clearOptions() {
   }
 }
 
-
-
 function knowService() {
   // Call the function and log to the console
   console.log("Know about services requested.");
@@ -150,52 +148,121 @@ function showInputField(show) {
   chatFooter.style.display = show ? "flex" : "none";
 }
 
-function getInitialMessage() {
-  // Leave this function blank
+async function getInitialMessage() {
+  const caseId = localStorage.getItem("caseId");
+  const obj = { caseId: caseId };
+  try {
+    const response = await postRequest(
+      "customerSupport/post/CaseMessages",
+      obj
+    );
+    const messages = response.data.messages; // Assuming messages is the array from the response
+
+    updateChatBox(messages);
+    
+    socket.emit("join-case", caseId); // Call the function to update chatbox
+  } catch (err) {
+    handleErrors(err);
+  }
+}
+function checkAndUpdateChatBoxLength() {
+  const chatBody = document.getElementById("chatBody");
+  const messageElements = chatBody.children;
+  if (messageElements.length > 20) {
+    // Remove older messages if there are more than 20
+    const excessMessages = messageElements.length - 20;
+    for (let i = 0; i < excessMessages; i++) {
+      chatBody.removeChild(messageElements[0]);
+    }
+  }
+}
+// Function to update the chatbox with new messages
+function updateChatBox(messages) {
+  const chatBody = document.getElementById("chatBody");
+
+  // Loop through messages and append them to the chatbox
+  messages.forEach((message) => {
+    const formattedMessage = message.isAdminSend
+      ? formatServerMessage(message.message)
+      : formatClientMessage(message.message);
+    chatBody.innerHTML += formattedMessage;
+  });
+
+  // Check if there are more than 20 messages
+
+  checkAndUpdateChatBoxLength();
+  // Scroll to the bottom of the chatbox
+  chatBody.scrollTop = chatBody.scrollHeight;
 }
 
+function addUserResponseMessage(message) {
+  const chatBody = document.getElementById("chatBody");
 
+  const msg = formatClientMessage(message);
+  chatBody.innerHTML += msg;
+  checkAndUpdateChatBoxLength();
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+function addAdminResponseMessage(message) {
+  const chatBody = document.getElementById("chatBody");
 
+  const msg = formatServerMessage(message);
+  chatBody.innerHTML += msg;
+  checkAndUpdateChatBoxLength();
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
 
 function createCaseFunction(name, email, candidateId) {
   // Implement the function logic here
-  console.log("createCaseFunction called with:", { name, email, candidateId});
+  console.log("createCaseFunction called with:", { name, email, candidateId });
 
-  const obj={name,email,candidateId,isExistingUser:true }
+  const obj = { name, email, candidateId, isExistingUser: true };
   createCase(obj);
 }
 
 function createCaseFunction2(name, email) {
   // Implement the function logic here
-  console.log("createCaseFunction2 called with:", { name, email});
+  console.log("createCaseFunction2 called with:", { name, email });
 
-  const obj={name,email,isExistingUser:false }
+  const obj = { name, email, isExistingUser: false };
   createCase(obj);
 }
 
-async function createCase(obj){
- 
-  try{
-    const response=await postRequest('customerSupport/post/createCase',obj)
-    const data=response.data;
-    const chatToken=data.chatToken;
-    console.log(chatToken);
-   // localStorage.setItem('chatToken',chatToken);
-   document.getElementById("sendMessage").onclick = function () {
-    handleSendingInputMessage()
-   }
-   
-  }
-  catch(err){
-    handleErrors(err)
+async function createCase(obj) {
+  try {
+    const response = await postRequest("customerSupport/post/createCase", obj);
+    const data = response.data;
+    const chatToken = data.chatToken;
+
+    localStorage.setItem("chatToken", chatToken);
+    localStorage.setItem("caseId", data.caseId);
+    document.getElementById("sendMessage").onclick = function () {
+      handleSendingInputMessage();
+    };
+  } catch (err) {
+    handleErrors(err);
   }
 }
 
-
-function handleSendingInputMessage(){
+async function handleSendingInputMessage() {
   const msg = document.getElementById("messageInput").value.trim();
-  console.log(msg)
-  document.getElementById("messageInput").value='';
+  document.getElementById("messageInput").value = "";
+  if (msg === "") {
+    return;
+  }
+  try {
+    const obj = { message: msg, isFile: false };
+    const response = await postRequestWithChatToken(
+      "customerSupport/post/addMessage",
+      obj
+    );
+    //console.log(respons)
+    const message = response.data.infoMessage.message;
+
+    addUserResponseMessage(message);
+  } catch (err) {
+    handleErrors(err);
+  }
 }
 function clearChatBox() {
   const chatBody = document.getElementById("chatBody");

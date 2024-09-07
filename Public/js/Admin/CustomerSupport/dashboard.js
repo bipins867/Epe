@@ -1,46 +1,44 @@
 // Fetch and display counts of cases
 document.addEventListener('DOMContentLoaded', function () {
-    // axios.get('/api/caseCounts')
-    //     .then(response => {
-    //         const { openCases, pendingCases, closedCases } = response.data;
-    //         document.getElementById('openCasesCount').textContent = openCases || 0;
-    //         document.getElementById('pendingCasesCount').textContent = pendingCases || 0;
-    //         document.getElementById('closedCasesCount').textContent = closedCases || 0;
-    //     })
-    //     .catch(error => {
-    //         console.error('Error fetching case counts:', error);
-    //     });
-});
-
-document.getElementById('openCasesBtn').addEventListener('click', function () {
-    // Axios call to fetch open cases
-    axios.get('/api/openCases')
+    postRequestWithToken('admin/customerSupport/post/dashboardInfo')
         .then(response => {
-            console.log('Open Cases:', response.data);
+            const { numberOfOpenCases, numberOfPendingCases, numberOfClosedCases, pendingCasesWithUnSeenMessages } = response.data;
+
+            // Update the counts
+            document.getElementById('openCasesCount').textContent = numberOfOpenCases || 0;
+            document.getElementById('pendingCasesCount').textContent = numberOfPendingCases || 0;
+            document.getElementById('closedCasesCount').textContent = numberOfClosedCases || 0;
+
+            // Show or hide the "New" badge on the Open Cases button
+            const openCasesIndicator = document.querySelector('#openCasesBtn .new-case-indicator');
+            if (numberOfOpenCases > 0) {
+                openCasesIndicator.style.display = 'inline';
+            } else {
+                openCasesIndicator.style.display = 'none';
+            }
+
+            // Show or hide the "New" badge on the Pending Cases button
+            const pendingCasesIndicator = document.querySelector('#pendingCasesBtn .new-case-indicator');
+            if (pendingCasesWithUnSeenMessages > 0) {
+                pendingCasesIndicator.style.display = 'inline';
+            } else {
+                pendingCasesIndicator.style.display = 'none';
+            }
         })
         .catch(error => {
-            console.error('Error fetching open cases:', error);
+            handleErrors(error);
         });
+});
+
+// Event listeners for buttons
+document.getElementById('openCasesBtn').addEventListener('click', function () {
+   window.location.replace('/admin/customerSupport/openCases')
 });
 
 document.getElementById('pendingCasesBtn').addEventListener('click', function () {
-    // Axios call to fetch pending cases
-    axios.get('/api/pendingCases')
-        .then(response => {
-            console.log('Pending Cases:', response.data);
-        })
-        .catch(error => {
-            console.error('Error fetching pending cases:', error);
-        });
+    window.location.replace('/admin/customerSupport/pendingCases')
 });
 
 document.getElementById('closedCasesBtn').addEventListener('click', function () {
-    // Axios call to fetch closed cases
-    axios.get('/api/closedCases')
-        .then(response => {
-            console.log('Closed Cases:', response.data);
-        })
-        .catch(error => {
-            console.error('Error fetching closed cases:', error);
-        });
+    window.location.replace('/admin/customerSupport/closedCases')
 });

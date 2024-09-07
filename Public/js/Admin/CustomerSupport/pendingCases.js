@@ -1,42 +1,56 @@
-// Dummy list of pending case information
-const pendingCases = [
-    { UserId: 201, caseId: 'P001', name: 'Alice Johnson', email: 'alice.johnson@example.com', isExistingUser: true, creationTime: '2024-09-06 09:00 AM' },
-    { UserId: 202, caseId: 'P002', name: 'Bob Williams', email: 'bob.williams@example.com', isExistingUser: false, creationTime: '2024-09-06 09:30 AM' },
-    { UserId: 203, caseId: 'P003', name: 'Charlie Davis', email: 'charlie.davis@example.com', isExistingUser: true, creationTime: '2024-09-06 10:00 AM' },
-    { UserId: 204, caseId: 'P004', name: 'Diana Moore', email: 'diana.moore@example.com', isExistingUser: false, creationTime: '2024-09-06 10:45 AM' },
-    { UserId: 205, caseId: 'P005', name: 'Ethan Taylor', email: 'ethan.taylor@example.com', isExistingUser: true, creationTime: '2024-09-06 11:15 AM' }
-];
+document.addEventListener("DOMContentLoaded", function () {
+    postRequestWithToken("admin/customerSupport/post/pendingCases")
+        .then((response) => {
+            const cases = response.data;
+            console.log(cases);
 
-// Display the number of pending cases
-document.getElementById('pendingCasesCount').textContent = pendingCases.length;
+            // Get the table body element
+            const pendingCaseListBody = document.getElementById("pendingCaseListBody");
+            const pendingCasesCount = document.getElementById("pendingCasesCount");
 
-// Populate the table with pending case data
-const pendingCaseListBody = document.getElementById('pendingCaseListBody');
-pendingCases.forEach(caseInfo => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${caseInfo.UserId}</td>
-        <td>${caseInfo.caseId}</td>
-        <td>${caseInfo.name}</td>
-        <td>${caseInfo.email}</td>
-        <td>${caseInfo.isExistingUser ? 'Yes' : 'No'}</td>
-        <td>${caseInfo.creationTime}</td>
-        <td>
-            <button class="btn btn-warning btn-sm position-relative open-case-btn">
-                Open
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    New
-                </span>
-            </button>
-        </td>
-    `;
-    pendingCaseListBody.appendChild(row);
-});
+            // Update the total pending cases count
+            pendingCasesCount.textContent = cases.length;
 
-// Event listener for the "Open" action buttons
-document.querySelectorAll('.open-case-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        // Add logic to handle opening the case
-        console.log('Pending Case opened:', this.closest('tr').querySelector('td:nth-child(2)').textContent);
-    });
+            // Loop through each case in the response data
+            cases.forEach((caseItem) => {
+                const { CaseUser, caseId, createdAt, CaseMessages } = caseItem;
+
+                // Determine if there are any unseen messages
+                const hasUnseenMessages = CaseMessages.some((msg) => !msg.seenByAdmin);
+
+                // Create a new table row
+                const row = document.createElement("tr");
+
+                // Add table cells with case information
+                row.innerHTML = `
+                    <td>${CaseUser.id}</td>
+                    <td>${caseId}</td>
+                    <td>${CaseUser.name}</td>
+                    <td>${CaseUser.email}</td>
+                    <td>${CaseUser.isExistingUser ? 'Yes' : 'No'}</td>
+                    <td>${new Date(createdAt).toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-outline-primary position-relative action-btn">
+                            Open
+                            ${hasUnseenMessages ? '<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">New</span>' : ''}
+                        </button>
+                    </td>
+                `;
+
+                // Append the new row to the table body
+                pendingCaseListBody.appendChild(row);
+            });
+
+            // Add click event listeners for all action buttons
+            const actionButtons = document.querySelectorAll(".action-btn");
+            actionButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    console.log('Action button clicked for case:', this.closest('tr').querySelector('td:nth-child(2)').textContent);
+                    // Leave the function blank for now
+                });
+            });
+        })
+        .catch((error) => {
+            handleErrors(error);
+        });
 });
