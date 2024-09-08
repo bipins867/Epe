@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const CaseUser = require("../../Models/CustomerSupport/caseUser");
 const CustomerCase = require("../../Models/CustomerSupport/customerCase");
+const fs = require("fs");
+const path = require("path");
 
 const CaseMessage = require("../../Models/CustomerSupport/caseMessage");
 const { sendMessage2Admin } = require("../../Server-Socket/server");
@@ -106,12 +108,9 @@ exports.closeCaseByUser = async (req, res, next) => {
 
     // Check if the case is currently open or pending
     if (customerCase.status !== "Open" && customerCase.status !== "Pending") {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Case cannot be closed. It is not in an open or pending state.",
-        });
+      return res.status(400).json({
+        error: "Case cannot be closed. It is not in an open or pending state.",
+      });
     }
 
     // Update the case status to 'Closed' and mark it as closed by user
@@ -170,7 +169,9 @@ exports.getCaseInfo = async (req, res, next) => {
 exports.getCaseMessages = async (req, res, next) => {
   try {
     const { caseId } = req.body; // Assuming caseId is provided as a route parameter
-    const customerCase=await CustomerCase.findOne({where:{caseId:caseId}})
+    const customerCase = await CustomerCase.findOne({
+      where: { caseId: caseId },
+    });
     // Fetch the top 20 messages associated with the given caseId
     const messages = await CaseMessage.findAll({
       where: { CustomerCaseId: customerCase.id },
@@ -186,7 +187,7 @@ exports.getCaseMessages = async (req, res, next) => {
     }
 
     // Return the list of messages
-    res.status(200).json({ messages:messages.reverse() });
+    res.status(200).json({ messages: messages.reverse() });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -218,7 +219,10 @@ exports.addUserMessage = async (req, res, next) => {
     if (customerCase.status === "Closed") {
       return res
         .status(403) // Forbidden status code
-        .json({ message: "Cannot add message to a closed case. - Please refress the page!" });
+        .json({
+          message:
+            "Cannot add message to a closed case. - Please refress the page!",
+        });
     }
 
     // 1. Create the new message associated with the customer case
@@ -248,13 +252,99 @@ exports.addUserMessage = async (req, res, next) => {
 
     // 3. Return the created message
     res.status(201).json({
-      message: "Message created successfully, and admin messages marked as seen.",
+      message:
+        "Message created successfully, and admin messages marked as seen.",
       infoMessage: newMessage,
     });
   } catch (error) {
     console.error("Error creating user message:", error);
     res.status(500).json({
       message: "An error occurred while creating the message.",
+      error,
+    });
+  }
+};
+
+exports.addUserFile = async (req, res, next) => {
+  try {
+    const { caseUser, customerCase } = req; // Extract case user and case from the request object
+    const userFile = req.files["userFile"] ? req.files["userFile"][0] : null; // Assuming single file upload middleware
+    const { caseId } = req.body; // Assuming caseId is provided in the request body
+
+    // Verify that required information is present
+    if (!caseUser || !customerCase || !userFile) {
+      return res
+        .status(400)
+        .json({ message: "Invalid user, case information, or file." });
+    }
+
+    // Check if the case is closed
+    if (customerCase.status === "Closed") {
+      return res.status(403).json({
+        message: "Cannot add file to a closed case. - Please refresh the page!",
+      });
+    }
+    console.log(caseId);
+    console.log(__dirname);
+    // Ensure the base directory for storing files
+    const baseDir = path.join(
+      __dirname,
+      "..",
+      "..",
+
+      "ChatSupport",
+      caseId
+    );
+    console.log(baseDir);
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(baseDir)) {
+      fs.mkdirSync(baseDir, { recursive: true });
+    }
+
+    // Save the file in the specified directory
+    const fileName = userFile.originalname; // Original name of the file
+    const filePath = path.join(baseDir, fileName);
+
+    // Save the file using fs
+    fs.writeFileSync(filePath, userFile.buffer);
+
+    // Define the relative path to be stored in the message
+    const fileRelativePath = `${caseId}/${fileName}`;
+
+    // 1. Create a new message entry for the file upload associated with the customer case
+    const newFileMessage = await customerCase.createCaseMessage({
+      message: fileRelativePath, // Store the relative file path
+      isFile: true, // Indicates it is a file
+      isAdminSend: false, // Indicates user-sent message
+      creationTime: new Date(),
+      seenByAdmin: false, // Default to unseen by admin
+      seenByUser: true, // User sees their own message
+    });
+
+    // 2. Mark all previous admin messages as seen by the user
+    await CaseMessage.update(
+      { seenByUser: true }, // Update to set seenByUser to true
+      {
+        where: {
+          CustomerCaseId: customerCase.id,
+          isAdminSend: true, // Only admin messages
+          seenByUser: false, // Only messages not yet seen by the user
+        },
+      }
+    );
+
+    // Notify admin of the new file
+    sendMessage2Admin(customerCase.caseId, newFileMessage.message);
+
+    // 3. Return the created message
+    res.status(201).json({
+      message: "File uploaded successfully, and admin messages marked as seen.",
+      fileMessage: newFileMessage,
+    });
+  } catch (error) {
+    console.error("Error uploading user file:", error);
+    res.status(500).json({
+      message: "An error occurred while uploading the file.",
       error,
     });
   }

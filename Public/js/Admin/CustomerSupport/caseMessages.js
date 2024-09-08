@@ -12,16 +12,52 @@ document.addEventListener("DOMContentLoaded", function () {
       const caseInfo = response.data.caseInfo;
 
       // Populate case details in the HTML
-      document.querySelector(".card-body p:nth-child(2)").childNodes[1].textContent = ` ${caseInfo.caseId}`;
-      document.querySelector(".card-body p:nth-child(3)").childNodes[1].textContent = ` ${caseInfo.CaseUser.id}`;
-      document.querySelector(".card-body p:nth-child(4)").childNodes[1].textContent = ` ${caseInfo.CaseUser.name}`;
-      document.querySelector(".card-body p:nth-child(5)").childNodes[1].textContent = ` ${caseInfo.CaseUser.email}`;
-      document.querySelector(".card-body p:nth-child(6)").childNodes[1].textContent = ` ${caseInfo.CaseUser.candidateId || "N/A"}`;
-      document.querySelector(".card-body p:nth-child(7)").childNodes[1].textContent = ` ${caseInfo.CaseUser.isExistingUser ? "Yes" : "No"}`;
-      document.querySelector(".card-body p:nth-child(8)").childNodes[1].textContent = ` ${new Date(caseInfo.creationTime).toLocaleString()}`;
-      document.querySelector(".card-body p:nth-child(9)").childNodes[1].textContent = ` ${caseInfo.closeTime ? new Date(caseInfo.closeTime).toLocaleString() : "N/A"}`;
-      document.querySelector(".card-body p:nth-child(10)").childNodes[1].textContent = ` ${caseInfo.status}`;
-      document.querySelector(".card-body p:nth-child(11)").childNodes[1].textContent = ` ${caseInfo.isClosedByAdmin ? "Admin" : caseInfo.isClosedByUser ? "User" : "N/A"}`;
+      document.querySelector(
+        ".card-body p:nth-child(2)"
+      ).childNodes[1].textContent = ` ${caseInfo.caseId}`;
+      document.querySelector(
+        ".card-body p:nth-child(3)"
+      ).childNodes[1].textContent = ` ${caseInfo.CaseUser.id}`;
+      document.querySelector(
+        ".card-body p:nth-child(4)"
+      ).childNodes[1].textContent = ` ${caseInfo.CaseUser.name}`;
+      document.querySelector(
+        ".card-body p:nth-child(5)"
+      ).childNodes[1].textContent = ` ${caseInfo.CaseUser.email}`;
+      document.querySelector(
+        ".card-body p:nth-child(6)"
+      ).childNodes[1].textContent = ` ${
+        caseInfo.CaseUser.candidateId || "N/A"
+      }`;
+      document.querySelector(
+        ".card-body p:nth-child(7)"
+      ).childNodes[1].textContent = ` ${
+        caseInfo.CaseUser.isExistingUser ? "Yes" : "No"
+      }`;
+      document.querySelector(
+        ".card-body p:nth-child(8)"
+      ).childNodes[1].textContent = ` ${new Date(
+        caseInfo.creationTime
+      ).toLocaleString()}`;
+      document.querySelector(
+        ".card-body p:nth-child(9)"
+      ).childNodes[1].textContent = ` ${
+        caseInfo.closeTime
+          ? new Date(caseInfo.closeTime).toLocaleString()
+          : "N/A"
+      }`;
+      document.querySelector(
+        ".card-body p:nth-child(10)"
+      ).childNodes[1].textContent = ` ${caseInfo.status}`;
+      document.querySelector(
+        ".card-body p:nth-child(11)"
+      ).childNodes[1].textContent = ` ${
+        caseInfo.isClosedByAdmin
+          ? "Admin"
+          : caseInfo.isClosedByUser
+          ? "User"
+          : "N/A"
+      }`;
 
       if (caseInfo.isClosedByAdmin || caseInfo.isClosedByUser) {
         document.getElementById("closeCaseButton").style.display = "none";
@@ -38,6 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
   postRequestWithToken(`admin/customerSupport/post/caseMessages/${caseId}`)
     .then((response) => {
       const messages = response.data.messages;
+      console.log(messages);
       const chatBody = document.getElementById("chatBody");
       chatBody.innerHTML = "";
 
@@ -48,7 +85,14 @@ document.addEventListener("DOMContentLoaded", function () {
         chatBody.appendChild(noMessageElement);
       } else {
         messages.forEach((message) => {
-          const formattedMessage = message.isAdminSend ? formatServerMessage(`${message.message}`) : formatClientMessage(`${message.message}`);
+          let formattedMessage;
+          if (message.isFile) {
+            formattedMessage = addImageResponseMessage(message.message);
+          } else {
+            formattedMessage = message.isAdminSend
+              ? formatServerMessage(message.message)
+              : formatClientMessage(message.message);
+          }
           chatBody.innerHTML += formattedMessage;
         });
 
@@ -66,7 +110,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (messageText) {
       try {
         const obj = { message: messageText, caseId: caseId };
-        const response = await postRequestWithToken("admin/customerSupport/post/addMessage", obj);
+        const response = await postRequestWithToken(
+          "admin/customerSupport/post/addMessage",
+          obj
+        );
 
         const noMessageElement = document.getElementById("noMessageFound");
         if (noMessageElement) {
@@ -85,24 +132,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  document.getElementById("closeCaseButton").addEventListener("click",async  () => {
-    if (confirm("Are you sure you want to close this case?")) {
-      
-      try{
-        await postRequestWithToken('admin/customerSupport/post/closeCase',{caseId:caseId})
-        alert("Case has been closed.");
-        window.location.replace("/admin/customerSupport/dashboard")
-      }catch(err){
-        handleErrors(err)
+  document
+    .getElementById("closeCaseButton")
+    .addEventListener("click", async () => {
+      if (confirm("Are you sure you want to close this case?")) {
+        try {
+          await postRequestWithToken("admin/customerSupport/post/closeCase", {
+            caseId: caseId,
+          });
+          alert("Case has been closed.");
+          window.location.replace("/admin/customerSupport/dashboard");
+        } catch (err) {
+          handleErrors(err);
+        }
       }
-    }
-  });
+    });
 
   window.addEventListener("beforeunload", function () {
     socket.emit("leave-case", caseId);
   });
 });
+function addImageResponseMessage(url) {
+  const imgTag = `<div class="message client-message"><img src="/files/CustomerSupport/${url}" alt="Uploaded Image" style="max-width: 200px; height: auto;"/></div>`;
 
+  return imgTag;
+}
 function formatServerMessage(message) {
   return `<div class="message server-message">${message}</div>`;
 }

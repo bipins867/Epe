@@ -11,6 +11,11 @@ function sendMessage2Admin(caseId, message) {
   console.log(caseId, message);
   io.to(caseId).emit("case-admin-message", message);
 }
+function sendFile2Admin(caseId, url) {
+  // Broadcast the message to the specific room
+  
+  io.to(caseId).emit("case-admin-file", url);
+}
 function sendMessage2User(caseId, message) {
   // Broadcast the message to the specific room
   console.log(caseId, message);

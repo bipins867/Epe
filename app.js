@@ -16,7 +16,7 @@ require('./Server-Socket/server')
 app=express()
 app.use(express.static(path.join(__dirname, 'Public')));
 app.use(express.static(path.join(__dirname, 'CustomerFiles')));
-app.use(express.static(path.join(__dirname,'PublicFiles')))
+app.use(express.static(path.join(__dirname,'CustomerSupport')))
 
 
 app.use(cors({

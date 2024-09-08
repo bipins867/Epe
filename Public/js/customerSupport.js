@@ -21,6 +21,62 @@ document.addEventListener("DOMContentLoaded", async function () {
     showInitialOptions();
   }
 });
+document.getElementById("fileSendButton").onclick = function () {
+  handleFileUpload();
+};
+// Function to handle file upload
+async function handleFileUpload() {
+  const chatToken = localStorage.getItem("chatToken");
+  const caseId = localStorage.getItem("caseId");
+  const fileInput = document.getElementById("fileInput");
+  console.log("File input element:", fileInput);
+
+  const file = fileInput.files[0];
+  console.log("Selected file:", file);
+
+  if (!file) {
+    alert("Please select a file to upload.");
+    return;
+  }
+
+  const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+  if (!allowedTypes.includes(file.type)) {
+    alert("Only image files (jpg, png, gif) are allowed.");
+    fileInput.value = ""; // Clear the file input
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("userFile", file);
+  formData.append("caseId", caseId);
+
+  try {
+    const response = await axios.post(
+      baseUrl + "customerSupport/post/addFile",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          chattoken: chatToken,
+        },
+      }
+    );
+
+    const fileUrl = response.data.fileUrl;
+
+    // Display image in chatbox
+    addImageResponseMessage(fileUrl);
+  } catch (err) {
+    alert("Error uploading file: " + err.message);
+  }
+}
+
+// Function to add an image message to the chatbox
+function addImageResponseMessage(url) {
+  const imgTag = `<div class="message client-message"><img src="files/CustomerSupport/${url}" alt="Uploaded Image" style="max-width: 200px; height: auto;"/></div>`;
+
+  return imgTag;
+}
 
 async function checkCaseStatus(caseId) {
   try {
@@ -30,7 +86,7 @@ async function checkCaseStatus(caseId) {
     const isCaseClosed =
       response.data.caseInfo.isClosedByAdmin ||
       response.data.caseInfo.isClosedByUser; // Assuming 'isClosed' is returned from the server
-    
+
     if (isCaseClosed) {
       alert("Case is already closed!");
       // If case is closed, remove chatToken and caseId from localStorage and refresh the page
@@ -231,12 +287,18 @@ function checkAndUpdateChatBoxLength() {
 // Function to update the chatbox with new messages
 function updateChatBox(messages) {
   const chatBody = document.getElementById("chatBody");
-
+  console.log(messages);
   // Loop through messages and append them to the chatbox
   messages.forEach((message) => {
-    const formattedMessage = message.isAdminSend
-      ? formatServerMessage(message.message)
-      : formatClientMessage(message.message);
+    let formattedMessage;
+    if (message.isFile) {
+      formattedMessage = addImageResponseMessage(message.message);
+    } else {
+      formattedMessage = message.isAdminSend
+        ? formatServerMessage(message.message)
+        : formatClientMessage(message.message);
+    }
+    
     chatBody.innerHTML += formattedMessage;
   });
 
