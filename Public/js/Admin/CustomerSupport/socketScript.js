@@ -1,6 +1,6 @@
 const host=getAddressWithoutPort(window.location.host);
 const socketPort=localStorage.getItem('socketPort');
-
+const nodeEnv = localStorage.getItem("nodeEnv");
 let socketUrl;
 if (nodeEnv) {
   if (nodeEnv === "production") {
