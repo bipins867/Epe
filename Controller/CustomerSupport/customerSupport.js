@@ -218,7 +218,7 @@ exports.addUserMessage = async (req, res, next) => {
     if (customerCase.status === "Closed") {
       return res
         .status(403) // Forbidden status code
-        .json({ message: "Cannot add message to a closed case." });
+        .json({ message: "Cannot add message to a closed case. - Please refress the page!" });
     }
 
     // 1. Create the new message associated with the customer case

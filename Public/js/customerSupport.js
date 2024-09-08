@@ -1,28 +1,69 @@
 document.addEventListener("DOMContentLoaded", async function () {
+  try {
+    const response = await getRequest("getServerInfo");
 
-  try{
-    const response=await getRequest('getServerInfo');
-
-    const socketPort=response.data.socketPort;
-    localStorage.setItem('socketPort',socketPort);
-  }
-  catch(err){
-   
+    const socketPort = response.data.socketPort;
+    localStorage.setItem("socketPort", socketPort);
+  } catch (err) {
     handleErrors(err);
   }
+
   // Check for chatToken in localStorage
   const chatToken = localStorage.getItem("chatToken");
-  if (chatToken) {
-    // If chatToken exists, show input field and call getInitialMessage function
-    showInputField(true);
-    getInitialMessage();
-    document.getElementById("sendMessage").onclick = function () {
-      handleSendingInputMessage();
-    };
+  const caseId = localStorage.getItem("caseId");
+
+  if (chatToken && caseId) {
+    // Fetch case details to check if it's closed
+    checkCaseStatus(caseId);
   } else {
     // If chatToken does not exist, hide input field and show initial options
     showInputField(false);
     showInitialOptions();
+  }
+});
+
+async function checkCaseStatus(caseId) {
+  try {
+    const response = await postRequest("customerSupport/post/caseInfo", {
+      caseId: caseId,
+    });
+    const isCaseClosed =
+      response.data.caseInfo.isClosedByAdmin ||
+      response.data.caseInfo.isClosedByUser; // Assuming 'isClosed' is returned from the server
+    
+    if (isCaseClosed) {
+      alert("Case is already closed!");
+      // If case is closed, remove chatToken and caseId from localStorage and refresh the page
+      localStorage.removeItem("chatToken");
+      localStorage.removeItem("caseId");
+      location.reload();
+    } else {
+      showInputField(true);
+      getInitialMessage();
+      document.getElementById("sendMessage").onclick = function () {
+        handleSendingInputMessage();
+      };
+    }
+  } catch (err) {
+    handleErrors(err);
+  }
+}
+
+document.getElementById("closeCase").addEventListener("click", async () => {
+  try {
+    const caseId = localStorage.getItem("caseId");
+    await postRequestWithChatToken("customerSupport/post/closeCase", {
+      caseId: caseId,
+    });
+
+    // Remove chatToken and caseId from localStorage
+    localStorage.removeItem("chatToken");
+    localStorage.removeItem("caseId");
+
+    // Refresh the page
+    location.reload();
+  } catch (err) {
+    handleErrors(err);
   }
 });
 
@@ -170,7 +211,7 @@ async function getInitialMessage() {
     const messages = response.data.messages; // Assuming messages is the array from the response
 
     updateChatBox(messages);
-    
+
     socket.emit("join-case", caseId); // Call the function to update chatbox
   } catch (err) {
     handleErrors(err);
@@ -250,6 +291,7 @@ async function createCase(obj) {
     document.getElementById("sendMessage").onclick = function () {
       handleSendingInputMessage();
     };
+    socket.emit("join-case", data.caseId);
   } catch (err) {
     handleErrors(err);
   }
@@ -315,19 +357,18 @@ document.getElementById("closeChat").addEventListener("click", function () {
   document.getElementById("chatBox").style.display = "none";
 });
 
+document.getElementById("closeCase").addEventListener("click", async () => {
+  try {
+    const caseId = localStorage.getItem("caseId");
+    await postRequestWithChatToken("customerSupport/post/closeCase", {
+      caseId: caseId,
+    });
 
-document.getElementById("closeCase").addEventListener('click',async ()=>{
-  try{
-   
-    const caseId=localStorage.getItem('caseId')
-    await postRequestWithChatToken('customerSupport/post/closeCase',{caseId:caseId})
-
-    localStorage.removeItem('caseId')
-    localStorage.removeItem('chatToken')
+    localStorage.removeItem("caseId");
+    localStorage.removeItem("chatToken");
 
     window.location.reload();
-  }
-  catch(err){
+  } catch (err) {
     handleErrors(err);
   }
 });
