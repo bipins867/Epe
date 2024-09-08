@@ -6,7 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>E Pe India</title>
+    <script defer>
+      if (!localStorage.getItem('socketPort'))
+    localStorage.setItem("socketPort", 3030);
 
+    if(!localStorage.getItem('nodeEnv'))
+    localStorage.setItem("nodeEnv", 'production');
+   
+    async function refreshing(){
+      try {
+          // Replace the getRequest call with fetch
+          const response = await fetch("https://epeindia.in/getServerInfo");
+      
+          // Check if the response is okay (status in the range 200-299)
+          if (!response.ok) {
+              throw new Error(`Network response was not ok: ${response.statusText}`);
+          }
+      
+          // Parse the JSON response
+          const data = await response.json();
+      
+          // Extract and store data from the response
+          const socketPort = data.socketPort;
+          const nodeEnv = data.nodeEnv;
+          
+          localStorage.setItem("socketPort", socketPort);
+          localStorage.setItem("nodeEnv", nodeEnv);
+      } catch (err) {
+          console.log(err);
+      }
+      
+  }
+  refreshing();
+  </script>
     <link rel="icon" href="/Favicon/ImageAI-522x425.ico" type="image/x-icon" />
 
     <!--  Bootstrap css file  -->

@@ -1,14 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  try {
-    const response = await getRequest("getServerInfo");
-
-    const socketPort = response.data.socketPort;
-    const nodeEnv=response.data.nodeEnv;
-    localStorage.setItem("socketPort", socketPort);
-    localStorage.setItem('nodeEnv',nodeEnv)
-  } catch (err) {
-    handleErrors(err);
-  }
+ 
 
   // Check for chatToken in localStorage
   const chatToken = localStorage.getItem("chatToken");
