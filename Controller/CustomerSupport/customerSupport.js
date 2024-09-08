@@ -214,9 +214,15 @@ exports.addUserMessage = async (req, res, next) => {
         .json({ message: "Message content cannot be empty." });
     }
 
+    // Check if the case is closed
+    if (customerCase.status === "Closed") {
+      return res
+        .status(403) // Forbidden status code
+        .json({ message: "Cannot add message to a closed case." });
+    }
+
     // 1. Create the new message associated with the customer case
     const newMessage = await customerCase.createCaseMessage({
-      // Link the message to the customer case
       message,
       isFile,
       isAdminSend: false, // Indicates user-sent message
@@ -237,7 +243,8 @@ exports.addUserMessage = async (req, res, next) => {
       }
     );
 
-    sendMessage2Admin(customerCase.caseId,newMessage.message)
+    // Notify admin of the new message
+    sendMessage2Admin(customerCase.caseId, newMessage.message);
 
     // 3. Return the created message
     res.status(201).json({

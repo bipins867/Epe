@@ -222,75 +222,6 @@ exports.getCaseMessages = async (req, res, next) => {
   }
 };
 
-exports.addAdminMessage = async (req, res, next) => {
-  try {
-    const { caseId, message } = req.body; // Assuming caseId and message are provided in the request body
-
-    // Check if caseId and message are provided
-    if (!caseId || !message) {
-      return res
-        .status(400)
-        .json({ error: "caseId and message are required." });
-    }
-
-    // Find the customer case by caseId
-    const customerCase = await CustomerCase.findOne({
-      where: { caseId: caseId },
-    });
-
-    if (!customerCase) {
-      return res.status(404).json({ error: "Customer case not found." });
-    }
-
-    // 1. Insert a new message from the admin into the associated case
-    const newMessage = await customerCase.createCaseMessage({
-      message: message,
-      isFile: false,
-      creationTime: new Date(),
-      isAdminSend: true, // Indicates that the message is from the admin
-      seenByAdmin: true,
-      seenByUser: false, // Admin has seen their own message
-    });
-
-    // 2. Check if this is the first message sent by the admin
-    const adminMessagesCount = await CaseMessage.count({
-      where: {
-        CustomerCaseId: customerCase.id,
-        isAdminSend: true,
-      },
-    });
-
-    // If this is the first admin message, update the status of the customer case to "Pending"
-    if (customerCase.status === "Open") {
-      await customerCase.update({ status: "Pending" });
-    }
-
-    // 3. Mark all previous user messages as seen by the admin
-    await CaseMessage.update(
-      { seenByAdmin: true }, // Update to set seenByAdmin to true
-      {
-        where: {
-          CustomerCaseId: customerCase.id,
-          isAdminSend: false, // Only user messages
-          seenByAdmin: false, // Only messages not yet seen by the admin
-        },
-      }
-    );
-    sendMessage2User(caseId, newMessage.message);
-    // 4. Return the created message as a response
-    res.status(201).json({
-      message:
-        "Admin message added successfully, and user messages marked as seen.",
-      data: newMessage,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      error: "Something went wrong while adding the admin message.",
-    });
-  }
-};
-
 exports.closeCaseByAdmin = async (req, res, next) => {
   try {
     const { caseId } = req.body; // Assuming caseId is provided in the request body
@@ -301,7 +232,7 @@ exports.closeCaseByAdmin = async (req, res, next) => {
     }
 
     // Find the case by caseId
-    const customerCase = await CustomerCase.findOne({ where: { id: caseId } });
+    const customerCase = await CustomerCase.findOne({ where: { caseId: caseId } });
 
     // If the case does not exist
     if (!customerCase) {
@@ -327,3 +258,83 @@ exports.closeCaseByAdmin = async (req, res, next) => {
     });
   }
 };
+
+exports.addAdminMessage = async (req, res, next) => {
+  try {
+    const { caseId, message } = req.body; // Assuming caseId and message are provided in the request body
+
+    // Check if caseId and message are provided
+    if (!caseId || !message) {
+      return res
+        .status(400)
+        .json({ error: "caseId and message are required." });
+    }
+
+    // Find the customer case by caseId
+    const customerCase = await CustomerCase.findOne({
+      where: { caseId: caseId },
+    });
+
+    if (!customerCase) {
+      return res.status(404).json({ error: "Customer case not found." });
+    }
+
+    // Check if the case is closed
+    if (customerCase.status === "Closed") {
+      return res
+        .status(403) // Forbidden status code
+        .json({ error: "Cannot add a message to a closed case." });
+    }
+
+    // 1. Insert a new message from the admin into the associated case
+    const newMessage = await customerCase.createCaseMessage({
+      message: message,
+      isFile: false,
+      creationTime: new Date(),
+      isAdminSend: true, // Indicates that the message is from the admin
+      seenByAdmin: true,
+      seenByUser: false, // Admin has seen their own message
+    });
+
+    // 2. Check if this is the first message sent by the admin
+    const adminMessagesCount = await CaseMessage.count({
+      where: {
+        CustomerCaseId: customerCase.id,
+        isAdminSend: true,
+      },
+    });
+
+    // If this is the first admin message and case is open, update the status to "Pending"
+    if (customerCase.status === "Open") {
+      await customerCase.update({ status: "Pending" });
+    }
+
+    // 3. Mark all previous user messages as seen by the admin
+    await CaseMessage.update(
+      { seenByAdmin: true }, // Update to set seenByAdmin to true
+      {
+        where: {
+          CustomerCaseId: customerCase.id,
+          isAdminSend: false, // Only user messages
+          seenByAdmin: false, // Only messages not yet seen by the admin
+        },
+      }
+    );
+
+    // Notify user of the new message
+    sendMessage2User(caseId, newMessage.message);
+
+    // 4. Return the created message as a response
+    res.status(201).json({
+      message:
+        "Admin message added successfully, and user messages marked as seen.",
+      data: newMessage,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Something went wrong while adding the admin message.",
+    });
+  }
+};
+

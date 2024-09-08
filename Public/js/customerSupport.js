@@ -314,3 +314,20 @@ document.getElementById("chatButton").addEventListener("click", function () {
 document.getElementById("closeChat").addEventListener("click", function () {
   document.getElementById("chatBox").style.display = "none";
 });
+
+
+document.getElementById("closeCase").addEventListener('click',async ()=>{
+  try{
+   
+    const caseId=localStorage.getItem('caseId')
+    await postRequestWithChatToken('customerSupport/post/closeCase',{caseId:caseId})
+
+    localStorage.removeItem('caseId')
+    localStorage.removeItem('chatToken')
+
+    window.location.reload();
+  }
+  catch(err){
+    handleErrors(err);
+  }
+});

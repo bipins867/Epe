@@ -1,11 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Function to extract the caseId from the URL
   function getCaseIdFromUrl() {
     const urlParts = window.location.pathname.split("/");
-    return urlParts[urlParts.length - 1]; // Assuming the caseId is always the last part of the path
+    return urlParts[urlParts.length - 1];
   }
 
-  // Get the caseId from the URL
   const caseId = getCaseIdFromUrl();
 
   // Make a request to fetch case information
@@ -25,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
       document.querySelector(".card-body p:nth-child(10)").childNodes[1].textContent = ` ${caseInfo.status}`;
       document.querySelector(".card-body p:nth-child(11)").childNodes[1].textContent = ` ${caseInfo.isClosedByAdmin ? "Admin" : caseInfo.isClosedByUser ? "User" : "N/A"}`;
 
-      // Hide the "Close Case" button, input field, and send button if the case is already closed
       if (caseInfo.isClosedByAdmin || caseInfo.isClosedByUser) {
         document.getElementById("closeCaseButton").style.display = "none";
         document.getElementById("messageInput").style.display = "none";
@@ -38,14 +35,12 @@ document.addEventListener("DOMContentLoaded", function () {
       handleErrors(error);
     });
 
-  // Make a request to fetch case messages
   postRequestWithToken(`admin/customerSupport/post/caseMessages/${caseId}`)
     .then((response) => {
       const messages = response.data.messages;
       const chatBody = document.getElementById("chatBody");
-      chatBody.innerHTML = ""; // Clear existing messages
+      chatBody.innerHTML = "";
 
-      // Show "No message found..." if no messages are available
       if (messages.length === 0) {
         const noMessageElement = document.createElement("div");
         noMessageElement.id = "noMessageFound";
@@ -53,16 +48,18 @@ document.addEventListener("DOMContentLoaded", function () {
         chatBody.appendChild(noMessageElement);
       } else {
         messages.forEach((message) => {
-          const formattedMessage = message.isAdminSend ? formatServerMessage(`${message.message}`) : formatClientMessage(` ${message.message}`);
+          const formattedMessage = message.isAdminSend ? formatServerMessage(`${message.message}`) : formatClientMessage(`${message.message}`);
           chatBody.innerHTML += formattedMessage;
         });
+
+        // Scroll to the bottom after messages are loaded
+        chatBody.scrollTop = chatBody.scrollHeight;
       }
     })
     .catch((error) => {
       handleErrors(error);
     });
 
-  // Send message functionality
   document.getElementById("sendButton").addEventListener("click", async () => {
     const messageInput = document.getElementById("messageInput");
     const messageText = messageInput.value.trim();
@@ -71,14 +68,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const obj = { message: messageText, caseId: caseId };
         const response = await postRequestWithToken("admin/customerSupport/post/addMessage", obj);
 
-        // Remove "No message found..." if it exists
         const noMessageElement = document.getElementById("noMessageFound");
         if (noMessageElement) {
           noMessageElement.remove();
         }
 
+        const chatBody = document.getElementById("chatBody");
         chatBody.innerHTML += formatServerMessage(messageText);
         messageInput.value = ""; // Clear input after sending
+
+        // Automatically scroll to the bottom after a new message
         chatBody.scrollTop = chatBody.scrollHeight;
       } catch (err) {
         handleErrors(err);
@@ -86,21 +85,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Close Case functionality
-  document.getElementById("closeCaseButton").addEventListener("click", () => {
+  document.getElementById("closeCaseButton").addEventListener("click",async  () => {
     if (confirm("Are you sure you want to close this case?")) {
-      // Handle the close case logic here, e.g., send an API request
-      alert("Case has been closed.");
+      
+      try{
+        await postRequestWithToken('admin/customerSupport/post/closeCase',{caseId:caseId})
+        alert("Case has been closed.");
+        window.location.replace("/admin/customerSupport/dashboard")
+      }catch(err){
+        handleErrors(err)
+      }
     }
   });
 
-  // Listen for page unload (user closes the tab, refreshes, or navigates away)
   window.addEventListener("beforeunload", function () {
     socket.emit("leave-case", caseId);
   });
 });
 
-// Function to format server and client messages
 function formatServerMessage(message) {
   return `<div class="message server-message">${message}</div>`;
 }
@@ -113,7 +115,6 @@ function checkAndUpdateChatBoxLength() {
   const chatBody = document.getElementById("chatBody");
   const messageElements = chatBody.children;
   if (messageElements.length > 20) {
-    // Remove older messages if there are more than 20
     const excessMessages = messageElements.length - 20;
     for (let i = 0; i < excessMessages; i++) {
       chatBody.removeChild(messageElements[0]);
