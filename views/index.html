@@ -7,26 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>E Pe India</title>
     <script>async function refreshing(){
-      try {
-          // Replace the getRequest call with fetch
-          const response = await fetch("getServerInfo");
-      
-          // Check if the response is okay (status in the range 200-299)
-          if (!response.ok) {
-              throw new Error(`Network response was not ok: ${response.statusText}`);
-          }
-      
-          // Parse the JSON response
-          const data = await response.json();
-      
-          // Extract and store data from the response
-          const socketPort = data.socketPort;
-          const nodeEnv = data.nodeEnv;
-          localStorage.setItem("socketPort", socketPort);
-          localStorage.setItem("nodeEnv", nodeEnv);
-      } catch (err) {
-          console.log(err);
-      }
+      localStorage.setItem("socketPort", 3030);
+      localStorage.setItem("nodeEnv", 'production');
       
   }</script>
     <link rel="icon" href="/Favicon/ImageAI-522x425.ico" type="image/x-icon" />
