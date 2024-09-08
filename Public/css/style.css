@@ -179,16 +179,17 @@
 
 .hero {
     width: 100%;
-    height: 600px;
-    background-image: url(/img/FinancialFreedom.jpg);
+    height: 400px;
+    background-color: #004992;
     background-size: 100% 100%;
     color: #fff;
     padding: 100px 20px;
     text-align: center;
-    animation: sliderImage 20s linear infinite;
+    
+   
 }
 
-@keyframes sliderImage {
+/* @keyframes sliderImage {
     0%{
         background-image:url(/img/FinancialFreedom.jpg) ;
     }
@@ -207,7 +208,7 @@
     }
 
     
-}
+} */
 
 .hero-content h1 {
     text-shadow: 2px 2px 5px red;    
@@ -389,9 +390,7 @@
     margin-top: 6rem;
     padding-top: 9rem;
     background:
-        url(/img/bg-circle.png),
-        url(/img/bg-triangle.png),
-        url(/img/bg-top.png),
+       
         linear-gradient(to bottom right, var(--primary), var(--secondary));
     background-position:
         left 0% bottom 0px,
