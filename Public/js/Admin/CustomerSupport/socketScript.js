@@ -3,13 +3,13 @@ const socketPort=localStorage.getItem('socketPort');
 const nodeEnv = localStorage.getItem("nodeEnv");
 let socketUrl;
 if (nodeEnv) {
-  if (nodeEnv === "production") {
-    socketUrl = `https://${host}:${socketPort}`;
-  } else {
+  if (nodeEnv === "testing") {
     socketUrl = `http://${host}:${socketPort}`;
+  } else {
+    socketUrl = `https://${host}:${socketPort}`;
   }
 } else {
-  socketUrl = `http://${host}:${socketPort}`;
+  socketUrl = `https://${host}:${socketPort}`;
 }
 console.log(socketUrl);
 // Connect to the socket server
