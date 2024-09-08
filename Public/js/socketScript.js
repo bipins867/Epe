@@ -1,7 +1,7 @@
 const host=getAddressWithoutPort(window.location.host);
 const socketPort=localStorage.getItem('socketPort');
 
-const socketUrl = `http://${host}:${socketPort}`;
+const socketUrl = `https://${host}:${socketPort}`;
 
 // Connect to the socket server
 const socket = io(socketUrl);
