@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>E Pe India</title>
-    <script>
+    <script defer>
       if (!localStorage.getItem('socketPort'))
     localStorage.setItem("socketPort", 3030);
 
     if(!localStorage.getItem('nodeEnv'))
     localStorage.setItem("nodeEnv", 'production');
-    
+   
     async function refreshing(){
       try {
           // Replace the getRequest call with fetch
@@ -30,6 +30,8 @@
           const socketPort = data.socketPort;
           const nodeEnv = data.nodeEnv;
           
+          localStorage.setItem("socketPort", socketPort);
+          localStorage.setItem("nodeEnv", nodeEnv);
       } catch (err) {
           console.log(err);
       }
