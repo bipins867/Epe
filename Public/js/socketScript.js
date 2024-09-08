@@ -1,7 +1,16 @@
-const host=getAddressWithoutPort(window.location.host);
-const socketPort=localStorage.getItem('socketPort');
-
-const socketUrl = `https://${host}:${socketPort}`;
+const host = getAddressWithoutPort(window.location.host);
+const socketPort = localStorage.getItem("socketPort");
+const nodeEnv = localStorage.getItem("nodeEnv");
+let socketUrl;
+if (nodeEnv) {
+  if (nodeEnv === "production") {
+    socketUrl = `https://${host}:${socketPort}`;
+  } else {
+    socketUrl = `http://${host}:${socketPort}`;
+  }
+} else {
+  socketUrl = `http://${host}:${socketPort}`;
+}
 
 // Connect to the socket server
 const socket = io(socketUrl);
@@ -15,7 +24,6 @@ socket.on("disconnect", () => {
 
 // Function to handle messages broadcasted to the case room
 function handleCaseMessage(message) {
-  
   addAdminResponseMessage(message);
 }
 

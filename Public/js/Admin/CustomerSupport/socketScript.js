@@ -1,7 +1,16 @@
 const host=getAddressWithoutPort(window.location.host);
 const socketPort=localStorage.getItem('socketPort');
 
-const socketUrl = `https://${host}:${socketPort}`;
+let socketUrl;
+if (nodeEnv) {
+  if (nodeEnv === "production") {
+    socketUrl = `https://${host}:${socketPort}`;
+  } else {
+    socketUrl = `http://${host}:${socketPort}`;
+  }
+} else {
+  socketUrl = `http://${host}:${socketPort}`;
+}
 console.log(socketUrl);
 // Connect to the socket server
 const socket = io(socketUrl);
