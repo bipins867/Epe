@@ -14,6 +14,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     showInitialOptions();
   }
 });
+
+document.getElementById("attachmentIcon").addEventListener("click", function () {
+  // Trigger click on the hidden file input
+  document.getElementById("fileInput").click();
+});
 document.getElementById("fileSendButton").onclick = function () {
   handleFileUpload();
 };
