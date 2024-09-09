@@ -385,19 +385,11 @@
 
 
 /* End About Me */ 
-
 .footer {
-    margin-top: 6rem;
-    padding-top: 9rem;
-    background:
    
-        linear-gradient(to bottom right, var(--primary), var(--secondary));
-    background-position:
-        left 0% bottom 0px,
-        right 0% top 50%,
-        center top;
-    background-repeat: no-repeat;
-}
+    background: linear-gradient(to bottom right, var(--primary), var(--secondary));
+   
+} 
 
 .footer .btn.btn-social {
     margin-right: 5px;
@@ -443,7 +435,7 @@
     padding: 25px 0;
     font-size: 14px;
     border-top: 1px solid rgba(256, 256, 256, .1);
-}
+} 
 
 .footer .copyright a {
     color: var(--light);
@@ -579,7 +571,7 @@
     }
 
     .footer {
-        padding: 6rem 3rem;
+        padding: 2rem 2rem;
     }
 
     .footer .btn.btn-social {
@@ -624,7 +616,7 @@
     }
 
     .footer {
-        padding: 9rem 5rem;
+        padding: 2rem 2rem;
     }
 
     .footer .btn.btn-social {
