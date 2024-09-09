@@ -1,4 +1,4 @@
-/* Login Page CSS */
+/* Responsive Login Page CSS */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
 @import url(/css/fonts.css); /* import fonts from fonts.css file */
 @import url(/css/partials/_variables.css); /* css variables */
@@ -50,7 +50,7 @@
   background: transparent;
   border-radius: 6px;
   cursor: pointer;
-  color: #fff;
+  color: #9d10dff3;
 }
 
 .home {
@@ -139,6 +139,7 @@
 .input_box input:focus {
   border-color: #7d2ae8;
 }
+
 .input_box i.user,
 .input_box i.phone,
 .input_box i.email,
@@ -172,4 +173,49 @@
   font-size: 12px;
   text-align: center;
   margin-top: 15px;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+  .header_area .main-menu .navbar {
+    padding: 0.5rem 2rem;
+  }
+
+  .header_area .main-menu .nav-item .nav-link {
+    font-size: 14px;
+    padding: 1rem;
+  }
+
+  .form_container {
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    height: 50px;
+    padding: 0 10px;
+  }
+
+  .header_area .main-menu .navbar {
+    padding: 0.5rem 1rem;
+  }
+
+  .header_area .main-menu .nav-item .nav-link {
+    font-size: 13px;
+    padding: 0.5rem;
+  }
+
+  .form_container {
+    max-width: 90%;
+    padding: 20px;
+  }
+
+  .form_container h2 {
+    font-size: 18px;
+  }
+
+  .input_box {
+    margin-top: 20px;
+  }
 }
