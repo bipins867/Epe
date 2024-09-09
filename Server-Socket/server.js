@@ -1,32 +1,24 @@
 const fs = require('fs');
-const http = require('http');
 const https = require('https');
 const socketIO = require('socket.io');
 
-// Check if we are in production environment
-const isProduction = process.env.NODE_ENV === 'production';
-
-let server;
-const options = isProduction ? {
+// Load SSL certificate and key
+const options = {
     key: fs.readFileSync('/etc/letsencrypt/live/epeindia.in/privkey.pem'),
     cert: fs.readFileSync('/etc/letsencrypt/live/epeindia.in/fullchain.pem')
-} : {}; // For local, we don't need SSL options
+};
 
-// Create HTTP or HTTPS server based on environment
-if (isProduction) {
-    server = https.createServer(options);
-} else {
-    server = http.createServer();
-}
+// Create an HTTPS server
+const httpsServer = https.createServer(options);
 
-// Attach Socket.IO to the server
-const io = socketIO(server, {
+// Attach Socket.IO to the HTTPS server
+const io = socketIO(httpsServer, {
     cors: {
         origin: "*",  // Adjust according to your CORS policy
     },
 });
 
-console.log(`Socket Server is running in ${isProduction ? 'production' : 'development'} mode!`);
+console.log("Socket Server is running!");
 
 const socketUsers = new Map();
 
@@ -49,12 +41,14 @@ function sendCaseInfo(info) {
 io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
+    // Handle user joining a specific case room
     socket.on("join-case", (caseId) => {
         socket.join(caseId);
         socketUsers.set(socket.id, caseId);
         console.log(`User ${socket.id} joined room: ${caseId}`);
     });
 
+    // Handle user leaving a specific case room
     socket.on("leave-case", () => {
         const caseId = socketUsers.get(socket.id);
         if (caseId) {
@@ -64,10 +58,12 @@ io.on("connection", (socket) => {
         }
     });
 
+    // Handle admin broadcasting info to a specific room
     socket.on("case-info", (info) => {
-        sendCaseInfo(info);
+        sendCaseInfo(info); // Broadcast case info to all connected clients
     });
 
+    // Handle disconnection
     socket.on("disconnect", () => {
         const caseId = socketUsers.get(socket.id);
         if (caseId) {
@@ -79,10 +75,9 @@ io.on("connection", (socket) => {
     });
 });
 
-// Listen on the appropriate port based on environment
-const port = process.env.SOCKET_PORT || 3030;
-server.listen(port, () => {
-    console.log(`Socket.IO server is running on port ${port}`);
+// Listen on port 3030 for HTTPS connections
+httpsServer.listen(3030, () => {
+    console.log('Socket.IO server is running on port 3030');
 });
 
 exports.io = io;
