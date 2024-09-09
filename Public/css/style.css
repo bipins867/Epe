@@ -453,9 +453,25 @@
     border-right: none;
 }
 
+.file-attachment {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
+.file-input {
+    display: none; /* Hide the actual file input */
+}
 
+.attachment-icon {
+    font-size: 24px;
+    cursor: pointer;
+    color: #007bff;
+}
 
+.attachment-icon:hover {
+    color: #0056b3; /* Change color on hover for effect */
+}
 
 
 
