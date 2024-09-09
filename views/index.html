@@ -137,12 +137,12 @@
                     >Services</a
                   >
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item"> 
                   <a class="nav-link" href="/career">Career</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#Event">Event</a>
-                </li>
+                </li>-->
                 <li class="nav-item">
                   <a class="nav-link" href="#Contact" data-after="Contact"
                     >Contact</a
@@ -784,7 +784,7 @@
       >
         <div class="container py-5 px-lg-5">
           <div class="row g-5">
-            <!-- <div class="col-md-6 col-lg-3">
+            <div class="col-md-6 col-lg-3">
                         <h4 class="text-white mb-4">Address</h4>
                         <p><i class="fa fa-map-marker-alt me-3"></i>Sector 63, Noida UP</p>
                         <p><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
@@ -795,7 +795,7 @@
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-instagram"></i></a>
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
                         </div>
-                    </div> -->
+                    </div>
             <div class="col-md-6 col-lg-3">
               <h4 class="text-white mb-4">Quick Link</h4>
               <a class="btn btn-link" href="#Services">Services</a>
@@ -861,49 +861,39 @@
       </div>
     </main>
 
-    <div>
-      <div class="chat-button" id="chatButton">
-        <i class="fas fa-comments"></i>
-      </div>
-    
-      <!-- Chat Box -->
-      <div class="chat-box" id="chatBox">
-        <div class="chat-header">
-          <h5>Chat with Us</h5>
-          <button
-            class="btn btn-link close-case"
-            id="closeCase"
-            style="position: absolute; top: 5px; right: 40px; background-color: rgb(223, 22, 250); color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer;"
-          >
-            Close Case
-          </button>
-          <button class="close" id="closeChat">&times;</button>
-        </div>
-        <div class="chat-body" id="chatBody">
-          <!-- Predefined Messages -->
-        </div>
-        <div class="chat-footer" id="chatFooter" style="display: none">
-          <div>
-            <input type="file" id="fileInput" accept="image/*" />
-            <button class="btn btn-secondary" id="fileSendButton">
-              Send File
-            </button>
-          </div>
-          <div>
-            <input
-              type="text"
-              class="form-control"
-              id="messageInput"
-              placeholder="Type a message"
-              style="margin-right: 5px;"
-            />
-              <button class="btn btn-primary" id="sendMessage"style="margin-right: 5px;position: absolute; bottom: 10px; right: 40px"
-              > <i class="fa fa-paper-plane text-primary-gradient fs-4"></i></button>
-          </div>
-        </div>
+   <!-- Chat Toggle Button -->
+<div>
+  <div class="chat-button" id="chatButton" style="position: fixed; bottom: 80px; right: 20px; background-color: #004992; color: white; padding: 10px 15px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <i class="fas fa-comments"></i>
+  </div>
+
+  <!-- Chat Box -->
+  <div class="chat-box" id="chatBox" style="width: 100%; height: 60%; max-width: 400px; border: 1px solid #b510df; border-radius: 8px; position: fixed; bottom: 0; right: 10px; background-color: #f9f9f9; display: none; flex-direction: column; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <div class="chat-header" style="background-color: #004992; color: #fff; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+      <h5 style="margin: 0; font-size: 16px;">Chat with Us</h5>
+      <div style="display: flex; align-items: center;">
+        <button class="btn btn-link close-case" id="closeCase" style="background-color: #df16fa; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px; font-size: 12px;">Close Case</button>
+        <button class="close" id="closeChat" style="background: none; border: none; color: #fff; font-size: 20px; cursor: pointer;">&times;</button>
       </div>
     </div>
-    
+    <div class="chat-body" id="chatBody" style="flex: 1; overflow-y: auto; padding: 10px; max-height: 300px;">
+      <!-- Predefined Messages -->
+    </div>
+    <div class="chat-footer" id="chatFooter" style="display: flex; flex-direction: column; gap: 10px; padding: 10px; border-top: 1px solid #ccc;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <input type="file" id="fileInput" accept="image/*" style="flex: 1; font-size: 14px;" />
+        <button class="btn btn-secondary" id="fileSendButton" style="flex: none; background-color: #6c757d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 14px;">Send File</button>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <input type="text" class="form-control" id="messageInput" placeholder="Type a message" style="flex: 1; padding: 5px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;" />
+        <button class="btn btn-primary" id="sendMessage" style="background-color: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; position: relative; bottom: 0; font-size: 14px;">
+          <i class="fa fa-paper-plane text-primary-gradient"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+   
 
     <!--  ======================== End Footer Area ==============================  -->
 
