@@ -11,7 +11,7 @@ if (nodeEnv) {
 } else {
   socketUrl = `https://${host}:${socketPort}`;
 }
-
+console.log(socketUrl);
 // Connect to the socket server
 const socket = io(socketUrl);
 
