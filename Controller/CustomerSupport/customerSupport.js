@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 
 const CaseMessage = require("../../Models/CustomerSupport/caseMessage");
-const { sendMessage2Admin } = require("../../app");
+const { sendMessage2Admin } = require("../../Server-Socket/server");
 
 // Helper function to generate a random string with 4 alphabets and 4 numbers
 function generateRandomCaseNumber() {
