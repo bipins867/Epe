@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     })
     .catch((error) => {
-     // handleErrors(error);
+      handleErrors(error);
     });
 
   document.getElementById("sendButton").addEventListener("click", async () => {
