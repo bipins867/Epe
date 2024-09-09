@@ -18,8 +18,9 @@ if (nodeEnv) {
 
 console.log(socketUrl);
 // Connect to the socket server
-const socket = io(socketUrl);
-
+const socket = io(socketUrl, {
+  transports: ['websocket'] // Ensure using WebSocket
+});
 socket.on("connect", () => {
   console.log(`Connect to Server - ${socketUrl}`);
 });
