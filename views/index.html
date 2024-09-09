@@ -8,7 +8,7 @@
     <title>E Pe India</title>
     <script defer>
       if (!localStorage.getItem('socketPort'))
-    localStorage.setItem("socketPort", 3030);
+    localStorage.setItem("socketPort", 3000);
 
     if(!localStorage.getItem('nodeEnv'))
     localStorage.setItem("nodeEnv", 'production');
@@ -16,7 +16,7 @@
     async function refreshing(){
       try {
           // Replace the getRequest call with fetch
-          const response = await fetch("https://epeindia.in/getServerInfo");
+          const response = await fetch("getServerInfo");
       
           // Check if the response is okay (status in the range 200-299)
           if (!response.ok) {
@@ -37,7 +37,7 @@
       }
       
   }
-  refreshing();
+ refreshing();
   </script>
     <link rel="icon" href="/Favicon/ImageAI-522x425.ico" type="image/x-icon" />
 
@@ -915,7 +915,7 @@
     <!--  custom js file  -->
     <script src="/js/main.js"></script>
     <script src="/js/Utils/utils.js" defer></script>
-    <script src="/js/customerSupport.js" ></script>
+    <script src="/js/customerSupport.js" defer ></script>
     <script src="/js/customerChatUtils.js" ></script>
     <script src="/js/socketScript.js" defer></script>
     
