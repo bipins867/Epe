@@ -2,6 +2,7 @@ const host = getAddressWithoutPort(window.location.host);
 const socketPort = localStorage.getItem("socketPort");
 const nodeEnv = localStorage.getItem("nodeEnv");
 let socketUrl;
+
 if (nodeEnv) {
   if (nodeEnv === "testing") {
     socketUrl = `http://${host}:${socketPort}`;
@@ -11,15 +12,24 @@ if (nodeEnv) {
 } else {
   socketUrl = `https://${host}:${socketPort}`;
 }
+
 console.log(socketUrl);
+
 // Connect to the socket server
-const socket = io(socketUrl);
+const socket = io(socketUrl, {
+  transports: ['websocket'], // Enforce using WebSocket for better debugging
+});
 
 socket.on("connect", () => {
-  console.log(`Connect to Server - ${socketUrl}`);
+  console.log(`Connected to Server - ${socketUrl}`);
 });
+
+socket.on("connect_error", (err) => {
+  console.error(`Connection error: ${err.message}`);
+});
+
 socket.on("disconnect", () => {
-  console.log(`Disconnected from the Server - ${socketUrl}`);
+  console.log(`Disconnected from Server - ${socketUrl}`);
 });
 
 // Function to handle messages broadcasted to the case room
