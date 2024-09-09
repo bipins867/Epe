@@ -1,47 +1,87 @@
-const host = getAddressWithoutPort(window.location.host);
-const socketPort = localStorage.getItem("socketPort");
-const nodeEnv = localStorage.getItem("nodeEnv");
-let socketUrl;
-if (nodeEnv) {
-  if (nodeEnv === "testing") {
-    socketUrl = `http://${host}:${socketPort}`;
-  } else {
-    socketUrl = `https://${host}:${socketPort}`;
-  }
-} else {
-  socketUrl = `https://${host}:${socketPort}`;
-}
-console.log(socketUrl);
-// Connect to the socket server
-const socket = io(socketUrl);
+const fs = require('fs');
+const https = require('https');
+const socketIO = require('socket.io');
 
-socket.on("connect", () => {
-  console.log(`Connect to Server - ${socketUrl}`);
-});
-socket.on("disconnect", () => {
-  console.log(`Disconnected from the Server - ${socketUrl}`);
+// Load SSL certificate and key
+const options = {
+    key: fs.readFileSync('/etc/letsencrypt/live/epeindia.in/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/epeindia.in/fullchain.pem')
+};
+
+// Create an HTTPS server
+const httpsServer = https.createServer(options);
+
+// Attach Socket.IO to the HTTPS server
+const io = socketIO(httpsServer, {
+    cors: {
+        origin: "*",  // Adjust according to your CORS policy
+    },
 });
 
-// Function to handle messages broadcasted to the case room
-function handleCaseMessage(message) {
-  addAdminResponseMessage(message);
+console.log("Socket Server is running!");
+
+const socketUsers = new Map();
+
+function sendMessage2Admin(caseId, message) {
+    io.to(caseId).emit("case-admin-message", message);
 }
 
-// Function to handle case info broadcasted to all clients
-function handleCaseInfo(info) {
-  console.log("Received case info:", info);
+function sendFile2Admin(caseId, url) {
+    io.to(caseId).emit("case-admin-file", url);
 }
 
-// Event listeners for messages
-socket.on("case-user-message", handleCaseMessage);
-socket.on("case-info", handleCaseInfo);
-
-// Example function to join a case room
-function joinCase(caseId) {
-  socket.emit("join-case", caseId);
+function sendMessage2User(caseId, message) {
+    io.to(caseId).emit("case-user-message", message);
 }
 
-// Example function to leave a case room
-function leaveCase() {
-  socket.emit("leave-case");
+function sendCaseInfo(info) {
+    io.emit("case-info", info);
 }
+
+io.on("connection", (socket) => {
+    console.log(`User connected: ${socket.id}`);
+
+    // Handle user joining a specific case room
+    socket.on("join-case", (caseId) => {
+        socket.join(caseId);
+        socketUsers.set(socket.id, caseId);
+        console.log(`User ${socket.id} joined room: ${caseId}`);
+    });
+
+    // Handle user leaving a specific case room
+    socket.on("leave-case", () => {
+        const caseId = socketUsers.get(socket.id);
+        if (caseId) {
+            socket.leave(caseId);
+            socketUsers.delete(socket.id);
+            console.log(`User ${socket.id} left room: ${caseId}`);
+        }
+    });
+
+    // Handle admin broadcasting info to a specific room
+    socket.on("case-info", (info) => {
+        sendCaseInfo(info); // Broadcast case info to all connected clients
+    });
+
+    // Handle disconnection
+    socket.on("disconnect", () => {
+        const caseId = socketUsers.get(socket.id);
+        if (caseId) {
+            socketUsers.delete(socket.id);
+            console.log(`User ${socket.id} disconnected from room: ${caseId}`);
+        } else {
+            console.log(`User disconnected: ${socket.id}`);
+        }
+    });
+});
+
+// Listen on port 3030 for HTTPS connections
+httpsServer.listen(3030, () => {
+    console.log('Socket.IO server is running on port 3030');
+});
+
+exports.io = io;
+exports.socketUsers = socketUsers;
+exports.sendCaseInfo = sendCaseInfo;
+exports.sendMessage2Admin = sendMessage2Admin;
+exports.sendMessage2User = sendMessage2User;
