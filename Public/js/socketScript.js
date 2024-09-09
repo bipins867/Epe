@@ -17,7 +17,7 @@ console.log(socketUrl);
 
 // Connect to the socket server
 const socket = io(socketUrl, {
-  transports: ['websocket'], // Enforce using WebSocket for better debugging
+  transports: ['websocket'] // Ensure using WebSocket
 });
 
 socket.on("connect", () => {
