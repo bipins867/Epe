@@ -1,6 +1,8 @@
-const host = getAddressWithoutPort(window.location.host);
+let host = getAddressWithoutPort(window.location.host);
 const socketPort = localStorage.getItem("socketPort");
 const nodeEnv = localStorage.getItem("nodeEnv");
+
+host="88.222.244.250";
 let socketUrl;
 
 if (nodeEnv) {
