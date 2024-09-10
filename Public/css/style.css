@@ -308,6 +308,58 @@
     box-shadow: var(--box-shadow);
 }
 
+/* Basic Styling for the Services Section */
+#Services .services-area {
+    padding: 40px 0;
+  }
+  
+  /* Styling for Each Service Card */
+  .services {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    flex: 1 1 calc(25% - 30px); /* Adjusts the width of each service card with a gap */
+  }
+  
+  /* Zoom-in Effect on Hover */
+  .services:hover {
+    transform: scale(1.05); /* Adjust scale value as needed */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Styling for the Image */
+  .sevices-img img {
+    max-width: 100%;
+    transition: transform 0.3s ease;
+  }
+  
+  /* Optional: Zoom-in effect for the image within the service */
+  .services:hover .sevices-img img {
+    transform: scale(1.1); /* Zooms the image slightly when hovering over the service card */
+  }
+  
+  /* Styling for the Card Title */
+  .card-title {
+    font-size: 15px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .services {
+      flex: 1 1 calc(50% - 30px); /* Adjust width for smaller screens with gap */
+      margin-bottom: 20px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .services {
+      flex: 1 1 100%; /* Full width for mobile screens */
+    }
+  }
 
 
 /* End Services Area */ 
@@ -337,7 +389,98 @@
 .site-main .project-area .grid .our-project .img a:hover img{
     filter: brightness(1.1) drop-shadow(1px 8px 30px #b1afaf);
 }
-
+/* Container Styling */
+/* Container Styling */
+.project-area {
+    padding: 50px 0;
+  }
+  
+  .project-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .title-h1 {
+    font-size: 36px;
+    font-weight: bold;
+  }
+  
+  /* Button Group */
+  .button-group {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .button-group button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button-group button.active,
+  .button-group button:hover {
+    background-color: #007bff;
+    color: #223edb;
+  }
+  
+  /* Grid and Project Card Styling */
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; /* Gap between all grid items */
+  }
+  
+  .our-project {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 15px; /* Adjust this to control spacing around each project */
+  }
+  
+  .our-project:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Image Styling */
+  .img {
+    position: relative;
+  }
+  
+  .img img {
+    width: 100%;
+    display: block;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+  
+  /* Overlay Text Styling */
+  .title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Hover Effect */
+  .our-project:hover .img img {
+    transform: scale(1.1);
+    opacity: 0.7; /* Dim the image */
+  }
+  
+  .our-project:hover .title {
+    opacity: 1; /* Show the overlay text */
+  }
+  
 
 /* End Project Area */ 
 
@@ -371,7 +514,7 @@
 }
 
 .site-main .about-area .owl-carousel .owl-item{
-    display: flex;
+    display: auto;
     justify-content: center;
     padding: 0 1.5rem;
 }
