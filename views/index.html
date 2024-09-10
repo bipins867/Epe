@@ -7,38 +7,39 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>E Pe India</title>
     <script defer>
-      if (!localStorage.getItem('socketPort'))
-    localStorage.setItem("socketPort", 3000);
+      if (!localStorage.getItem("socketPort"))
+        localStorage.setItem("socketPort", 3000);
 
-    if(!localStorage.getItem('nodeEnv'))
-    localStorage.setItem("nodeEnv", 'production');
-   
-    async function refreshing(){
-      try {
+      if (!localStorage.getItem("nodeEnv"))
+        localStorage.setItem("nodeEnv", "production");
+
+      async function refreshing() {
+        try {
           // Replace the getRequest call with fetch
           const response = await fetch("getServerInfo");
-      
+
           // Check if the response is okay (status in the range 200-299)
           if (!response.ok) {
-              throw new Error(`Network response was not ok: ${response.statusText}`);
+            throw new Error(
+              `Network response was not ok: ${response.statusText}`
+            );
           }
-      
+
           // Parse the JSON response
           const data = await response.json();
-      
+
           // Extract and store data from the response
           const socketPort = data.socketPort;
           const nodeEnv = data.nodeEnv;
-          
+
           localStorage.setItem("socketPort", socketPort);
           localStorage.setItem("nodeEnv", nodeEnv);
-      } catch (err) {
+        } catch (err) {
           console.log(err);
+        }
       }
-      
-  }
- refreshing();
-  </script>
+      refreshing();
+    </script>
     <link rel="icon" href="/Favicon/ImageAI-522x425.ico" type="image/x-icon" />
 
     <!--  Bootstrap css file  -->
@@ -64,8 +65,10 @@
       rel="stylesheet"
       href="/vendor/owl-carousel/css/owl.theme.default.min.css"
     />
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css" />
-
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+    />
 
     <!--  custom css file  -->
     <link rel="stylesheet" href="./css/style.css" />
@@ -103,6 +106,10 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" defer></script>
+  
+    <link rel="stylesheet" href="/css/contactUs.css"/>
+    <link rel="stylesheet" href="/css/apply.css"/>
+  
   </head>
 
   <body>
@@ -204,7 +211,7 @@
         <div class="hero-content">
           <h1>Get Instant Loans with E Pe</h1>
           <p>Quick, easy, and secure. Your financial solutions, simplified.</p>
-          <button class="hero-btn">Apply Now</button>
+          <button class="hero-btn" id="open-apply-form-btn">Apply Now</button>
         </div>
       </section>
 
@@ -305,6 +312,7 @@
                 <button
                   type="button"
                   class="btn button primary-button text-uppercase"
+                  id="open-contactUs-form-btn"
                 >
                   Contact Us
                 </button>
@@ -643,7 +651,8 @@
                     />
                   </a>
                 </div>
-               
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -787,17 +796,27 @@
         <div class="container py-5 px-lg-5">
           <div class="row g-5">
             <div class="col-md-6 col-lg-3">
-                        <h4 class="text-white mb-4">Address</h4>
-                        <p><i class="fa fa-map-marker-alt me-3"></i>Sector 63, Noida UP</p>
-                        <p><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                        <p><i class="fa fa-envelope me-3"></i>info@example.com</p>
-                        <div class="d-flex pt-2">
-                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-instagram"></i></a>
-                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
+              <h4 class="text-white mb-4">Address</h4>
+              <p>
+                <i class="fa fa-map-marker-alt me-3"></i>Sector 63, Noida UP
+              </p>
+              <p><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+              <p><i class="fa fa-envelope me-3"></i>info@example.com</p>
+              <div class="d-flex pt-2">
+                <a class="btn btn-outline-light btn-social" href=""
+                  ><i class="fab fa-twitter"></i
+                ></a>
+                <a class="btn btn-outline-light btn-social" href=""
+                  ><i class="fab fa-facebook-f"></i
+                ></a>
+                <a class="btn btn-outline-light btn-social" href=""
+                  ><i class="fab fa-instagram"></i
+                ></a>
+                <a class="btn btn-outline-light btn-social" href=""
+                  ><i class="fab fa-linkedin-in"></i
+                ></a>
+              </div>
+            </div>
             <div class="col-md-6 col-lg-3">
               <h4 class="text-white mb-4">Quick Link</h4>
               <a class="btn btn-link" href="#Services">Services</a>
@@ -843,10 +862,8 @@
           <div class="copyright">
             <div class="row">
               <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                &copy;
-                 
-                  2024 by Techfin Private Limited
-                , All Right Reserved. Create with love in INDIA
+                &copy; 2024 by Techfin Private Limited , All Right Reserved.
+                Create with love in INDIA
 
                 <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
               </div>
@@ -861,45 +878,256 @@
           </div>
         </div>
       </div>
+
+
+      <section class="popup-area">
+        <div id="apply-form-modal" class="apply-form-modal">
+          <div class="apply-container">
+            <div class="header-row">
+              <h2>Apply</h2>
+              <button id="close-apply-form-btn" class="close-btn">
+                &times;
+              </button>
+            </div>
+            <form id="apply-form" action="/submit-apply" method="POST">
+              <!-- Name -->
+              <label for="name">Name:</label>
+              <input type="text" id="name" name="name" required /><br /><br />
+    
+              <!-- Email -->
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" required /><br /><br />
+    
+              <!-- Phone Number -->
+              <label for="phone">Phone Number:</label>
+              <input type="tel" id="phone" name="phone" required /><br /><br />
+    
+              <!-- Loan Type Dropdown -->
+              <label for="loan-type">Select Loan Type:</label>
+              <select id="loan-type" name="loan-type" required>
+                <option value="">--Select Loan--</option>
+                <option value="home-loan">Home Loan</option>
+                <option value="personal-loan">Personal Loan</option>
+                <option value="car-loan">Car Loan</option>
+                <option value="education-loan">Education Loan</option>
+                <option value="business-loan">Business Loan</option></select
+              ><br /><br />
+    
+              <!-- Reason for Loan -->
+              <label for="reason">Reason for Loan:</label>
+              <textarea id="reason" name="reason" rows="4" required></textarea
+              ><br /><br />
+    
+              <!-- Submit Button -->
+              <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+          </div>
+        </div>
+        <div id="contactUs-form-modal" class="contactUs-form-modal">
+          <div class="contact-container">
+            <!-- Contact Us heading with close button -->
+            <div class="header-row">
+              <h2>Contact Us</h2>
+              <button id="close-contactUs-form-btn" class="close-btn">&times;</button>
+            </div>
+            <form id="contact-form" action="/submit-contact" method="POST">
+              <!-- Name -->
+              <label for="name">Name:</label>
+              <input type="text" id="name" name="name" required /><br /><br />
+    
+              <!-- Email -->
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" required /><br /><br />
+    
+              <!-- Phone Number -->
+              <label for="phone">Phone Number:</label>
+              <input type="tel" id="phone" name="phone" required /><br /><br />
+    
+              <!-- Reason for Contact -->
+              <label for="reason">Reason for Contact:</label>
+              <textarea id="reason" name="reason" rows="4" required></textarea><br /><br />
+    
+              <!-- Submit Button -->
+              <button type="submit">Send</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
     </main>
 
-   <!-- Chat Toggle Button -->
-   <div>
-    <div class="chat-button" id="chatButton" style="position: fixed; bottom: 80px; right: 20px; background-color: #004992; color: white; padding: 10px 15px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-      <i class="fas fa-comments"></i>
-    </div>
-  
-    <!-- Chat Box -->
-    <div class="chat-box" id="chatBox" style="width: 100%; height: 60%; max-width: 380px; border: 1px solid #b510df; border-radius: 8px; position: fixed; bottom: 8%; right: 21px; background-color: #f9f9f9; display: none; flex-direction: column; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-      <div class="chat-header" style="background-color: #004992; color: #fff; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-top-left-radius: 8px; border-top-right-radius: 8px;">
-        <h5 style="margin: 0; font-size: 16px;">Chat with Us</h5>
-        <div style="display: flex; align-items: center;">
-          <button class="btn btn-link close-case" id="closeCase" style="background-color: #df16fa; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-right: 10px; font-size: 12px;">Close Case</button>
-          <button class="close" id="closeChat" style="background: none; border: none; color: #fff; font-size: 20px; cursor: pointer;">&times;</button>
-        </div>
+    <!-- Chat Toggle Button -->
+    <div>
+      <div
+        class="chat-button"
+        id="chatButton"
+        style="
+          position: fixed;
+          bottom: 80px;
+          right: 20px;
+          background-color: #004992;
+          color: white;
+          padding: 10px 15px;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        "
+      >
+        <i class="fas fa-comments"></i>
       </div>
-      <div class="chat-body" id="chatBody" style="flex: 1; overflow-y: auto; padding: 10px; max-height: 300px;">
-        <!-- Predefined Messages -->
-      </div>
-      <div class="chat-footer" id="chatFooter" style="display: flex; flex-direction: column; gap: 10px; padding: 10px; border-top: 1px solid #ccc;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          
-          <i class="uil uil-paperclip attachment-icon" id="attachmentIcon" style="cursor: pointer; font-size: 18px;">
-            <input type="file" id="fileInput" accept="image/*" style="display: none;" />
-          </i>
-          
-          <button class="btn btn-secondary" id="fileSendButton" style="flex: none; background-color: #6c757d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 14px;">Send File</button>
-        </div>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <input type="text" class="form-control" id="messageInput" placeholder="Type a message" style="flex: 1; padding: 5px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;" />
-          <button class="btn btn-primary" id="sendMessage" style="background-color: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; position: relative; bottom: 0; font-size: 14px;">
-            <i class="fa fa-paper-plane text-primary-gradient"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 
+      <!-- Chat Box -->
+      <div
+        class="chat-box"
+        id="chatBox"
+        style="
+          width: 100%;
+          height: 60%;
+          max-width: 380px;
+          border: 1px solid #b510df;
+          border-radius: 8px;
+          position: fixed;
+          bottom: 8%;
+          right: 21px;
+          background-color: #f9f9f9;
+          display: none;
+          flex-direction: column;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        "
+      >
+        <div
+          class="chat-header"
+          style="
+            background-color: #004992;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+          "
+        >
+          <h5 style="margin: 0; font-size: 16px">Chat with Us</h5>
+          <div style="display: flex; align-items: center">
+            <button
+              class="btn btn-link close-case"
+              id="closeCase"
+              style="
+                background-color: #df16fa;
+                color: white;
+                padding: 5px 10px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-right: 10px;
+                font-size: 12px;
+              "
+            >
+              Close Case
+            </button>
+            <button
+              class="close"
+              id="closeChat"
+              style="
+                background: none;
+                border: none;
+                color: #fff;
+                font-size: 20px;
+                cursor: pointer;
+              "
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+        <div
+          class="chat-body"
+          id="chatBody"
+          style="flex: 1; overflow-y: auto; padding: 10px; max-height: 300px"
+        >
+          <!-- Predefined Messages -->
+        </div>
+        <div
+          class="chat-footer"
+          id="chatFooter"
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+          "
+        >
+          <div style="display: flex; align-items: center; gap: 10px">
+            <i
+              class="uil uil-paperclip attachment-icon"
+              id="attachmentIcon"
+              style="cursor: pointer; font-size: 18px"
+            >
+              <input
+                type="file"
+                id="fileInput"
+                accept="image/*"
+                style="display: none"
+              />
+            </i>
+
+            <button
+              class="btn btn-secondary"
+              id="fileSendButton"
+              style="
+                flex: none;
+                background-color: #6c757d;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+              "
+            >
+              Send File
+            </button>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px">
+            <input
+              type="text"
+              class="form-control"
+              id="messageInput"
+              placeholder="Type a message"
+              style="
+                flex: 1;
+                padding: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+              "
+            />
+            <button
+              class="btn btn-primary"
+              id="sendMessage"
+              style="
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 5px 10px;
+                border-radius: 4px;
+                cursor: pointer;
+                position: relative;
+                bottom: 0;
+                font-size: 14px;
+              "
+            >
+              <i class="fa fa-paper-plane text-primary-gradient"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!--  ======================== End Footer Area ==============================  -->
 
@@ -917,14 +1145,15 @@
 
     <!--  Owl-carousel js file  -->
     <script src="/vendor/owl-carousel/js/owl.carousel.min.js"></script>
-    
+
     <!--  custom js file  -->
     <script src="/js/main.js"></script>
     <script src="/js/Utils/utils.js" defer></script>
-    <script src="/js/customerSupport.js" defer ></script>
-    <script src="/js/customerChatUtils.js" ></script>
+    <script src="/js/customerSupport.js" defer></script>
+    <script src="/js/customerChatUtils.js"></script>
     <script src="/js/socketScript.js" defer></script>
-    
+    <script src="/js/contactUs.js"></script>
+    <script src="/js/apply.js"></script>
     
   </body>
 </html>
