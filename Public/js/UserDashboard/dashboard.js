@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   try {
     
 
-    const result = await getRequest("user/dashboard/post/info");
+    const result = await getRequestWithToken("user/dashboard/post/info");
     const data = result.data;
 
     // Extract user details from the response

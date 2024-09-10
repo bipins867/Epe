@@ -13,7 +13,7 @@ const panFile = document.getElementById("panFile").files[0];
 
 document.addEventListener("DOMContentLoaded", async function () {
   try {
-    const result = await getRequest("user/dashboard/post/info");
+    const result = await getRequestWithToken("user/dashboard/post/info");
 
     const data = result.data;
     // Example user data

@@ -30,11 +30,16 @@ document
         baseUrl + "user/auth/post/login",
         obj
       );
-      window.location.replace("/user/dashboard");
+     
 
+      
+      // console.log(result.data);
       // alert('Login Successfull!')
       const data = result.data;
+      //console.log(data.token)
+      
       localStorage.setItem("token", data.token);
+      window.location.replace("/user/dashboard");
       //console.log(data);
     } catch (err) {
       document.getElementById('login-btn').disabled=false;

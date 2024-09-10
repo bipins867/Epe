@@ -73,7 +73,7 @@ exports.userSignUp = async (req, res, next) => {
 
 exports.userLogin = async (req, res, next) => {
   const { email, phone, password } = req.body;
-
+  
   try {
     // Check if the user exists
     let user;
