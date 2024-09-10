@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", async function () {
- 
-
   // Check for chatToken in localStorage
   const chatToken = localStorage.getItem("chatToken");
   const caseId = localStorage.getItem("caseId");
@@ -15,10 +13,12 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 });
 
-document.getElementById("attachmentIcon").addEventListener("click", function () {
-  // Trigger click on the hidden file input
-  document.getElementById("fileInput").click();
-});
+document
+  .getElementById("attachmentIcon")
+  .addEventListener("click", function () {
+    // Trigger click on the hidden file input
+    document.getElementById("fileInput").click();
+  });
 document.getElementById("fileSendButton").onclick = function () {
   handleFileUpload();
 };
@@ -60,20 +60,13 @@ async function handleFileUpload() {
       }
     );
 
-    const fileUrl = response.data.fileUrl;
-
-    // Display image in chatbox
-    addImageResponseMessage(fileUrl);
+    const fileUrl = response.data.fileMessage.message;
+    console.log(fileUrl);
+    //Display image in chatbox
+    addUserResponseImage(fileUrl);
   } catch (err) {
     alert("Error uploading file: " + err.message);
   }
-}
-
-// Function to add an image message to the chatbox
-function addImageResponseMessage(url) {
-  const imgTag = `<div class="message client-message"><img src="files/CustomerSupport/${url}" alt="Uploaded Image" style="max-width: 200px; height: auto;"/></div>`;
-
-  return imgTag;
 }
 
 async function checkCaseStatus(caseId) {
@@ -296,7 +289,7 @@ function updateChatBox(messages) {
         ? formatServerMessage(message.message)
         : formatClientMessage(message.message);
     }
-    
+
     chatBody.innerHTML += formattedMessage;
   });
 
@@ -304,6 +297,14 @@ function updateChatBox(messages) {
 
   checkAndUpdateChatBoxLength();
   // Scroll to the bottom of the chatbox
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+function addUserResponseImage(fileUrl) {
+  const chatBody = document.getElementById("chatBody");
+
+  const msg = addImageResponseMessage(fileUrl);
+  chatBody.innerHTML += msg;
+  checkAndUpdateChatBoxLength();
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
@@ -389,24 +390,24 @@ document.getElementById("fileInput").addEventListener("change", function () {
     this.files.length > 0 ? "inline-block" : "none";
 });
 
-document
-  .getElementById("fileSendButton")
-  .addEventListener("click", function () {
-    const fileInput = document.getElementById("fileInput");
-    const chatBody = document.getElementById("chatBody");
+// document
+//   .getElementById("fileSendButton")
+//   .addEventListener("click", function () {
+//     const fileInput = document.getElementById("fileInput");
+//     const chatBody = document.getElementById("chatBody");
 
-    if (fileInput.files.length > 0) {
-      const fileMessage = document.createElement("div");
-      fileMessage.className = "message client-message";
-      fileMessage.textContent = `File sent: ${fileInput.files[0].name}`;
-      chatBody.appendChild(fileMessage);
-      chatBody.scrollTop = chatBody.scrollHeight;
+//     if (fileInput.files.length > 0) {
+//       const fileMessage = document.createElement("div");
+//       fileMessage.className = "message client-message";
+//       fileMessage.textContent = `File sent: ${fileInput.files[0].name}`;
+//       chatBody.appendChild(fileMessage);
+//       chatBody.scrollTop = chatBody.scrollHeight;
 
-      // Clear the file input
-      fileInput.value = "";
-      this.style.display = "none";
-    }
-  });
+//       // Clear the file input
+//       fileInput.value = "";
+//       this.style.display = "none";
+//     }
+//   });
 
 document.getElementById("chatButton").addEventListener("click", function () {
   const chatBox = document.getElementById("chatBox");

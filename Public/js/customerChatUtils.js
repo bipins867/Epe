@@ -1,13 +1,30 @@
-function formatServerMessage(message) {
-  return `<div class="message server-message">
-      ${message}
-    </div>`;
+function formatClientMessage(message) {
+  return `<div class="d-flex justify-content-end mb-2">
+            <div class="message client-message">
+              ${message}
+            </div>
+          </div>`;
 }
 
-function formatClientMessage(message) {
-  return `<div class="message client-message">
-      ${message}
-    </div>`;
+function formatServerMessage(message) {
+  return `<div class="d-flex justify-content-start mb-2">
+            <div class="message server-message">
+              ${message}
+            </div>
+          </div>`;
+}
+// Function to add an image message to the chatbox
+function addImageResponseMessage(url) {
+  // Create the image message with appropriate Bootstrap and custom classes
+  const imgTag = `
+    <div class="d-flex justify-content-end mb-2">
+      <div class="message client-message">
+        <img src="files/CustomerSupport/${url}" alt="Uploaded Image" style="max-width: 200px; height: auto;"/>
+      </div>
+    </div>
+  `;
+
+  return imgTag;
 }
 
 function prepareOptionTemplate(messageDict, headingMessage) {
