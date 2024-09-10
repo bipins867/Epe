@@ -72,6 +72,8 @@ body {
     overflow-y: auto;
     flex-grow: 1;
     font-size: 16px;
+    flex:1;
+    max-height: auto;
 }
 
 .message {
@@ -96,9 +98,22 @@ body {
 .chat-footer {
     display: flex;
     flex-wrap: wrap;
+    background-color: rgb(238, 238, 238);
+    flex-direction: column;
     padding: 10px;
     border-top: 1px solid #f0f0f0;
-    gap: 5px; /* Adds spacing between elements */
+    gap: 10px; /* Adds spacing between elements */
+}
+
+.btn-file-send{
+    flex: none;
+    color: #007bff;
+    background-color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;   
 }
 
 .chat-footer input[type="file"] {
