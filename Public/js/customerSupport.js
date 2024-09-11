@@ -2,7 +2,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   // Check for chatToken in localStorage
   const chatToken = localStorage.getItem("chatToken");
   const caseId = localStorage.getItem("caseId");
-
+  updateCloseCaseButtonStatus(false);
+  updateFileInputStatus(false);
+  
   if (chatToken && caseId) {
     // Fetch case details to check if it's closed
     checkCaseStatus(caseId);
@@ -18,6 +20,8 @@ document
   .addEventListener("click", function () {
     // Trigger click on the hidden file input
     document.getElementById("fileInput").click();
+    
+    
   });
 document.getElementById("fileSendButton").onclick = function () {
   handleFileUpload();
@@ -85,6 +89,8 @@ async function checkCaseStatus(caseId) {
       localStorage.removeItem("caseId");
       location.reload();
     } else {
+      updateCloseCaseButtonStatus(true);
+      updateFileInputStatus(true);
       showInputField(true);
       getInitialMessage();
       document.getElementById("sendMessage").onclick = function () {
@@ -166,7 +172,8 @@ function handleOption(option) {
                 chatBody.innerHTML += formatClientMessage(candidateId);
                 createCaseFunction(name, email, candidateId);
                 clearChatBox();
-                addInitalInfoMessage()
+                addInitalInfoMessage();
+                
               } else {
                 chatBody.innerHTML += formatServerMessage(
                   "Candidate ID cannot be empty."
@@ -305,6 +312,9 @@ function updateChatBox(messages) {
 }
 
 function addInitalInfoMessage() {
+  updateCloseCaseButtonStatus(true);
+  updateFileInputStatus(true);
+  
   const chatBody = document.getElementById("chatBody");
 
   const msg = formatInfoMessage();

@@ -51,9 +51,9 @@ function prepareOptionTemplate(messageDict, headingMessage) {
 function updatePropertyStatus(show, elementId) {
   const propertyObj = document.getElementById(elementId);
   if (show) {
-    propertyObj.style.display = "box";
-  } else {
     propertyObj.style.display = "flex";
+  } else {
+    propertyObj.style.display = "none";
   }
 }
 
@@ -71,4 +71,9 @@ function updateAttachmentIconStatus(show) {
 
 function updateSendFileButtonStatus(show) {
   updatePropertyStatus(show, "fileSendButton");
+}
+
+function updateFileInputStatus(show) {
+  updateAttachmentIconStatus(show);
+  updateSendFileButtonStatus(show);
 }
