@@ -50,8 +50,7 @@ function prepareOptionTemplate(messageDict, headingMessage) {
 
 function updatePropertyStatus(show, elementId) {
   const propertyObj = document.getElementById(elementId);
-  console.log(show)
-  console.log(elementId);
+  
   if (show) {
     propertyObj.style.display = "flex";
   } else {

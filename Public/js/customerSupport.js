@@ -466,6 +466,4 @@ document.getElementById("closeCase").addEventListener("click", async () => {
   }
 });
 
-window.addEventListener("click", async () => {
-  console.log("CLIKEDE");
-});
+
