@@ -83,7 +83,14 @@ body {
     max-width: 75%;
     font-size: 15px;
 }
-
+.info-box {
+    max-width: 9 0%; /* Smaller width for the box */
+    background-color: #e7f1ff; /* Light blue background */
+    color: #0056b3; /* Dark blue text */
+    border: 1px solid #cce5ff; /* Border to make it stand out */
+    border-radius: 8px; /* Rounded corners */
+    margin-top: 10px; /* Space from other content */
+  }
 .server-message {
     background-color: #f0f0f0;
     align-items: end;

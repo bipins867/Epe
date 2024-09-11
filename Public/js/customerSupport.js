@@ -166,6 +166,7 @@ function handleOption(option) {
                 chatBody.innerHTML += formatClientMessage(candidateId);
                 createCaseFunction(name, email, candidateId);
                 clearChatBox();
+                addInitalInfoMessage()
               } else {
                 chatBody.innerHTML += formatServerMessage(
                   "Candidate ID cannot be empty."
@@ -214,6 +215,7 @@ function handleOption(option) {
             chatBody.innerHTML += formatClientMessage(name);
             createCaseFunction2(name, email);
             clearChatBox();
+            addInitalInfoMessage();
           } else {
             chatBody.innerHTML += formatServerMessage("Name cannot be empty.");
           }
@@ -256,9 +258,11 @@ async function getInitialMessage() {
       obj
     );
     const messages = response.data.messages; // Assuming messages is the array from the response
-
-    updateChatBox(messages);
-
+    if (messages) {
+      updateChatBox(messages);
+    } else {
+      addInitalInfoMessage();
+    }
     socket.emit("join-case", caseId); // Call the function to update chatbox
   } catch (err) {
     handleErrors(err);
@@ -299,6 +303,16 @@ function updateChatBox(messages) {
   // Scroll to the bottom of the chatbox
   chatBody.scrollTop = chatBody.scrollHeight;
 }
+
+function addInitalInfoMessage() {
+  const chatBody = document.getElementById("chatBody");
+
+  const msg = formatInfoMessage();
+  chatBody.innerHTML += msg;
+
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
 function addUserResponseImage(fileUrl) {
   const chatBody = document.getElementById("chatBody");
 

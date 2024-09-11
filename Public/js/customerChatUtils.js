@@ -1,3 +1,11 @@
+function formatInfoMessage() {
+  return `<div class="d-flex justify-content-center mb-2" id="info-box">
+    <div class="info-box text-center p-2 small">
+      Now you are connected with our agent. Feel free to ask to query.
+    </div>
+  </div>`;
+}
+
 function formatClientMessage(message) {
   return `<div class="d-flex justify-content-end mb-2">
             <div class="message client-message">
@@ -38,4 +46,29 @@ function prepareOptionTemplate(messageDict, headingMessage) {
     )}">${message}</button>`;
   }
   mess += `</div>`;
+}
+
+function updatePropertyStatus(show, elementId) {
+  const propertyObj = document.getElementById(elementId);
+  if (show) {
+    propertyObj.style.display = "box";
+  } else {
+    propertyObj.style.display = "flex";
+  }
+}
+
+function updateCloseCaseButtonStatus(show) {
+  updatePropertyStatus(show, "closeCase");
+}
+
+function updateChatBoxStatus(show) {
+  updatePropertyStatus(show, "chatBox");
+}
+
+function updateAttachmentIconStatus(show) {
+  updatePropertyStatus(show, "attachmentIcon");
+}
+
+function updateSendFileButtonStatus(show) {
+  updatePropertyStatus(show, "fileSendButton");
 }
