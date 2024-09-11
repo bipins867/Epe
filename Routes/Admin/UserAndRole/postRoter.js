@@ -4,10 +4,10 @@ const router = express.Router();
 const userAndRoleController = require("../../../Controller/Admin/UserAndRole/userAndRole");
 const {
   adminAuthentication,
-  userAuthentication,
   roleSSAuthentication,
   roleSAuthentication,
 } = require("../../../Middleware/auth");
+
 
 router.post("/createSSAdmin", userAndRoleController.createSSAdmin);
 router.post(
@@ -37,7 +37,7 @@ router.post(
   userAndRoleController.changePassword
 );
 
-router.post("/updateAdminStatus", userAndRoleController.updateAdminStatus);
+router.post("/updateAdminStatus",adminAuthentication,roleSAuthentication, userAndRoleController.updateAdminStatus);
 
 router.post("/updateAdminRoles",adminAuthentication,roleSAuthentication, userAndRoleController.updateAdminRoles);
 

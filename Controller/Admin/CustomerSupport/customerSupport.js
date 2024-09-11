@@ -27,9 +27,9 @@ exports.getDashboardInfo = async (req, res, next) => {
         },
       ],
     });
-
+    
     // 3. Count cases where the last message is seen by admin
-    const pendingCasesWithUnSeenMessages = pendingCases.reduce(
+    const pendingCasesWithUnSeenMessages = pendingCases.reverse().reduce(
       (acc, customerCase) => {
         const caseMessages = customerCase.CaseMessages;
         const latestMessage = caseMessages.length ? caseMessages[0] : null; // Get the latest message, if any

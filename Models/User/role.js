@@ -17,6 +17,10 @@ const Role = sequelize.define(
       type: Sequelize.STRING,
       allowNull: false,
     },
+    identifier:{
+      type:Sequelize.STRING,
+      allowNull:false
+    }
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

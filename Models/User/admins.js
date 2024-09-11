@@ -25,6 +25,13 @@ const Admin = sequelize.define(
       type: Sequelize.BOOLEAN,
       allowNull: false,
     },
+    email:{
+      type:Sequelize.STRING,
+      
+    },
+    name:{
+      type:Sequelize.STRING
+    }
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

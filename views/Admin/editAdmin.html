@@ -1,77 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Edit SAdmin</title>
     <!-- Bootstrap CSS -->
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="icon" href="/Favicon/ImageAI-522x425.ico" type="image/x-icon">
-  </head>
-  <body>
+</head>
+<body>
     <div class="container mt-4">
-      <h3>Edit SAdmin</h3>
+        <h3>Edit SAdmin</h3>
 
-      <!-- Admins List -->
-      <table class="table table-bordered mt-3" id="adminsTable">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>UserName</th>
-            <th>Admin Type</th>
-            <th>Freeze Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Admins will be dynamically loaded here -->
-        </tbody>
-      </table>
+        <!-- Admins List -->
+        <table class="table table-bordered mt-3" id="adminsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>UserName</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    
+                    <th>Admin Type</th>
+                    <th>Freeze Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Admins will be dynamically loaded here -->
+            </tbody>
+        </table>
 
-      <!-- Form to Add New SAdmin -->
-      <div class="mt-4">
-        <h4>Add New SAdmin</h4>
-        <form id="addSAdminForm">
-          <div class="form-group">
-            <label for="sAdminPassword">Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="sAdminPassword"
-              placeholder="Enter password"
-              required
-            />
-          </div>
-          <div class="form-group" id="div-role">
-            <label for="sAdminRole">Role</label>
-            <select class="form-control" id="sAdminRole" required>
-              <option value="" disabled selected>Select role</option>
-              <option value="SA">SA</option>
-              <option value="A" selected>A</option>
-            </select>
-          </div>
-          <button type="submit" class="btn btn-primary" id="create-admin-btn">Create SAdmin</button>
-        </form>
-      </div>
+        <!-- Form to Add New SAdmin -->
+        <div class="mt-4">
+            <h4>Add New SAdmin</h4>
+            <form id="addSAdminForm">
+                <div class="form-group">
+                    <label for="sAdminName">Name</label>
+                    <input type="text" class="form-control" id="sAdminName" placeholder="Enter name" required />
+                </div>
+                <div class="form-group">
+                    <label for="sAdminEmail">Email</label>
+                    <input type="email" class="form-control" id="sAdminEmail" placeholder="Enter email" required />
+                </div>
+                <div class="form-group">
+                    <label for="sAdminPassword">Password</label>
+                    <input type="password" class="form-control" id="sAdminPassword" placeholder="Enter password" required />
+                </div>
+                <div class="form-group" id="div-role">
+                    <label for="sAdminRole">Role</label>
+                    <select class="form-control" id="sAdminRole" required>
+                        <option value="" disabled selected>Select role</option>
+                        <option value="SA">SA</option>
+                        <option value="A" selected>A</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" id="create-admin-btn">Create SAdmin</button>
+            </form>
+        </div>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
-      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/js/Utils/adminUtils.js"></script>
     <!-- Axios and custom JS -->
 
     <script src="/js/Admin/EditAdmin/editAdmin.js"></script>
     <!-- Linking the external JavaScript file -->
-  </body>
+</body>
 </html>

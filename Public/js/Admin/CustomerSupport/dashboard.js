@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     postRequestWithToken('admin/customerSupport/post/dashboardInfo')
         .then(response => {
             const { numberOfOpenCases, numberOfPendingCases, numberOfClosedCases, pendingCasesWithUnSeenMessages } = response.data;
-
+            console.log(pendingCasesWithUnSeenMessages)
             // Update the counts
             document.getElementById('openCasesCount').textContent = numberOfOpenCases || 0;
             document.getElementById('pendingCasesCount').textContent = numberOfPendingCases || 0;
