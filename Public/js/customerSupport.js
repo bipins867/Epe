@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const caseId = localStorage.getItem("caseId");
   updateCloseCaseButtonStatus(false);
   updateFileInputStatus(false);
-  
+
   if (chatToken && caseId) {
     // Fetch case details to check if it's closed
     checkCaseStatus(caseId);
@@ -20,8 +20,6 @@ document
   .addEventListener("click", function () {
     // Trigger click on the hidden file input
     document.getElementById("fileInput").click();
-    
-    
   });
 document.getElementById("fileSendButton").onclick = function () {
   handleFileUpload();
@@ -173,7 +171,6 @@ function handleOption(option) {
                 createCaseFunction(name, email, candidateId);
                 clearChatBox();
                 addInitalInfoMessage();
-                
               } else {
                 chatBody.innerHTML += formatServerMessage(
                   "Candidate ID cannot be empty."
@@ -200,7 +197,9 @@ function handleOption(option) {
       `;
   } else if (option === "services") {
     knowService(); // Call the function and log to the console
-    finishPreTemplateConversation(); // Finish conversation setup
+    finishPreTemplateConversation();
+    showInputField(false);
+    showInitialOptions(); // Finish conversation setup
 
     // Hide options after selection
   } else if (option === "agent") {
@@ -247,8 +246,9 @@ function clearOptions() {
 }
 
 function knowService() {
-  // Call the function and log to the console
-  console.log("Know about services requested.");
+  document.getElementById('chatbase-bubble-button').click()
+  updateChatBoxStatus(false)
+  updateChatBaseBubbleButton(true)
 }
 
 function showInputField(show) {
@@ -314,7 +314,7 @@ function updateChatBox(messages) {
 function addInitalInfoMessage() {
   updateCloseCaseButtonStatus(true);
   updateFileInputStatus(true);
-  
+
   const chatBody = document.getElementById("chatBody");
 
   const msg = formatInfoMessage();
@@ -436,10 +436,18 @@ document.getElementById("fileInput").addEventListener("change", function () {
 document.getElementById("chatButton").addEventListener("click", function () {
   const chatBox = document.getElementById("chatBox");
   chatBox.style.display = chatBox.style.display === "flex" ? "none" : "flex";
+  
+  if (chatBox.style.display==='none'){
+    updateChatBaseBubbleButton(true);
+  }
+  else{
+    updateChatBaseBubbleButton(false);
+  }
 });
 
 document.getElementById("closeChat").addEventListener("click", function () {
   document.getElementById("chatBox").style.display = "none";
+  updateChatBaseBubbleButton(true);
 });
 
 document.getElementById("closeCase").addEventListener("click", async () => {
@@ -456,4 +464,8 @@ document.getElementById("closeCase").addEventListener("click", async () => {
   } catch (err) {
     handleErrors(err);
   }
+});
+
+window.addEventListener("click", async () => {
+  console.log("CLIKEDE");
 });

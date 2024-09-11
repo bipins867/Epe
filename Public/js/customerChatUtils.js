@@ -50,6 +50,8 @@ function prepareOptionTemplate(messageDict, headingMessage) {
 
 function updatePropertyStatus(show, elementId) {
   const propertyObj = document.getElementById(elementId);
+  console.log(show)
+  console.log(elementId);
   if (show) {
     propertyObj.style.display = "flex";
   } else {
@@ -77,3 +79,14 @@ function updateFileInputStatus(show) {
   updateAttachmentIconStatus(show);
   updateSendFileButtonStatus(show);
 }
+
+function updateChatBaseBubbleButton(show){
+  updatePropertyStatus(show,'chatbase-bubble-button')
+}
+function updateChatBaseBubbleWindow(show){
+  updatePropertyStatus(show,'chatbase-bubble-window')
+}
+
+
+//chatbase-bubble-button
+//chatbase-bubble-window
