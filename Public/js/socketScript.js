@@ -7,7 +7,7 @@ let socketUrl;
 
 if (nodeEnv) {
   if (nodeEnv === "testing") {
-    socketUrl = `http://localhost:${socketPort}`;
+    socketUrl = `http://192.168.106.67:${socketPort}`;
   } else {
     socketUrl = `https://${host}:${socketPort}`;
   }

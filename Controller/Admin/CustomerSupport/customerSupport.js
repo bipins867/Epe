@@ -1,9 +1,10 @@
+const { sendMessage2User } = require("../../../appConfig");
 const CaseMessage = require("../../../Models/CustomerSupport/caseMessage");
 const CaseUser = require("../../../Models/CustomerSupport/caseUser");
 const CustomerCase = require("../../../Models/CustomerSupport/customerCase");
 
 const { Op } = require("sequelize");
-const {  sendMessage2User } = require("../../../Server-Socket/server");
+
 
 exports.getDashboardInfo = async (req, res, next) => {
   try {
