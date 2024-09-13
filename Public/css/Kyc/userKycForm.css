@@ -1,29 +1,46 @@
-/* KYC Form Page CSS */
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+@import url(/css/fonts.css); /* import fonts from fonts.css file */
+@import url(/css/partials/_variables.css); /* css variables */
+@import url(/css/partials/_global.css);  /* import global styling */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
-
+/* Base Styling */
 .header {
   position: fixed;
-  height: 80px;
+  height: 60px;
   width: 100%;
   z-index: 100;
   padding: 0 20px;
+  background-color: #fff;
 }
 
-.nav {
-  max-width: 1100px;
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  height: 100%;
-  align-items: center;
-  justify-content: space-between;
+.header_area .main-menu .navbar .navbar-brand {
+  padding: 0 1rem 0 2rem;
+}
+
+.header_area .main-menu .navbar {
+  padding: 0.5rem 10rem;
+}
+
+.header_area .main-menu .nav-item .nav-link {
+  font: bold 500 15px/2px var(--roboto);
+  text-transform: uppercase;
+  padding: 1.7rem;
+  color: #7d2ae8;
+}
+
+.header_area .main-menu .navbar-nav .active a {
+  background: var(--gradient-color);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header_area .main-menu .navbar-nav a:hover {
+  background: var(--gradient-color);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #0620b4;
+  background-clip: text;
+  color: #7d2ae8;
 }
 
 .button {
@@ -107,6 +124,7 @@
   margin-top: 20px;
   width: 100%;
 }
+
 .input_box i.user,
 .input_box i.phone,
 .input_box i.email,
@@ -166,4 +184,42 @@
 
 .kyc_form {
   text-align: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 10px;
+  }
+
+  .form_container {
+    width: 95%;
+    max-height: 85%;
+    padding: 15px;
+  }
+
+  .form_container h2 {
+    font-size: 18px;
+  }
+
+  .input_box,
+  .file_input_box {
+    width: 100%;
+  }
+
+  .input_box input,
+  .file_input_box input {
+    padding: 0 20px;
+  }
+
+  .button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .form_close {
+    top: 5px;
+    right: 10px;
+    font-size: 18px;
+  }
 }
