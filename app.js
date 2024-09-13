@@ -83,7 +83,7 @@ io.on("connection", (socket) => {
 
 // Listen on the same port for both the Express app and Socket.IO server
 const port = process.env.APP_PORT || 3000;
-server.listen(port, () => {
+server.listen(port,'127.0.0.1', () => {
     console.log(`Server and Socket.IO are running on port ${port}`);
 });
 
