@@ -2,16 +2,24 @@ let host = getAddressWithoutPort(window.location.host);
 const socketPort = localStorage.getItem("socketPort");
 const nodeEnv = localStorage.getItem("nodeEnv");
 
-host="88.222.244.250";
+const errorFunction = {
+  // socketError: () => {
+  //   console.log("FUNction triggered");
+  // },
+};
+
+
 let socketUrl;
 
 if (nodeEnv) {
   if (nodeEnv === "testing") {
-    socketUrl = `http://localhost:${socketPort}`;
+    socketUrl = `http://${host}:${socketPort}`;
   } else {
+    host = "88.222.244.250";
     socketUrl = `https://${host}:${socketPort}`;
   }
 } else {
+  host = "88.222.244.250";
   socketUrl = `https://${host}:${socketPort}`;
 }
 
@@ -19,7 +27,12 @@ console.log(socketUrl);
 
 // Connect to the socket server
 const socket = io(socketUrl, {
-  transports: ['websocket'] // Ensure using WebSocket
+  transports: ["websocket"], // Use WebSocket transport
+  reconnection: true, // Enable reconnection (default is true)
+  reconnectionAttempts: Infinity, // Unlimited reconnection attempts (you can change this if needed)
+  reconnectionDelay: 5000, // Try to reconnect every 5 seconds
+  reconnectionDelayMax: 5000, // Max delay between attempts is also 5 seconds (no exponential backoff)
+  timeout: 5000, // Connection timeout before triggering reconnection
 });
 
 socket.on("connect", () => {
@@ -27,7 +40,8 @@ socket.on("connect", () => {
 });
 
 socket.on("connect_error", (err) => {
-  console.error(`Connection error: ${err.message}`);
+  //console.error(`Connection error: ${err.message}`);
+  handleSocketError(err);
 });
 
 socket.on("disconnect", () => {
@@ -56,4 +70,10 @@ function joinCase(caseId) {
 // Example function to leave a case room
 function leaveCase() {
   socket.emit("leave-case");
+}
+
+function handleSocketError(err) {
+  if (errorFunction.socketError) {
+    errorFunction.socketError();
+  }
 }

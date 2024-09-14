@@ -1,4 +1,17 @@
+
 document.addEventListener("DOMContentLoaded", async function () {
+  const chatBox=document.getElementById('chatBox')  
+  if(errorFunction){
+    errorFunction.socketError=()=>{
+      if(chatBox.style.display==='flex'){
+
+        //Here it will be calling referess message function to add any new or extra function ..
+      }
+     
+    }
+  }
+  
+  
   // Check for chatToken in localStorage
   const chatToken = localStorage.getItem("chatToken");
   const caseId = localStorage.getItem("caseId");

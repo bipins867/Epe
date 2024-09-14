@@ -1,4 +1,15 @@
 /* Custom styles for dropdown */
+/* External CSS for fixing image size */
+.services-img img {
+  width: auto;  /* Set the width of the image */
+  height: 100px; /* Set the height of the image */
+  object-fit: cover; /* Ensure the image maintains aspect ratio */
+  max-width: 100%; /* Ensure responsiveness */
+  display: block;
+  margin: 0 auto;
+}
+
+
 .custom-popup-title {
   font-size: 18px;
   font-weight: bold;
