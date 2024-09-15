@@ -11,37 +11,55 @@ function getAddressWithoutPort(url) {
   return match ? match[1] : null;
 }
 
+// if (response.status == 503) {
+//   window.location.replace("/user/auth/login");
+//   localStorage.removeItem("token");
+// }
 
-async function handleErrors(err) {
+async function handleErrors(err, log = true, alertMsg = true, mapFunction) {
+  // Declare variables
+  let logMessage = null;
+  let alertMessage = null;
+
+  // Check if the error has no response (network/server issue)
   if (!err.response) {
-    console.log("Network error or server is not responding:", err);
-    alert("Network error or server is not responding. Please try again later.");
-    return;
-  }
-  const { response } = err;
-
-  if (response.status == 503) {
-    window.location.replace("/user/auth/login");
-    localStorage.removeItem("token");
-  }
-  // Extract the response data
-
-  // Handle specific error responses
-  if (response.data && response.data.errors) {
-    let errorMessage = "Please fix the following errors:\n";
-    Object.keys(response.data.errors).forEach((er) => {
-      errorMessage += response.data.errors[er] + "\n";
-    });
-    alert(errorMessage);
-  } else if (response.data && response.data.message) {
-    alert(response.data.message); // Display message from server
-  } else if (response.data && response.data.error) {
-    alert(response.data.error); // Display error from server if message is not available
+    logMessage = "Network error or server is not responding: " + err;
+    alertMessage =
+      "Network error or server is not responding. Please try again later.";
   } else {
-    alert("An unexpected error occurred. Please try again.");
+    const { response } = err;
+
+    // Check if response.status exists in mapFunction, and call the corresponding function
+    if (mapFunction && response.status in mapFunction) {
+      mapFunction[response.status](err); // Call the mapped function
+    }
+
+    // Check if the response contains specific error details
+    if (response.data && response.data.errors) {
+      alertMessage = "Please fix the following errors:\n";
+      Object.keys(response.data.errors).forEach((er) => {
+        alertMessage += response.data.errors[er] + "\n";
+      });
+    } else if (response.data && response.data.message) {
+      alertMessage = response.data.message; // Message from server
+    } else if (response.data && response.data.error) {
+      alertMessage = response.data.error; // Error message from server
+    } else {
+      alertMessage = "An unexpected error occurred. Please try again.";
+    }
+
+    logMessage = "Error response: " + JSON.stringify(response);
   }
 
-  console.log("Error response:", response);
+  // Log the error if log argument is true and logMessage exists
+  if (log && logMessage) {
+    console.log(logMessage);
+  }
+
+  // Show alert if alertMsg argument is true and alertMessage exists
+  if (alertMsg && alertMessage) {
+    alert(alertMessage);
+  }
 }
 
 function getTokenHeaders() {
@@ -64,9 +82,6 @@ function getChatTokenHeaders() {
 }
 
 async function getRequest(url) {
-  
-  
-
   const result = await axios.get(baseUrl + url);
 
   return result;
