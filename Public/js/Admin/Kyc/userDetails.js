@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  // Extract the emailId from the URL
+  try{
+    // Extract the emailId from the URL
   const urlParams = new URLSearchParams(window.location.search);
   const emailId = window.location.pathname.split("/").pop();
 
@@ -21,6 +22,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   document.getElementById("panNumber").textContent = userKyc.panNumber;
   document.getElementById("panImage").src = userKyc.panUrl;
+  }
+  catch(err){
+    handleErrors(err,mapFunction);
+  }
 });
 const url = "admin/kyc/post/updateStatus";
 document.getElementById("approve-btn").onclick = async (event) => {
@@ -45,7 +50,7 @@ document.getElementById("approve-btn").onclick = async (event) => {
       alert("Failed to approve KYC: " + result.message);
     }
   } catch (error) {
-    handleErrors(error);
+    handleErrors(error,mapFunction);
   }
 };
 
@@ -75,7 +80,7 @@ document.getElementById("reject-btn").onclick = async (event) => {
         alert("Failed to reject KYC: " + result.message);
       }
     } catch (error) {
-      handleErrors(error);
+      handleErrors(error,mapFunction);
     }
   } else {
     alert("Rejection reason is required.");

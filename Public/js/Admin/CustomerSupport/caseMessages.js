@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     })
     .catch((error) => {
-      handleErrors(error);
+      handleErrors(error,mapFunction);
     });
 
   postRequestWithToken(`admin/customerSupport/post/caseMessages/${caseId}`)
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     })
     .catch((error) => {
-      handleErrors(error);
+      handleErrors(error,mapFunction);
     });
 
   document.getElementById("sendButton").addEventListener("click", async () => {
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Automatically scroll to the bottom after a new message
         chatBody.scrollTop = chatBody.scrollHeight;
       } catch (err) {
-        handleErrors(err);
+        handleErrors(err,mapFunction);
       }
     }
   });
@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
           alert("Case has been closed.");
           window.location.replace("/admin/customerSupport/dashboard");
         } catch (err) {
-          handleErrors(err);
+          handleErrors(err,mapFunction);
         }
       }
     });

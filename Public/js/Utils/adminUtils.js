@@ -9,7 +9,12 @@ function getAddressWithoutPort(url) {
   // If a match is found, return the matched group; otherwise, return null
   return match ? match[1] : null;
 }
-
+const mapFunction = {
+  503: (err) => {
+    window.location.replace("/admin/login");
+    localStorage.removeItem("token");
+  },
+};
 
 
 async function handleErrors(err, log = true, alertMsg = true, mapFunction) {

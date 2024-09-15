@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       window.location.href = "/user/dashboard";
     }
   } catch (err) {
-    handleErrors(err);
+    
+    handleErrors(err, mapFunction);
   }
 
   const acceptButton = document.getElementById("acceptButton");
@@ -38,12 +39,14 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     } catch (error) {
       document.getElementById("acceptButton").disabled = false;
-      handleErrors(error);
+      handleErrors(error,mapFunction);
     }
   });
 
-  document.getElementById('agreement-checkbox').addEventListener('change', function() {
-    var button = document.getElementById('acceptButton');
-    button.disabled = !this.checked;
-});
+  document
+    .getElementById("agreement-checkbox")
+    .addEventListener("change", function () {
+      var button = document.getElementById("acceptButton");
+      button.disabled = !this.checked;
+    });
 });

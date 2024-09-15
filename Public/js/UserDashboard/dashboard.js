@@ -1,9 +1,6 @@
-
 document.addEventListener("DOMContentLoaded", async function () {
   // Fetch the user data from the server
   try {
-    
-
     const result = await getRequestWithToken("user/dashboard/post/info");
     const data = result.data;
 
@@ -39,13 +36,14 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     };
 
-    document.getElementById('logout-button').onclick=function(){
-      localStorage.removeItem('token')
-      
-      window.location.replace("/user/auth/login")
-    }
+    document.getElementById("logout-button").onclick = function () {
+      localStorage.removeItem("token");
+
+      window.location.replace("/user/auth/login");
+    };
   } catch (err) {
-    handleErrors(err);
+    
+    handleErrors(err, mapFunction);
   }
 });
 
@@ -58,10 +56,9 @@ function handleKYCStatus(user) {
   const completeKyc = document.getElementById("completeKyc");
   const pendingKyc = document.getElementById("pendingKyc");
   const rejectedKyc = document.getElementById("rejectedKyc");
-  const statusBar=document.getElementById('status-bar')
+  const statusBar = document.getElementById("status-bar");
   const completeKycButton = document.getElementById("completeKycButton");
-  const statusText=document.getElementById('status-text')
-
+  const statusText = document.getElementById("status-text");
 
   // Reset visibility of all status cards and button
   incompleteKyc.style.display = "none";
@@ -69,7 +66,7 @@ function handleKYCStatus(user) {
   pendingKyc.style.display = "none";
   rejectedKyc.style.display = "none";
   completeKycButton.style.display = "none"; // Default to hidden
-  statusBar.style.display='none'
+  statusBar.style.display = "none";
 
   // Determine the KYC status and display the appropriate section
   if (kycStatus === "Not Submitted" || userKyc === null) {
@@ -83,9 +80,9 @@ function handleKYCStatus(user) {
   } else if (kycStatus === "Rejected") {
     // KYC has been rejected, user needs to re-upload
     rejectedKyc.style.display = "block";
-    statusBar.style.display='block'
+    statusBar.style.display = "block";
     completeKycButton.style.display = "block";
-    statusText.textContent=user.userKyc.adminMessage;
+    statusText.textContent = user.userKyc.adminMessage;
     // Show button
   } else if (kycStatus === "Completed") {
     // KYC is completed
@@ -98,5 +95,3 @@ function handleKYCStatus(user) {
     }
   }
 }
-
-
