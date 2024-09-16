@@ -30,10 +30,7 @@ async function handleErrors(err, log = true, alertMsg = true, mapFunction) {
   } else {
     const { response } = err;
 
-    // Check if response.status exists in mapFunction, and call the corresponding function
-    if (mapFunction && response.status in mapFunction) {
-      mapFunction[response.status](err); // Call the mapped function
-    }
+    
 
     // Check if the response contains specific error details
     if (response.data && response.data.errors) {
@@ -60,6 +57,10 @@ async function handleErrors(err, log = true, alertMsg = true, mapFunction) {
   // Show alert if alertMsg argument is true and alertMessage exists
   if (alertMsg && alertMessage) {
     alert(alertMessage);
+  }
+  // Check if response.status exists in mapFunction, and call the corresponding function
+  if (mapFunction && response.status in mapFunction) {
+    mapFunction[response.status](err); // Call the mapped function
   }
 }
 function getAdminTokenHeaders() {

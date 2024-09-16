@@ -17,7 +17,7 @@ const mapFunction = {
   },
 };
 
-async function handleErrors(err,mapFunction, log = true, alertMsg = true) {
+async function handleErrors(err, mapFunction, log = true, alertMsg = true) {
   // Declare variables
   let logMessage = null;
   let alertMessage = null;
@@ -31,9 +31,6 @@ async function handleErrors(err,mapFunction, log = true, alertMsg = true) {
     const { response } = err;
 
     // Check if response.status exists in mapFunction, and call the corresponding function
-    if (mapFunction && response.status in mapFunction) {
-      mapFunction[response.status](err); // Call the mapped function
-    }
 
     // Check if the response contains specific error details
     if (response.data && response.data.errors) {
@@ -61,6 +58,10 @@ async function handleErrors(err,mapFunction, log = true, alertMsg = true) {
   if (alertMsg && alertMessage) {
     alert(alertMessage);
   }
+
+  if (mapFunction && response.status in mapFunction) {
+    mapFunction[response.status](err); // Call the mapped function
+  }
 }
 function getTokenHeaders() {
   const token = localStorage.getItem("token");
@@ -82,9 +83,6 @@ function getChatTokenHeaders() {
 }
 
 async function getRequest(url) {
-  
-  
-
   const result = await axios.get(baseUrl + url);
 
   return result;
