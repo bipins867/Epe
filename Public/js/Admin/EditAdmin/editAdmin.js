@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
               attachEventListeners();
           })
           .catch(function (error) {
-              handleErrors(error);
+              handleErrors(error,mapFunction);
           });
   }
 
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       await postRequestWithToken(`admin/userAndRole/post/deleteAdmin/${adminId}`);
                       location.reload();
                   } catch (err) {
-                      handleErrors(err);
+                      handleErrors(err,mapFunction);
                   }
               }
           });
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   await postRequestWithToken('admin/userAndRole/post/updateAdminStatus', { adminId: adminId, freezeStatus: freezeStatus });
                   alert(`Admin ${adminId} freeze status updated to ${freezeStatus ? 'Frozen' : 'Active'}.`);
               } catch (err) {
-                  handleErrors(err);
+                  handleErrors(err,mapFunction);
               }
           });
       });
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
           location.reload();
       } catch (err) {
           document.getElementById('create-admin-btn').disabled = false;
-          handleErrors(err);
+          handleErrors(err,mapFunction);
       }
   });
 

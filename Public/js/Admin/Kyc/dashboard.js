@@ -20,7 +20,7 @@ async function populateUserTable() {
       userTableBody.appendChild(row);
     });
   } catch (err) {
-    handleErrors(err);
+    handleErrors(err,mapFunction);
   }
 }
 

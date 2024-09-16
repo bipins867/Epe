@@ -52,6 +52,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         })
         .catch((error) => {
-            handleErrors(error);
+            handleErrors(error,mapFunction);
         });
 });

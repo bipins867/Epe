@@ -109,7 +109,12 @@ async function checkCaseStatus(caseId) {
       };
     }
   } catch (err) {
-    handleErrors(err);
+    mapFunction[404]=(err)=>{
+      localStorage.removeItem('caseId')
+      localStorage.removeItem('chatToken')
+      location.reload();
+    }
+    handleErrors(err,mapFunction);
   }
 }
 

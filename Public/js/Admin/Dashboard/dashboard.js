@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       window.location.href = "/admin/login"; // Redirect to login page
     });
   } catch (err) {
-    handleErrors(err);
+    handleErrors(err,mapFunction);
   }
 
   // Display User ID

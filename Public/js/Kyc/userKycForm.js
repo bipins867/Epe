@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       customerId.value = userKyc.customerId;
     }
   } catch (err) {
-    handleErrors(err);
+    handleErrors(err,mapFunction);
   }
 });
 
@@ -87,6 +87,6 @@ document
     } catch (err) {
       document.getElementById("kyc-submit").disabled = false;
       // Check if there's no response from the server (network error, etc.)
-      handleErrors(err);
+      handleErrors(err,mapFunction);
     }
   });

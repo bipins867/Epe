@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
         populateRoles(response.data.roles, response.data.activeRoles);
       })
       .catch(function (error) {
-        handleErrors(error);
+        handleErrors(error,mapFunction);
       });
   }
 
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
         location.reload();
       } catch (err) {
         document.getElementById('btn-reset').disabled=false;
-        handleErrors(err);
+        handleErrors(err,mapFunction);
       }
     });
 
@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", function () {
       alert(result.data.message);
     } catch (err) {
       document.getElementById("updateRolesBtn").disabled=false;
-      handleErrors(err);
+      handleErrors(err,mapFunction);
     }
   };
 
