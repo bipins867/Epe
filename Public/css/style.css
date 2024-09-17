@@ -500,8 +500,8 @@
     margin-bottom: 40px;
 }
 
-.about .about-image img {
-    max-width: 100%;
+.about-image  {
+    max-width:500px;
     height: auto;
 }
 
