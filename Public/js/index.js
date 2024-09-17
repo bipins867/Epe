@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     onLoadAnimation('services-item','fade-in')
     
-    
+    onLoadAnimation('about-area','slide-in-left')
+
+    onLoadAnimation('footer-area','slide-in-up')
     
 })
