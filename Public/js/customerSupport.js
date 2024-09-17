@@ -1,17 +1,17 @@
-
 document.addEventListener("DOMContentLoaded", async function () {
-  const chatBox=document.getElementById('chatBox')  
-  if(errorFunction){
-    errorFunction.socketError=()=>{
-      if(chatBox.style.display==='flex'){
-
+  const chatBox = document.getElementById("chatBox");
+  if (errorFunction) {
+    errorFunction.socketError = () => {
+      if (chatBox.style.display === "flex") {
+        initialSetup();
         //Here it will be calling referess message function to add any new or extra function ..
       }
-     
-    }
+    };
   }
-  
-  
+  initialSetup();
+});
+
+function initialSetup() {
   // Check for chatToken in localStorage
   const chatToken = localStorage.getItem("chatToken");
   const caseId = localStorage.getItem("caseId");
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     showInputField(false);
     showInitialOptions();
   }
-});
+}
 
 document
   .getElementById("attachmentIcon")
@@ -109,12 +109,12 @@ async function checkCaseStatus(caseId) {
       };
     }
   } catch (err) {
-    mapFunction[404]=(err)=>{
-      localStorage.removeItem('caseId')
-      localStorage.removeItem('chatToken')
+    mapFunction[404] = (err) => {
+      localStorage.removeItem("caseId");
+      localStorage.removeItem("chatToken");
       location.reload();
-    }
-    handleErrors(err,mapFunction);
+    };
+    handleErrors(err, mapFunction);
   }
 }
 
@@ -264,9 +264,9 @@ function clearOptions() {
 }
 
 function knowService() {
-  document.getElementById('chatbase-bubble-button').click()
-  updateChatBoxStatus(false)
-  updateChatBaseBubbleButton(true)
+  document.getElementById("chatbase-bubble-button").click();
+  updateChatBoxStatus(false);
+  updateChatBaseBubbleButton(true);
 }
 
 function showInputField(show) {
@@ -454,11 +454,10 @@ document.getElementById("fileInput").addEventListener("change", function () {
 document.getElementById("chatButton").addEventListener("click", function () {
   const chatBox = document.getElementById("chatBox");
   chatBox.style.display = chatBox.style.display === "flex" ? "none" : "flex";
-  
-  if (chatBox.style.display==='none'){
+
+  if (chatBox.style.display === "none") {
     updateChatBaseBubbleButton(true);
-  }
-  else{
+  } else {
     updateChatBaseBubbleButton(false);
   }
 });
@@ -483,5 +482,3 @@ document.getElementById("closeCase").addEventListener("click", async () => {
     handleErrors(err);
   }
 });
-
-

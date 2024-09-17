@@ -18,7 +18,7 @@ function onLoadAnimation(elementClassName, animationClassName) {
 
   // Target all paragraphs with 'paragraph' class
   document.querySelectorAll(`.${elementClassName}`).forEach((paragraph) => {
-    console.log(elementClassName);
+    
     observer.observe(paragraph);
   });
 }
