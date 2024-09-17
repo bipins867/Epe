@@ -1,4 +1,25 @@
 
+.ask-btn-link {
+  background: none;
+  border: none;
+  color: #ffffff; /* Link color */
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit; /* Maintain the same font size */
+}
+
+.ask-btn-link:hover {
+  color: #0056b3; /* Hover effect similar to a link */
+  text-decoration: none; /* Optional: Remove underline on hover */
+}
+
+.ask-btn-link:focus {
+  outline: none; /* Remove button focus outline */
+}
+
+
+
 /* Custom styles for dropdown */
 /* External CSS for fixing image size */
 .services-img img {

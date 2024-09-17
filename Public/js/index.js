@@ -20,3 +20,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     onLoadAnimation('project-button-group','slide-in-right')
     onLoadAnimation('project-image-item','zoom-in')
 })
+
+function defaultSettings(){
+    
+}
