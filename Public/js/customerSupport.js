@@ -9,19 +9,42 @@ document.addEventListener("DOMContentLoaded", async function () {
     };
   }
   initialSetup();
-  //setTimeout(()=>{defaultSettings()},2000)
+  setTimeout(() => {
+    defaultSettings();
+  }, 2000);
 });
 
 function defaultSettings() {
-  const chatButton = document.getElementById('chatbase-bubble-button');
-  chatButton.style.display = "none";
+  // Hide the original chatbase button
+  const chatbaseButton = document.getElementById("chatbase-bubble-button");
+  const chatbaseWindow = document.getElementById("chatbase-bubble-window");
+  const helloChatbotButton = document.getElementById("ask-btn");
+  chatbaseButton.style.display = "none";
+  // Click on the Hello Chatbot button opens the chat window
+  helloChatbotButton.addEventListener("click", function () {
+    chatbaseButton.click();
+    chatbaseButton.style.display = "none";
+  });
 
-  document.getElementById("ask-btn").addEventListener('click',()=>{
-    chatButton.click();
-    
-  })
+  // Function to check if the chat window is visible
+  function isChatWindowOpen() {
+    return chatbaseWindow.style.display !== "none"; // Adjust this based on how the window is hidden
+  }
+
+  // Close the chat window when clicking outside of it
+  document.addEventListener("click", function (event) {
+    const isClickInsideChat =
+      chatbaseWindow.contains(event.target) ||
+      helloChatbotButton.contains(event.target);
+
+    // If clicked outside of the chat window and the window is open
+    if (!isClickInsideChat && isChatWindowOpen()) {
+      chatbaseButton.click();
+      chatbaseButton.style.display = "none"; // Simulate another click to close the chat window
+    }
+  });
 }
-//xzxsazzzzzzzzzzxsaqwhat is 
+//xzxsazzzzzzzzzzxsaqwhat is
 function initialSetup() {
   // Check for chatToken in localStorage
   const chatToken = localStorage.getItem("chatToken");
@@ -275,9 +298,16 @@ function clearOptions() {
 }
 
 function knowService() {
-  document.getElementById("chatbase-bubble-button").click();
-  updateChatBoxStatus(false);
-  updateChatBaseBubbleButton(true);
+  const chatButton = document.getElementById("chatbase-bubble-button");
+  console.log(chatButton);
+  if (chatButton) {
+    setTimeout(() => {
+      chatButton.click();
+      updateChatBoxStatus(false);
+    }, 0); // Add a slight delay
+  } else {
+    console.error("Chatbase bubble button not found!");
+  }
 }
 
 function showInputField(show) {
@@ -467,7 +497,7 @@ document.getElementById("chatButton").addEventListener("click", function () {
   chatBox.style.display = chatBox.style.display === "flex" ? "none" : "flex";
 
   if (chatBox.style.display === "none") {
-    updateChatBaseBubbleButton(true);
+    updateChatBaseBubbleButton(false);
   } else {
     updateChatBaseBubbleButton(false);
   }
@@ -475,7 +505,7 @@ document.getElementById("chatButton").addEventListener("click", function () {
 
 document.getElementById("closeChat").addEventListener("click", function () {
   document.getElementById("chatBox").style.display = "none";
-  updateChatBaseBubbleButton(true);
+  updateChatBaseBubbleButton(false);
 });
 
 document.getElementById("closeCase").addEventListener("click", async () => {
