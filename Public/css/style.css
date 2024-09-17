@@ -501,7 +501,7 @@
 }
 
 .about-image  {
-    max-width:500px;
+    max-width:90%;
     height: auto;
 }
 
@@ -557,19 +557,22 @@
     height: auto;
     transition: opacity 0.5s ease-in-out;
   }
+  .our-project:hover .img {
+    opacity: 0; /* Image disappears on hover */
+  }
   
   /* Add black film overlay */
-  .our-project::before {
+  /* .our-project::before {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0); /* Transparent by default */
+    background-color: rgba(0, 0, 0, 0); 
     transition: background-color 0.5s ease-in-out;
-    z-index: 1; /* Ensure the overlay is on top of the image */
-  }
+    z-index: 1; 
+    } */
   
   .our-project:hover::before {
     background-color: rgba(0, 0, 0, 0.6); /* Black film on hover */
@@ -593,16 +596,15 @@
   .hover-text h4 {
     font-size: 24px;
     margin-bottom: 10px;
-    color: #fff;
+    color: #000000;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Text highlight with shadow */
   }
   
   .hover-text p {
     font-size: 14px;
     line-height: 1.5;
-    color: #fff;
+    color: #141212;
     font-weight: bold; /* Make paragraph text bold */
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Text highlight with shadow */
   }
   
   
