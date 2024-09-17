@@ -489,7 +489,58 @@
 
 .site-main .about-area .about-title p{
     padding: 1rem 7rem;
+    
 }
+.about h2 {
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.about .about-section {
+    margin-bottom: 40px;
+}
+
+.about .about-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Flexbox for alternating sections */
+.about-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.about-section.flex-row-reverse {
+    flex-direction: row-reverse;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 991px) {
+    .about-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .about-section.flex-row-reverse {
+        flex-direction: column;
+    }
+
+    .about-image img {
+        margin-bottom: 20px;
+    }
+}
+
+
+.about .about-image img {
+    width: 70%; /* Reduces image size by 30% */
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Center the image */
+}
+
 
 .site-main .about-area .client{
     background: #ffffff10;
