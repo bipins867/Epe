@@ -9,8 +9,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     };
   }
   initialSetup();
+  //setTimeout(()=>{defaultSettings()},2000)
 });
 
+function defaultSettings() {
+  const chatButton = document.getElementById('chatbase-bubble-button');
+  chatButton.style.display = "none";
+
+  document.getElementById("ask-btn").addEventListener('click',()=>{
+    chatButton.click();
+    
+  })
+}
+//xzxsazzzzzzzzzzxsaq
 function initialSetup() {
   // Check for chatToken in localStorage
   const chatToken = localStorage.getItem("chatToken");
