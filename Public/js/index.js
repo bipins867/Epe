@@ -2,7 +2,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     
 
-  onLoadAnimation("hero", "slide-in-right");
+  onLoadAnimation("hero-content", "slide-in-left");
+  onLoadAnimation("hero-image", "slide-in-right");
+  
 
   onLoadAnimation("feature-header", "slide-in-down");
   onLoadAnimation("feature-cards", "slide-in-up");
