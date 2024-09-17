@@ -16,4 +16,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     onLoadAnimation('footer-area','slide-in-up')
     
+    onLoadAnimation('project-title','slide-in-left')
+    onLoadAnimation('project-button-group','slide-in-right')
+    onLoadAnimation('project-image-item','zoom-in')
 })
