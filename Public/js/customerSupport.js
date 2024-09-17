@@ -21,7 +21,7 @@ function defaultSettings() {
     
   })
 }
-//xzxsazzzzzzzzzzxsaq
+//xzxsazzzzzzzzzzxsaqwhat is 
 function initialSetup() {
   // Check for chatToken in localStorage
   const chatToken = localStorage.getItem("chatToken");
