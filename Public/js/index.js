@@ -24,3 +24,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   onLoadAnimation("project-image-item", "zoom-in");
 });
 
+
+
+document.getElementById('header-contact-btn').addEventListener('click',()=>{
+
+  document.getElementById('open-contactUs-form-btn').click();
+})
+document.getElementById('quick-contact-btn').addEventListener('click',()=>{
+
+  document.getElementById('open-contactUs-form-btn').click();
+})

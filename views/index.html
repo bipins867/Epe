@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <!--New File-->
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -121,7 +122,7 @@
         <div class="main-menu">
           <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand" href="/">
-              <img src="./img/epeLogo.gif" width="auto" height="60px" alt="" />
+              <img src="./img/epeLogo.gif" width="auto" height="80px" alt="" />
             </a>
             <button
               class="navbar-toggler"
@@ -154,50 +155,51 @@
                   <li class="nav-item">
                     <a class="nav-link" href="#Event">Event</a>
                   </li>-->
-                  <li class="nav-item">
-                    <a class="nav-link" href="#Contact" data-after="Contact">Contact</a>
-                  </li>
-                  
-                  <!-- Updated Dropdown for Login -->
-                  <li class="nav-item dropdown">
-                    <button
-                      class="btn btn-primary with-arrow"
-                      id="loginDropdown"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      Login
-                    </button>
-                    <div
-                      class="dropdown-menu dropdown-menu-end"
-                      aria-labelledby="loginDropdown"
-                    >
-                      <!-- Retained the content from the pop-up -->
-                      <div>
-                        <div class="dropdown-item">
-                          <span class="fw-bold">Piggy Bank</span>
-                          <div class="d-flex justify-content-between">
-                            <span>Piggy Wallet</span>
-                            <span class="custom-links">
-                              <a href="#">Login</a> | <a href="#">Register</a>
-                            </span>
-                          </div>
+                <li class="nav-item">
+                  <button class="nav-link ask-btn-link" id="header-contact-btn">
+                    Contact
+                  </button>
+                </li>
+
+                <!-- Updated Dropdown for Login -->
+                <li class="nav-item dropdown">
+                  <button
+                    class="btn btn-primary with-arrow"
+                    id="loginDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Login
+                  </button>
+                  <div
+                    class="dropdown-menu dropdown-menu-end"
+                    aria-labelledby="loginDropdown"
+                  >
+                    <!-- Retained the content from the pop-up -->
+                    <div>
+                      <div class="dropdown-item">
+                        <span class="fw-bold">Piggy Box</span>
+                        <div class="d-flex justify-content-between">
+                          <span>Personal</span>
+                          <span class="custom-links">
+                            <a href="#">Login</a> | <a href="#">Register</a>
+                          </span>
                         </div>
-                        <hr class="dropdown-divider" />
-                        <div class="dropdown-item">
-                          <span class="fw-bold">KYC </span>
-                          <div class="d-flex justify-content-between">
-                            <span>User </span>
-                            <span class="custom-links">
-                              <a href="/user/auth/login">Login</a> |
-                              <a href="/user/auth/signUp">Register</a>
-                            </span>
-                          </div>
+                      </div>
+                      <hr class="dropdown-divider" />
+                      <div class="dropdown-item">
+                        <span class="fw-bold">KYC </span>
+                        <div class="d-flex justify-content-between">
+                          <span>User </span>
+                          <span class="custom-links">
+                            <a href="/user/auth/login">Login</a> |
+                            <a href="/user/auth/signUp">Register</a>
+                          </span>
                         </div>
                       </div>
                     </div>
-                  </li>
-                  
+                  </div>
+                </li>
               </ul>
             </div>
           </nav>
@@ -449,7 +451,6 @@
 
       <!--  ========================= End About Area ==========================  -->
 
-
       <!--  ====================== Start Services Area =============================  -->
 
       <section id="Services" class="services-container">
@@ -682,7 +683,6 @@
       </section>
       <!--  ====================== End Services Area =============================  -->
 
-
       <section class="project-area">
         <div class="container">
           <div class="project-title pb-5">
@@ -901,7 +901,6 @@
 
       <!--  ======================= Project Area =============================  -->
 
-  
       <!--  ======================= End Project Area =============================  -->
 
       <!--  ======================== About Me Area ==============================  -->
@@ -1071,9 +1070,11 @@
             <div class="col-md-6 col-lg-2">
               <h4 class="text-white mb-4">Quick Link</h4>
               <a class="btn btn-link" href="#About">About Us</a>
-              <a class="btn btn-link" href="#About">Contact Us</a>
+
               <a class="btn btn-link" href="#Services">Services</a>
               <a class="btn btn-link" href="">PiggyBox</a>
+              <button class="btn btn-link ask-btn-link" id="quick-contact-btn">Contact Us
+              </button>
             </div>
 
             <!-- Popular Links Column -->
@@ -1084,9 +1085,8 @@
                 >Terms & Condition</a
               >
               <a class="btn btn-link" href="/userAgreement">User Agreement</a>
-              <button class="ask-btn-link" id="ask-btn">Ask E Pe</button>
+              <button class="btn btn-link ask-btn-link" id="ask-btn">Ask E Pe</button>
             </div>
-           
 
             <!-- Newsletter Column -->
             <div class="col-md-6 col-lg-3">
@@ -1160,11 +1160,16 @@
               <label for="loan-type">Select Loan Type:</label>
               <select id="loan-type" name="loan-type" required>
                 <option value="">--Select Loan--</option>
-                <option value="home-loan">Home Loan</option>
                 <option value="personal-loan">Personal Loan</option>
-                <option value="car-loan">Car Loan</option>
+                <option value="merchant/business-loan">
+                  Merchant/Business Loan
+                </option>
                 <option value="education-loan">Education Loan</option>
-                <option value="business-loan">Business Loan</option></select
+                <option value="medical-loan">Medical Loan</option>
+                <option value="loanAgainstProperty">
+                  Loan Against Property
+                </option>
+                <option value="startupFunding">Startup Funding</option></select
               ><br /><br />
 
               <!-- Reason for Loan -->
