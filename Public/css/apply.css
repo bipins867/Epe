@@ -1,46 +1,48 @@
-
-
 .apply-container {
     background: #fff;
-    padding: 20px;
+    padding: 10px; /* Further reduced padding */
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 70%;
-    max-width: 500px;
-    margin: 20px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    width: 50%; /* Further reduced width */
+    max-width: 350px; /* Further reduced max-width */
+    margin: 10px auto; /* Further adjusted margin */
 }
 
 .apply-container h2 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Further reduced bottom margin */
+    font-size: 16px; /* Further reduced font size */
 }
 
 .apply-container label {
     font-weight: 500;
-    margin-bottom: 5px;
+    margin-bottom: 2px; /* Further reduced margin */
     display: block;
     color: #333;
+    font-size: 13px; /* Further reduced font size */
 }
 
 .apply-container input,
 .apply-container select,
 .apply-container textarea {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
+    padding: 6px; /* Further reduced padding */
+    margin-bottom: 8px; /* Further reduced margin */
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 4px; /* Slightly smaller border-radius */
+    font-size: 13px; /* Further reduced font size */
 }
 
 .apply-container button {
     width: 100%;
-    padding: 10px;
+    padding: 6px; /* Further reduced padding */
     background-color: #7d2ae8;
     color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px; /* Slightly smaller border-radius */
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-size: 13px; /* Further reduced font size */
 }
 
 .apply-container button:hover {
@@ -49,7 +51,7 @@
 
 @media (max-width: 768px) {
     .apply-container {
-        width: 90%;
+        width: 80%; /* Adjusted width for smaller screens */
     }
 }
 
@@ -70,58 +72,52 @@
 /* Header Row Styling */
 .header-row {
     display: flex;
-    justify-content: space-between; /* Aligns the h2 to the left and close button to the right */
-    align-items: center; /* Vertically centers the items in the row */
-    margin-bottom: 20px;
-    
-    width: 100%; /* Ensures the header row takes full width of the container */
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px; /* Further reduced margin */
+    width: 100%;
 }
 
 /* Styling for the h2 tag */
 .header-row h2 {
     margin-right: 50%;
-    padding-right: 10%;
-    white-space: nowrap; /* Prevents text from wrapping */
-    
-    text-overflow: ellipsis; /* Adds ellipsis if text overflows */
+    padding-right: 5%; /* Further reduced padding-right */
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 16px; /* Reduced font size */
 }
 
 /* Close Button Styling */
 .close-btn {
     background-color: transparent;
     border: none;
-    font-size: 16px; /* Size of the '×' symbol */
+    font-size: 14px; /* Slightly reduced size */
     cursor: pointer;
     color: #333;
-    padding: 0; /* No padding to keep button size minimal */
+    padding: 0;
     margin: 0;
-    line-height: 1; /* Keeps the button compact */
-    width: auto; /* Button size matches the '×' symbol */
-    height: auto; /* Button size matches the '×' symbol */
-    outline: none; /* Removes any default button outline */
-    display: flex; /* Keeps the button only as wide as the '×' symbol */
-    justify-content: center; /* Centers the '×' symbol */
-    align-items: center; /* Centers the '×' symbol */
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .close-btn:hover {
-    background-color: #e0e0e0; /* Light gray background on hover */
+    background-color: #e0e0e0;
     color: #6c5297;
-   
 }
-
-
 
 /* Style for open button */
 #open-apply-form-btn {
-    padding: 10px 20px;
+    padding: 6px 12px; /* Further reduced padding */
     background-color: #7d2ae8;
     color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px; /* Slightly smaller border-radius */
     cursor: pointer;
-    margin: 20px;
+    margin: 10px; /* Further reduced margin */
     transition: background-color 0.3s ease;
+    font-size: 13px; /* Further reduced font size */
 }
 
 #open-apply-form-btn:hover {
