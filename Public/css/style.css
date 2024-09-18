@@ -119,7 +119,6 @@
 @media (max-width: 600px) {
     .nav-item {
         flex-direction: column;
-        margin-right: 10px;
     }    
     .nav-item .wallet-container,
     .nav-item .kyc-container {
@@ -137,6 +136,7 @@
 @media (min-width: 601px) and (max-width: 1024px) {
     .nav-item {
         margin-right: 15px;
+        margin-left: 10px;
     }
 
     .nav-item .wallet-container,
@@ -800,6 +800,13 @@
 
     .site-main .about-area .about-title p {
         padding: 1rem 2rem;
+    }
+
+    .site-main .about-area .client .about-client p {
+        font-size: 14px; /* Adjust the font size for mobile if needed */
+        visibility: visible; /* Ensure the text is not hidden */
+        display: block; /* Make sure it's displayed */
+        line-height: 1.5; /* Improve readability */
     }
 
     .footer {
