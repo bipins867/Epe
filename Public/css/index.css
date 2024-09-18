@@ -33,62 +33,60 @@
 
 /* Custom styles for dropdown */
 /* External CSS for fixing image size */
-/* Services Image Styling */
 .services-img img {
-  width: auto; /* Maintain original width */
-  height: 100px; /* Fixed height for consistency */
-  object-fit: cover; /* Maintain aspect ratio */
+  width: auto;  /* Set the width of the image */
+  height: 100px; /* Set the height of the image */
+  object-fit: cover; /* Ensure the image maintains aspect ratio */
   max-width: 100%; /* Ensure responsiveness */
   display: block;
   margin: 0 auto;
 }
 
-/* Custom Popup Title Styling */
+
 .custom-popup-title {
   font-size: 18px;
   font-weight: bold;
   color: #333;
-  white-space: nowrap; /* Prevent text wrapping */
+  white-space: nowrap; /* Prevent text from wrapping */
   margin-bottom: 5px;
 }
 
-/* Custom Sub Popup Styling */
 .custom-sub-popup {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
-  white-space: nowrap; /* Prevent text wrapping */
+  white-space: nowrap; /* Prevent text from wrapping */
 }
 
-/* Custom Links Styling */
 .custom-links {
+  
+ 
   font-size: 14px;
-  margin-left: 10px; /* Space before "Login | Register" */
+  margin-left: 10px; /* Add space before "Login | Register" */
 }
 
-/* Button with Arrow Styling */
+/* Style for button with arrow */
 .with-arrow {
-  position: relative; /* Position relative for the arrow */
-  padding: 8px 12px; /* Adjust padding */
-  display: inline-flex; /* Align text and arrow */
-  align-items: center; /* Center content vertically */
-  background-color: #007bff; /* Button color */
-  color: #fff; /* Text color */
-  border: none; /* Remove border */
+  position: relative; /* Position relative to allow absolute positioning of the arrow */
+  padding: 5px; /* Space for the arrow and padding around text */
+  display: inline-flex; /* Aligns text and arrow properly */
+  align-items: center; /* Centers content vertically */
+  background-color: #007bff; /* Example button color */
+  color: #fff; /* Example text color */
+  border: none; /* Remove default button border */
   border-radius: 4px; /* Rounded corners */
-  font-size: 14px; /* Adjust font size */
+  font-size: 16px; /* Example font size */
   cursor: pointer; /* Pointer cursor on hover */
-  min-width: 100px; /* Minimum width for the button */
-  max-height: 36px; /* Ensure button height is appropriate */
-  margin-top: 8px; /* Margin for spacing */
+  min-width: 100px;
+  max-height: 80%; 
+  margin-top: 8%;/* Ensure button is wide enough */
 }
 
-/* Arrow Styling */
 .with-arrow::after {
   content: "";
   position: absolute;
-  right: 10px; /* Distance from the right edge */
+  right: 10px; /* Distance from the right edge of the button */
   top: 50%; /* Center vertically */
   transform: translateY(-50%); /* Align arrow vertically */
   width: 0;
@@ -98,70 +96,62 @@
   border-top: 6px solid #fff; /* Arrow color */
 }
 
-/* Dropdown Menu Styling */
+/* Adjust arrow position on hover if needed */
+.nav-item.dropdown:hover .with-arrow::after {
+  border-top-color: #0056b3; /* Change arrow color on hover if needed */
+}
+
+
+
+
+.nav-item.dropdown:hover .custom-dropdown-menu {
+  display: block; /* Show dropdown on hover */
+}
+
+/* Custom dropdown styles */
 .custom-dropdown-menu {
-  display: none; /* Hide by default */
-  min-width: 250px; /* Adjust width */
-  padding: 8px; /* Adjust padding */
+  display: none;
+  min-width: 320px; /* Adjust width as needed */
+  padding: 2px; /* Remove default padding */
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: absolute; /* Absolute positioning */
-  z-index: 1000;
-  left: 50%; /* Center horizontally */
-  transform: translateX(-50%); /* Center alignment */
+  left: 50%;
+  transform: translateX(-50%);
   overflow: hidden; /* Prevent overflow */
+  position: absolute; /* Absolute positioning to float dropdown */
+  z-index: 1000;
 }
 
-/* Card Container Styling */
+/* Custom card container to avoid conflict with Bootstrap */
 .custom-card-container {
-  width: 100%; /* Full width */
+  width: 95%;
   border: 1px solid #dcdcdc;
   border-radius: 8px;
-  padding: 15px; /* Adjust padding */
-  box-sizing: border-box; /* Include padding and border */
+  padding: 20px; /* Ensure there is enough padding */
+  box-sizing: border-box; /* Includes padding and border in the element's total width and height */
   overflow: hidden; /* Prevent overflow */
-  margin: 0%; /* Remove margin to center card */
+  margin: 5px ; /* Center card inside dropdown */
 }
 
-/* Popup Flexbox Styling */
+/* Flexbox styling to align elements */
 .custom-popup {
   display: flex;
   flex-direction: column;
-  gap: 8px; /* Gap between elements */
+  gap: 8px;
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) { /* Adjust for tablet view */
-  .custom-dropdown-menu {
-    min-width: 80vw; /* 80% of viewport width */
-    left: 10%; /* Center dropdown */
-    transform: translateX(0); /* Reset transformation */
-  }
-
-  .with-arrow {
-    padding: 6px 10px; /* Adjust padding */
-    font-size: 14px; /* Adjust font size */
-  }
-
-  .custom-popup-title {
-    font-size: 16px; /* Adjust font size */
-  }
-
-  .custom-links {
-    font-size: 12px; /* Adjust font size */
-  }
-}
-
+/* Responsive styles */
 @media (max-width: 576px) { /* Adjust for mobile view */
   .custom-dropdown-menu {
-    min-width: 90vw; /* 90% of viewport width */
-    left: 5%; /* Center dropdown */
+    min-width: 90vw; /* Use 90% of the viewport width */
+    left: 5%; /* Center the dropdown */
     transform: translateX(0); /* Reset transformation */
   }
 
   .custom-card-container {
-    padding: 10px; /* Adjust padding */
+    padding: 15px; /* Adjust padding for smaller screens */
+    margin: 5px ; /* Adjust margin to center content properly */
   }
 }
