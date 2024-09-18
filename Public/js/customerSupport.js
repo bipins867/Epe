@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       
         if (chatToken && caseId) {
           // Fetch case details to check if it's closed
+          clearChatBox();
           checkCaseStatus(caseId);
 
         }
