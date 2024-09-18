@@ -3,8 +3,16 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (errorFunction) {
     errorFunction.socketError = () => {
       if (chatBox.style.display === "flex") {
-        initialSetup();
-        //Here it will be calling referess message function to add any new or extra function ..
+        const chatToken = localStorage.getItem("chatToken");
+        const caseId = localStorage.getItem("caseId");
+        
+        
+      
+        if (chatToken && caseId) {
+          // Fetch case details to check if it's closed
+          checkCaseStatus(caseId);
+
+        }
       }
     };
   }
@@ -299,7 +307,7 @@ function clearOptions() {
 
 function knowService() {
   const chatButton = document.getElementById("chatbase-bubble-button");
-  console.log(chatButton);
+  
   if (chatButton) {
     setTimeout(() => {
       chatButton.click();
