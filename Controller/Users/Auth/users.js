@@ -172,3 +172,8 @@ exports.userOtpVerify = async (req, res, next) => {
       .json({ error: "Internal server error. Please try again later." });
   }
 };
+
+
+exports.userResendOtp=async(req,res,next)=>{
+  
+}

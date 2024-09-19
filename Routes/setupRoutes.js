@@ -3,6 +3,8 @@ const adminRouter=require('./Admin/admin')
 //const kycRouter=require('./Kyc/kyc')
 const userRouter=require('./User/user')
 const fileRouter=require('./Files/files')
+const basicRouter=require('./Basic/basic')
+
 const customerSupportRouter=require('./CustomerSupport/customerSupport')
 
 
@@ -12,6 +14,7 @@ exports.setupRoutes=(app)=>{
     app.use('/user',userRouter)
     app.use('/files',fileRouter)
     app.use('/admin',adminRouter)
+    app.use('/basic',basicRouter)
     //app.use('/kyc',kycRouter)
     app.use('/',pagesRouter)
 }

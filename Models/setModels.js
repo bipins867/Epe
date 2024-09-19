@@ -10,7 +10,12 @@ const AdminAndRole=require('./User/adminAndRole')
 
 const CaseUser=require('./CustomerSupport/caseUser')
 const CaseMessage=require('./CustomerSupport/caseMessage')
-const CustomerCase=require('./CustomerSupport/customerCase')
+const CustomerCase=require('./CustomerSupport/customerCase');
+
+
+const ContactUs = require('./Basic/contactUs');
+const ApplyLoan = require('./Basic/applyLoan');
+
 
 
 

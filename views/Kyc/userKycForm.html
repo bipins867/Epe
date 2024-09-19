@@ -8,13 +8,12 @@
     <link rel="stylesheet" href="/css/UserAuthentication/login.css" />
     <!-- Use login.css for consistent styling -->
     <link rel="stylesheet" href="/css/Kyc/userKycForm.css" />
-    <link rel="icon" href="/Favicon/ImageAI-522x425.ico" type="image/x-icon">
+    <link rel="icon" href="/Favicon/ImageAI-522x425.ico" type="image/x-icon" />
     <!-- Include specific styles for KYC form -->
     <link
       rel="stylesheet"
       href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
     />
-   
   </head>
   <body>
     <!-- Header -->
@@ -93,7 +92,10 @@
                 />
                 <i class="uil uil-phone-alt phone"></i>
               </div>
-              <div class="input_box">
+              <div
+                class="input_box"
+                onclick="document.getElementById('dob').focus();"
+              >
                 <input type="date" id="dob" name="dob" required />
                 <i class="uil uil-calendar-alt calendar"></i>
               </div>
