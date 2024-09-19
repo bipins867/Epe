@@ -174,6 +174,49 @@ exports.userOtpVerify = async (req, res, next) => {
 };
 
 
-exports.userResendOtp=async(req,res,next)=>{
-  
-}
+exports.userResendOtp = async (req, res, next) => {
+  const { signUpToken, otpType } = req.body;
+
+  try {
+    // Verify the signUpToken
+    const payload = jwt.verify(signUpToken, process.env.JWT_SECRET_KEY);
+    const { email, phone } = payload;
+
+    if (!email) {
+      return res.status(400).json({ message: "Invalid token: missing email." });
+    }
+
+    // Check if the email exists in the otpStore
+    if (!otpStore[email]) {
+      return res.status(400).json({ message: "OTP expired or invalid." });
+    }
+
+    // Generate a new OTP based on otpType (either email or phone)
+    let newOtp;
+    if (otpType === "email") {
+      newOtp = crypto.randomInt(100000, 999999).toString();
+      otpStore[email].emailOtp = newOtp;
+      
+      // Send the new OTP to the user's email
+      await sendOtpToEmail(email, newOtp);
+    } else if (otpType === "phone") {
+      newOtp = crypto.randomInt(100000, 999999).toString();
+      otpStore[email].phoneOtp = newOtp;
+      
+      // Send the new OTP to the user's phone
+      await sendOtpToPhone(phone, newOtp);
+    } else {
+      return res.status(400).json({ message: "Invalid OTP type." });
+    }
+
+    // Refresh OTP expiration time to 5 more minutes
+    setTimeout(() => {
+      delete otpStore[email];
+    }, 5 * 60 * 1000);
+
+    return res.status(200).json({ message: `OTP resent successfully to ${otpType}.`,otpType });
+  } catch (err) {
+    console.error("Error during OTP resend:", err);
+    return res.status(500).json({ message: "Internal server error. Please try again later." });
+  }
+};

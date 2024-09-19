@@ -23,4 +23,6 @@ router.post(
   userAuthenticationController.userOtpVerify
 );
 
+router.post('/resendOtp',userAuthenticationController.userResendOtp)
+
 module.exports = router;
