@@ -49,13 +49,12 @@ exports.sendOtp = async (mobileNumber, otp) => {
   const senderid = process.env.SMS_SENDER_ID;
   let message = process.env.SMS_OTP_TEMPLETE;
   const number = mobileNumber;
-  console.log(message)
+  
   message = message.replace("{otp}", otp);
-  console.log(message);
-  console.log("***********************************")
+  
   const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${number}&message=${message}&format=json`;
   const response= await axios.get(url);
-  console.log(url);
+ 
   //console.log(response.data);
   return response;
 };
