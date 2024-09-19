@@ -140,7 +140,7 @@ nav ul li a:hover {
   background-color: #ddd;
 }
 
-main {
+.main-class {
   max-width: 800px;
   margin: 40px auto;
   line-height: 1.6;

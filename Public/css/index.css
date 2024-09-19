@@ -1,3 +1,7 @@
+html {
+  scroll-padding-top: 120px; /* Adjust based on the height of your header */
+}
+
 .client-item{
   height: 250px;
 }
