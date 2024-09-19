@@ -55,6 +55,6 @@ exports.sendOtp = async (mobileNumber, otp) => {
   const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${number}&message=${message}&format=json`;
   const response= await axios.get(url);
   console.log(url);
-  console.log(response);
+  console.log(response.data);
   return response;
 };
