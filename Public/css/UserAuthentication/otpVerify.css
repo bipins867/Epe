@@ -3,8 +3,8 @@
 /* Header Styles */
 .header {
   position: fixed;
-  height: 60px; /* Keep the same height as in login.css */
-  width: 100%;
+  height: 80px; /* Keep the same height as in login.css */
+  width: auto;
   z-index: 100;
   padding: 0 20px;
   background-color: #fff;
