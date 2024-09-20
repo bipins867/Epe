@@ -102,7 +102,7 @@ exports.userOtpVerify = async (req, res, next) => {
     // Use Sequelize to find an existing user by phone or email
     const existingUser = await User.findOne({
       where: {
-        [Op.or]: [{ email }, { phone }],
+        phone,
       },
     });
 
@@ -132,6 +132,7 @@ exports.userOtpVerify = async (req, res, next) => {
 
     res.status(200).send({ message: "OTP sent successfully.", signUpToken: token });
   } catch (err) {
+    console.log(err);
     return res
       .status(500)
       .json({ error: "Internal server error. Please try again later." });
