@@ -43,7 +43,10 @@
     background-clip: text;
 }
 
+.btn .btn-primary .with-arrow{
+    background-color: #001069;
 
+}
 
 /* General styles for the nav item */
 .nav-item {
@@ -54,7 +57,7 @@
 
 /* Style for the button triggering the dropdown */
 .button {
-    background-color: #9f31df; /* Adjust color as needed */
+    background-color: #0a0064; /* Adjust color as needed */
     color: #fff;
     border: none;
     padding: 10px 15px;
@@ -65,7 +68,7 @@
 }
 
 .button:hover {
-    background-color: #47066d; /* Slightly darker shade on hover */
+    background-color: #01075c; /* Slightly darker shade on hover */
 }
 
 /* Dropdown menu styles */
@@ -83,7 +86,7 @@
 }
 
 .dropdown-item:hover {
-    color: #4a37f3; /* Darker shade on hover */
+    color: #09005e; /* Darker shade on hover */
     text-decoration: underline;
 
 }
@@ -116,7 +119,7 @@
 
 .nav-item .wallet-container a:hover,
 .nav-item .kyc-container a:hover {
-    color: #a01549; /* Adjust hover color as needed */
+    color: #050049; /* Adjust hover color as needed */
 }
 
 /* Responsive Styling */
@@ -193,10 +196,10 @@
 
 
 .hero-content h1 {
-    text-shadow: 2px 2px 5px red;    
+    text-shadow: 2px 2px 5px rgb(25, 0, 255);    
     font-size: 2.5em;
     margin-bottom: 20px;
-    color: #007bff;
+    color: #09005a;
 }
 
 .hero-content p {
@@ -256,7 +259,7 @@
 
 .card h3 {
     margin-bottom: 15px;
-    color: #003366;
+    color: #100057;
 }
 
 /* End Banner Area */ 
@@ -421,7 +424,7 @@
   .button-group button.active,
   .button-group button:hover {
     background-color: #007bff;
-    color: #223edb;
+    color: #001069;
   }
   
   /* Grid and Project Card Styling */
@@ -647,7 +650,7 @@
 
 /* End About Me */ 
 .footer {
-    background: linear-gradient(to bottom right, var(--primary), var(--secondary));
+    background: linear-gradient(to bottom right, #001069, var(--secondary));
     margin-left: 10%;
     margin-right: 10%;
 } 
