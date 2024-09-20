@@ -2,25 +2,46 @@ let host = getAddressWithoutPort(window.location.host);
 const socketPort = localStorage.getItem("socketPort");
 const nodeEnv = localStorage.getItem("nodeEnv");
 
-host="88.222.244.250";
 let socketUrl;
 
+const errorFunction = {
+  // socketError: () => {
+  //   console.log("FUNction triggered");
+  // },
+};
+
+
+
+// Detect protocol dynamically (http => ws, https => wss)
+const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+
+// Determine socket URL based on environment
 if (nodeEnv) {
   if (nodeEnv === "testing") {
-    socketUrl = `http://localhost:${socketPort}`;
+    // In testing environment, use the provided socket port with ws:// or wss://
+    socketUrl = `${protocol}${host}:${socketPort}`;
   } else {
-    socketUrl = `https://${host}:${socketPort}`;
+    // In production or other environments, use the /socket endpoint
+    socketUrl = `${protocol}${host}/socket`;
   }
 } else {
-  socketUrl = `https://${host}:${socketPort}`;
+  // Default to production-like behavior if no environment is set
+  socketUrl = `${protocol}${host}/socket`;
 }
 
-
 console.log(socketUrl);
+
 // Connect to the socket server
 const socket = io(socketUrl, {
-  transports: ['websocket'] // Ensure using WebSocket
+  transports: ["websocket"], // Use WebSocket transport
+  reconnection: true, // Enable reconnection (default is true)
+  reconnectionAttempts: Infinity, // Unlimited reconnection attempts (can be adjusted)
+  reconnectionDelay: 5000, // Try to reconnect every 5 seconds
+  reconnectionDelayMax: 5000, // Max delay between attempts is also 5 seconds (no exponential backoff)
+  timeout: 5000, // Connection timeout before triggering reconnection
 });
+
+
 socket.on("connect", () => {
   console.log(`Connect to Server - ${socketUrl}`);
 });
