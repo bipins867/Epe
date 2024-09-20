@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       window.location.replace("/user/auth/login");
     };
   } catch (err) {
-    
+    //console.log(mapFunction);
     handleErrors(err, mapFunction);
   }
 });

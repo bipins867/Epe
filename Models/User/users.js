@@ -15,11 +15,8 @@ const User = sequelize.define(
     },
     email: {
       type: Sequelize.STRING,
-      allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
-      },
+      allowNull: true,
+      
     },
     phone: {
       type: Sequelize.STRING,

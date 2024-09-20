@@ -28,7 +28,7 @@ async function handleErrors(err, mapFunction, log = true, alertMsg = true) {
     alertMessage =
       "Network error or server is not responding. Please try again later.";
   } else {
-    const { response } = err;
+    const response = err.response;
 
     // Check if response.status exists in mapFunction, and call the corresponding function
 
@@ -47,20 +47,21 @@ async function handleErrors(err, mapFunction, log = true, alertMsg = true) {
     }
 
     logMessage = "Error response: " + JSON.stringify(response);
-  }
 
-  // Log the error if log argument is true and logMessage exists
-  if (log && logMessage) {
-    console.log(logMessage);
-  }
+    // Log the error if log argument is true and logMessage exists
+    if (log && logMessage) {
+      console.log(logMessage);
+    }
 
-  // Show alert if alertMsg argument is true and alertMessage exists
-  if (alertMsg && alertMessage) {
-    alert(alertMessage);
-  }
-
-  if (mapFunction && response.status in mapFunction) {
-    mapFunction[response.status](err); // Call the mapped function
+    // Show alert if alertMsg argument is true and alertMessage exists
+    if (alertMsg && alertMessage) {
+      alert(alertMessage);
+    }
+    console.log(response);
+    if (mapFunction && response.status in mapFunction) {
+      console.log("IS HERE OR NOT");
+      mapFunction[response.status](err); // Call the mapped function
+    }
   }
 }
 function getTokenHeaders() {

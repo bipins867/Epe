@@ -1,48 +1,28 @@
-
-
 document.addEventListener("DOMContentLoaded", async function () {
-  const token=localStorage.getItem('token')
+  const token = localStorage.getItem('token');
 
-  if(token){
+  if (token) {
     window.location.replace("/user/dashboard");
   }
 });
-document
-  .getElementById("loginForm")
-  .addEventListener("submit", async function (event) {
-    event.preventDefault();
 
-    const emailOrPhone = document.getElementById("emailOrPhone").value;
-    const password = document.getElementById("password").value;
+document.getElementById("loginForm").addEventListener("submit", async function (event) {
+  event.preventDefault();
 
-    let obj;
-    if (emailOrPhone.includes("@")) {
-      const email = emailOrPhone;
-      obj = { email, password };
-    } else {
-      const phone = emailOrPhone;
-      obj = { phone, password };
-    }
+  const phone = document.getElementById("phone").value;
+  const password = document.getElementById("password").value;
 
-    try {
-      document.getElementById('login-btn').disabled=true;
-      const result = await axios.post(
-        baseUrl + "user/auth/post/login",
-        obj
-      );
-     
+  const obj = { phone, password };
 
-      
-      // console.log(result.data);
-      // alert('Login Successfull!')
-      const data = result.data;
-      //console.log(data.token)
-      
-      localStorage.setItem("token", data.token);
-      window.location.replace("/user/dashboard");
-      //console.log(data);
-    } catch (err) {
-      document.getElementById('login-btn').disabled=false;
-      handleErrors(err);
-    }
-  });
+  try {
+    document.getElementById('login-btn').disabled = true;
+    const result = await axios.post(baseUrl + "user/auth/post/login", obj);
+
+    const data = result.data;
+    localStorage.setItem("token", data.token);
+    window.location.replace("/user/dashboard");
+  } catch (err) {
+    document.getElementById('login-btn').disabled = false;
+    handleErrors(err);
+  }
+});
