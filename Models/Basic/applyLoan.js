@@ -29,10 +29,7 @@ const ApplyLoan = sequelize.define('ApplyLoan', {
   adminId: {
     type: DataTypes.INTEGER,
     allowNull: true,
-    references: {
-      model: 'Admins', // Replace 'Admins' with the actual name of your admin table/model
-      key: 'id'
-    }
+
   },
   adminRemark: {
     type: DataTypes.TEXT,
