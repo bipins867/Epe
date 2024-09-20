@@ -4,7 +4,7 @@ const axios = require("axios");
 
 exports.getPendingKycs = async (req, res, next) => {
   try {
-    // Fetch all KYC entries with status "Pending", including the associated User's email
+    // Fetch all KYC entries with status "Pending", including the associated User's phone
     const pendingKycList = await UserKyc.findAll({
       where: {
         status: "Pending", // Filter by pending status
@@ -12,7 +12,7 @@ exports.getPendingKycs = async (req, res, next) => {
       include: [
         {
           model: User,
-          attributes: ["email"], // Only include the email field from the User model
+          attributes: ["phone"], // Only include the phone field from the User model
         },
       ],
     });
@@ -22,7 +22,7 @@ exports.getPendingKycs = async (req, res, next) => {
       return res.status(404).json({ message: "No pending KYC entries found." });
     }
 
-    // Return the list of pending KYC entries with the associated user emails
+    // Return the list of pending KYC entries with the associated user phones
     return res.status(200).json({
       message: "Pending KYC entries fetched successfully.",
       pendingKycList,
@@ -38,12 +38,13 @@ exports.getPendingKycs = async (req, res, next) => {
 
 exports.getUserDetails = async (req, res, next) => {
   try {
-    const emailId = req.params.emailId;
-    const user = await User.findOne({ where: { email: emailId } });
+    const phone = req.params.phone;
+    const user = await User.findOne({ where: { phone: phone } });
 
     const userKyc = await user.getUserKyc();
 
     res.status(201).json({ userKyc: userKyc, user: user });
+    
   } catch (err) {
     console.log(err);
     return res
@@ -54,8 +55,8 @@ exports.getUserDetails = async (req, res, next) => {
 
 exports.updateKycStatus = async (req, res, next) => {
   try {
-    const { email, status, message } = req.body;
-    const user = await User.findOne({ where: { email: email } });
+    const { phone, status, message } = req.body;
+    const user = await User.findOne({ where: { phone: phone } });
 
     const userKyc = await user.getUserKyc();
 

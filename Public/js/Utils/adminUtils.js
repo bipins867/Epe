@@ -12,12 +12,11 @@ function getAddressWithoutPort(url) {
 const mapFunction = {
   503: (err) => {
     window.location.replace("/admin/login");
-    localStorage.removeItem("token");
+    localStorage.removeItem("adminToken");
   },
 };
 
-
-async function handleErrors(err, log = true, alertMsg = true, mapFunction) {
+async function handleErrors(err, mapFunction, log = true, alertMsg = true) {
   // Declare variables
   let logMessage = null;
   let alertMessage = null;
@@ -28,9 +27,7 @@ async function handleErrors(err, log = true, alertMsg = true, mapFunction) {
     alertMessage =
       "Network error or server is not responding. Please try again later.";
   } else {
-    const { response } = err;
-
-    
+    const response = err.response;
 
     // Check if the response contains specific error details
     if (response.data && response.data.errors) {
@@ -47,20 +44,20 @@ async function handleErrors(err, log = true, alertMsg = true, mapFunction) {
     }
 
     logMessage = "Error response: " + JSON.stringify(response);
-  }
 
-  // Log the error if log argument is true and logMessage exists
-  if (log && logMessage) {
-    console.log(logMessage);
-  }
+    // Log the error if log argument is true and logMessage exists
+    if (log && logMessage) {
+      console.log(logMessage);
+    }
 
-  // Show alert if alertMsg argument is true and alertMessage exists
-  if (alertMsg && alertMessage) {
-    alert(alertMessage);
-  }
-  // Check if response.status exists in mapFunction, and call the corresponding function
-  if (mapFunction && response.status in mapFunction) {
-    mapFunction[response.status](err); // Call the mapped function
+    // Show alert if alertMsg argument is true and alertMessage exists
+    if (alertMsg && alertMessage) {
+      alert(alertMessage);
+    }
+    // Check if response.status exists in mapFunction, and call the corresponding function
+    if (mapFunction && response.status in mapFunction) {
+      mapFunction[response.status](err); // Call the mapped function
+    }
   }
 }
 function getAdminTokenHeaders() {

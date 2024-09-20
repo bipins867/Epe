@@ -14,7 +14,7 @@ async function populateUserTable() {
                 <td>${user.panNumber}</td>
                 <td>${user.dob}</td>
                 <td>${user.status}</td>
-                <td><a href="/admin/kyc/dashboard/${user.User.email}" class="btn btn-primary btn-sm">View KYC</a></td>
+                <td><a href="/admin/kyc/dashboard/${user.User.phone}" class="btn btn-primary btn-sm">View KYC</a></td>
             `;
 
       userTableBody.appendChild(row);

@@ -8,7 +8,7 @@ const router=express.Router();
 
 router.get('/dashboard',adminKycPageController.getKycDashboardPage)
 
-router.get('/dashboard/:emailId', adminKycPageController.getUserDetailsPage);
-router.get('/userDetails/:emailId',adminKycController.getUserDetails)
+router.get('/dashboard/:phone', adminKycPageController.getUserDetailsPage);
+router.get('/userDetails/:phone',adminKycController.getUserDetails)
 
 module.exports=router;
