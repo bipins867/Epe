@@ -4,6 +4,14 @@ const nodeEnv = localStorage.getItem("nodeEnv");
 
 let socketUrl;
 
+const errorFunction = {
+  // socketError: () => {
+  //   console.log("FUNction triggered");
+  // },
+};
+
+
+
 // Detect protocol dynamically (http => ws, https => wss)
 const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
 
