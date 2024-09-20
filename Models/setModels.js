@@ -15,6 +15,8 @@ const CustomerCase=require('./CustomerSupport/customerCase');
 
 const ContactUs = require('./Basic/contactUs');
 const ApplyLoan = require('./Basic/applyLoan');
+const Newsletter = require('./Basic/newsLetter');
+
 
 
 

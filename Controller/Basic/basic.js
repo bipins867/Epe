@@ -1,5 +1,6 @@
 const ApplyLoan = require("../../Models/Basic/applyLoan");
 const ContactUs = require("../../Models/Basic/contactUs");
+const Newsletter = require("../../Models/Basic/newsLetter");
 
 
 
@@ -73,4 +74,38 @@ exports.submitApplyLoan = async (req, res) => {
     });
   }
 };
+
+
+exports.subscribeToNewsletter = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    // Check if the email already exists in the newsletter
+    const existingSubscription = await Newsletter.findOne({ where: { email } });
+
+    if (existingSubscription) {
+      // Email already subscribed
+      return res.status(200).json({
+        message: 'You are already subscribed to the newsletter!',
+        subscribed: true
+      });
+    }
+
+    // If email is not subscribed, create a new subscription
+    const newSubscription = await Newsletter.create({ email });
+
+    return res.status(201).json({
+      message: 'Subscription successful!',
+      subscription: newSubscription,
+      subscribed: true
+    });
+  } catch (error) {
+    console.error('Error subscribing to newsletter:', error);
+    return res.status(500).json({
+      message: 'An error occurred while subscribing to the newsletter.',
+      error: error.message
+    });
+  }
+};
+
 

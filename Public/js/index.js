@@ -1,10 +1,6 @@
 document.addEventListener("DOMContentLoaded", async function () {
-
-    
-
   onLoadAnimation("hero-content", "slide-in-left");
   onLoadAnimation("hero-image", "slide-in-right");
-  
 
   onLoadAnimation("feature-header", "slide-in-down");
   onLoadAnimation("feature-cards", "slide-in-up");
@@ -23,23 +19,15 @@ document.addEventListener("DOMContentLoaded", async function () {
   onLoadAnimation("project-button-group", "slide-in-right");
   onLoadAnimation("project-image-item", "zoom-in");
 
-
-
   setupFunction();
 });
 
-
-
-document.getElementById('header-contact-btn').addEventListener('click',()=>{
-
-  document.getElementById('open-contactUs-form-btn').click();
-})
-document.getElementById('quick-contact-btn').addEventListener('click',()=>{
-
-  document.getElementById('open-contactUs-form-btn').click();
-})
-
-
+document.getElementById("header-contact-btn").addEventListener("click", () => {
+  document.getElementById("open-contactUs-form-btn").click();
+});
+document.getElementById("quick-contact-btn").addEventListener("click", () => {
+  document.getElementById("open-contactUs-form-btn").click();
+});
 
 async function postRequest(url, obj) {
   const result = await axios.post(baseUrl + url, obj);
@@ -48,8 +36,8 @@ async function postRequest(url, obj) {
 
 function setupFunction() {
   // Base URL for the API
-  
-  
+
+  setupNewsletterSubscription();
 
   // Apply form submit event listener
   const applyForm = document.getElementById("apply-form");
@@ -69,15 +57,14 @@ function setupFunction() {
       email,
       phoneNumber: phone,
       loanType,
-      reasonForLoan: reason
+      reasonForLoan: reason,
     };
 
     try {
-      const response = await postRequest('basic/post/applyLoan', loanData);
+      const response = await postRequest("basic/post/applyLoan", loanData);
       alert(response.data.message); // Show success message
     } catch (error) {
-      
-      handleError(error)
+      handleError(error);
     }
 
     // Clear the form inputs
@@ -100,18 +87,49 @@ function setupFunction() {
       name,
       email,
       phoneNumber: phone,
-      reasonForContact: reason
+      reasonForContact: reason,
     };
 
     try {
-      const response = await postRequest('basic/post/contactUs', contactData);
+      const response = await postRequest("basic/post/contactUs", contactData);
       alert(response.data.message); // Show success message
     } catch (error) {
-      handleError(error)
-
+      handleError(error);
     }
 
     // Clear the form inputs
     contactForm.reset();
+  });
+}
+
+function setupNewsletterSubscription() {
+  // Base URL for the API
+
+  // Newsletter subscription form submit event listener
+  const newsletterForm = document.getElementById("newsletter-form");
+  newsletterForm.addEventListener("submit", async function (event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Get email from form
+    const email = document.getElementById("newsletter-email").value;
+
+    // Prepare data object
+    const subscriptionData = {
+      email,
+    };
+
+    try {
+      // Make POST request to subscribe endpoint
+      const response = await postRequest(
+        "basic/post/subscribeNewsLetter",
+        subscriptionData
+      );
+      alert(response.data.message); // Show success message
+    } catch (error) {
+      handleError(error);
+    }
+
+    // Clear the form input
+    newsletterForm.reset();
   });
 }
