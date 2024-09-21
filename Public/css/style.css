@@ -650,7 +650,7 @@
 
 /* End About Me */ 
 .footer {
-    background: linear-gradient(to bottom right, #001069, var(--secondary));
+    background: linear-gradient(to bottom right,#00056B, var(--secondary));
     margin-left: 10%;
     margin-right: 10%;
 } 
