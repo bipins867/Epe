@@ -39,7 +39,7 @@
 .header_area .navbar .navbar-nav .nav-link {
   font: bold 500 15px/2px var(--roboto);
   text-transform: uppercase;
-  color: #7d2ae8;
+  color: #00056B;
   padding: 1.7rem 0;
   transition: color 0.3s;
 }
@@ -223,7 +223,7 @@ p {
 .checkbox-container .checkmark {
   width: 20px;
   height: 20px;
-  border: 2px solid #7d2ae8;
+  border: 2px solid #00056B;
   margin-right: 10px;
   border-radius: 3px;
   position: relative;
@@ -236,7 +236,7 @@ p {
   top: 2px;
   width: 10px;
   height: 15px;
-  border: solid #7d2ae8;
+  border: solid #00056B;
   border-width: 0 3px 3px 0;
   transform: rotate(45deg);
   opacity: 0;
@@ -247,7 +247,7 @@ p {
 }
 
 .checkbox-container a {
-  color: #7d2ae8;
+  color: #00056B;
   text-decoration: none;
 }
 
@@ -256,7 +256,7 @@ p {
 }
 
 .button {
-  background-color: #7d2ae8;
+  background-color: #00056B;
   color: #fff;
   border: none;
   padding: 10px 20px;

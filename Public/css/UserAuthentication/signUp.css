@@ -26,7 +26,7 @@
   font: bold 500 15px/2px var(--roboto);
   text-transform: uppercase;
   padding: 1.7rem;
-  color: #7d2ae8;
+  color: #00056B;
 }
 
 .header_area .main-menu .navbar-nav .active a {
@@ -41,7 +41,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: #0620b4;
   background-clip: text;
-  color: #7d2ae8;
+  color: #00056B;
 }
 
 .button {
@@ -137,7 +137,7 @@
 }
 
 .input_box input:focus {
-  border-color: #7d2ae8;
+  border-color: #00056B;
 }
 
 .input_box i.user,
@@ -162,7 +162,7 @@
 }
 
 .form_container .button {
-  background: #7d2ae8;
+  background: #00056B;
   margin-top: 30px;
   width: 100%;
   color: #fff;

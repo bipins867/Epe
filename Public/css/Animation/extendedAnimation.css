@@ -314,9 +314,9 @@
 /* Glow */
 @keyframes glow {
     0%, 100% {
-        box-shadow: 0 0 5px rgba(103, 156, 89, 0.8), 0 0 10px rgba(66, 141, 89, 0.8), 0 0 20px rgba(71, 177, 171, 0.8);
+        box-shadow: 0 0 5px rgba(0, 5, 107, 0.8), 0 0 10px rgba(0, 5, 107, 0.8), 0 0 20px rgba(0, 5, 107, 0.8);
     }
     50% {
-        box-shadow: 0 0 20px rgb(18, 65, 119), 0 0 30px rgb(43, 160, 168), 0 0 50px rgb(59, 132, 192);
+        box-shadow: 0 0 20px rgba(0, 5, 107, 1), 0 0 30px rgba(0, 5, 107, 1), 0 0 50px rgba(0, 5, 107, 1);
     }
 }

@@ -36,7 +36,7 @@
 .apply-container button {
     width: 100%;
     padding: 6px; /* Further reduced padding */
-    background-color: #7d2ae8;
+    background-color: #00056B;
     color: #fff;
     border: none;
     border-radius: 4px; /* Slightly smaller border-radius */
@@ -110,7 +110,7 @@
 /* Style for open button */
 #open-apply-form-btn {
     padding: 6px 12px; /* Further reduced padding */
-    background-color: #7d2ae8;
+    background-color: #00056B;
     color: #fff;
     border: none;
     border-radius: 4px; /* Slightly smaller border-radius */

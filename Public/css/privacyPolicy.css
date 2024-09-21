@@ -39,7 +39,7 @@
 .header_area .navbar .navbar-nav .nav-link {
   font: bold 500 15px/2px var(--roboto);
   text-transform: uppercase;
-  color: #7d2ae8;
+  color: #00056B;
   padding: 1.7rem 0;
   transition: color 0.3s;
 }

@@ -22,7 +22,7 @@
   font: bold 500 15px/2px var(--roboto);
   text-transform: uppercase;
   padding: 1.7rem;
-  color: #7d2ae8;
+  color: #00056B;
 }
 
 .header_area .main-menu .navbar-nav .active a {
@@ -37,7 +37,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: #0620b4;
   background-clip: text;
-  color: #7d2ae8;
+  color: #00056B;
 }
 
 /* Existing OTP Form Page Styles */
