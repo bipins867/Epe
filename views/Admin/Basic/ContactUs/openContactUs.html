@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Contact Us Cases</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/Admin/Basic/ContactUs/openContactUs.css">
+</head>
+<body>
+    <a href="/admin/dashboard">Dashboard</a>
+    <div class="container mt-5">
+        <h3 class="mb-4">Contact Us Cases</h3>
+        
+        <!-- Contact Us Cases Table -->
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Case ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Status Checked</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody id="contactUsListBody">
+                <!-- Contact case data rows will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/Admin/Basic/ContactUs/openContactUs.js"></script>
+    <script src="/js/Utils/adminUtils.js"></script>
+</body>
+</html>
