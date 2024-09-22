@@ -27,7 +27,7 @@ const ApplyLoan = sequelize.define('ApplyLoan', {
     allowNull: false
   },
   adminId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: true,
 
   },

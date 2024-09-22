@@ -9,15 +9,18 @@ const router=express.Router();
 router.get('/applyLoan',basicPageController.getApplyLoanDashobard)
 router.get('/contactUs',basicPageController.getContactUsDashobard)
 
-router.get('/openApplyLoan',basicPageController.getOpenApplyLoan)
-router.get('/openContactUs',basicPageController.getOpenContactUs)
+router.get('/openApplyLoanList',basicPageController.getOpenApplyLoanList)
+router.get('/openContactUsList',basicPageController.getOpenContactUsList)
 
-router.get('/pendingApplyLoan',basicPageController.getPendingApplyLoan)
-router.get('/pendingContactUs',basicPageController.getPendingContactUs)
+router.get('/closeApplyLoanList',basicPageController.getCloseApplyLoanList)
+router.get('/closeContactUsList',basicPageController.getCloseContactUsList)
+
+router.get('/pendingApplyLoan/:id',basicPageController.getPendingApplyLoan)
+router.get('/pendingContactUs/:id',basicPageController.getPendingContactUs)
 
 
-router.get('/closeApplyLoan',basicPageController.getCloseApplyLoan)
-router.get('/closeContactUs',basicPageController.getCloseContactUs)
+router.get('/closeApplyLoan/:id',basicPageController.getCloseApplyLoan)
+router.get('/closeContactUs/:id',basicPageController.getCloseContactUs)
 
 
 

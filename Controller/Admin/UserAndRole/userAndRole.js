@@ -232,6 +232,7 @@ exports.updateAdminStatus = async (req, res, next) => {
       .json({ error: "An error occurred while updating the admin status." });
   }
 };
+
 exports.updateAdminRoles = async (req, res, next) => {
   try {
     const { userName, roles } = req.body;
@@ -280,31 +281,45 @@ exports.updateAdminRoles = async (req, res, next) => {
   }
 };
 
-exports.createRole = async (req, res, next) => {
+exports.createRoles = async (req, res, next) => {
   try {
-    // Extract roleName from request body
-    const { roleName, identifier } = req.body;
+    // Extract roles array from request body
+    const { roles } = req.body;
 
-    // Generate a unique roleId
-    const roleId = generateRandomRoleId();
+    // Validate that roles is an array and contains at least one role
+    if (!Array.isArray(roles) || roles.length === 0) {
+      return res.status(400).json({ message: "Invalid input, roles array is required." });
+    }
 
-    // Create the new role
-    const newRole = await Role.create({
-      roleId,
-      roleName,
-      identifier,
-    });
+    // Loop through each role in the array and create a new role entry
+    const createdRoles = [];
+    for (const role of roles) {
+      const { roleName, identifier } = role;
+
+      // Generate a unique roleId for each role
+      const roleId = generateRandomRoleId();
+
+      // Create the new role
+      const newRole = await Role.create({
+        roleId,
+        roleName,
+        identifier,
+      });
+
+      createdRoles.push(newRole); // Add the created role to the array
+    }
 
     return res
       .status(201)
-      .json({ message: "Role created successfully.", role: newRole });
+      .json({ message: "Roles created successfully.", roles: createdRoles });
   } catch (error) {
-    console.error("Error creating role:", error);
+    console.error("Error creating roles:", error);
     return res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
   }
 };
+
 
 exports.deleteRole = async (req, res, next) => {
   try {

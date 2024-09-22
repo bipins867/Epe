@@ -22,7 +22,7 @@ const ContactUs = sequelize.define('ContactUs', {
     allowNull: false
   },
   adminId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: true,
    
   },

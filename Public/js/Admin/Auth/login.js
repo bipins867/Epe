@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const token = localStorage.getItem("adminToken");
 
   if (token) {
-    window.location.replace("/user/dashboard");
+    window.location.replace("/admin/dashboard");
   }
 });
 document

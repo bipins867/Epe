@@ -41,7 +41,7 @@ router.post("/updateAdminStatus",adminAuthentication,roleSAuthentication, userAn
 
 router.post("/updateAdminRoles",adminAuthentication,roleSAuthentication, userAndRoleController.updateAdminRoles);
 
-router.post("/createRole", userAndRoleController.createRole);
+router.post("/createRole", userAndRoleController.createRoles);
 router.post("/deleteRole", userAndRoleController.deleteRole);
 
 router.post(

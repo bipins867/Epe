@@ -13,15 +13,26 @@ exports.getContactUsDashobard=async(req,res,next)=>{
 
 
 
-exports.getOpenApplyLoan=async(req,res,next)=>{
+exports.getOpenApplyLoanList=async(req,res,next)=>{
 
-    res.sendFile(path.resolve('views','Admin','Basic','ApplyLoan','openApplyLoan.html'))
+    res.sendFile(path.resolve('views','Admin','Basic','ApplyLoan','openApplyLoanList.html'))
 }
 
 
-exports.getOpenContactUs=async(req,res,next)=>{
+exports.getOpenContactUsList=async(req,res,next)=>{
 
-    res.sendFile(path.resolve('views','Admin','Basic','ContactUs','openContactUs.html'))
+    res.sendFile(path.resolve('views','Admin','Basic','ContactUs','openContactUsList.html'))
+}
+
+exports.getCloseApplyLoanList=async(req,res,next)=>{
+
+    res.sendFile(path.resolve('views','Admin','Basic','ApplyLoan','closeApplyLoanList.html'))
+}
+
+
+exports.getCloseContactUsList=async(req,res,next)=>{
+
+    res.sendFile(path.resolve('views','Admin','Basic','ContactUs','closeContactUsList.html'))
 }
 
 
