@@ -22,11 +22,11 @@ if (nodeEnv) {
     socketUrl = `${protocol}${host}:${socketPort}`;
   } else {
     // In production or other environments, use the /socket endpoint
-    socketUrl = `${protocol}${host}/socket`;
+    socketUrl = `${protocol}${host}/socket.io`;
   }
 } else {
   // Default to production-like behavior if no environment is set
-  socketUrl = `${protocol}${host}/socket`;
+  socketUrl = `${protocol}${host}/socket.io`;
 }
 
 console.log(socketUrl);
