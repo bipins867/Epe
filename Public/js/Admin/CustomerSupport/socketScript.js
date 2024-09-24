@@ -22,11 +22,11 @@ if (nodeEnv) {
     socketUrl = `${protocol}${host}:${socketPort}`;
   } else {
     // In production or other environments, use the /socket endpoint
-    socketUrl = `${protocol}${host}/socket`;
+    socketUrl = `${protocol}${host}:3030`;
   }
 } else {
   // Default to production-like behavior if no environment is set
-  socketUrl = `${protocol}${host}/socket`;
+  socketUrl = `${protocol}${host}:3030`;
 }
 
 console.log(socketUrl);
@@ -40,6 +40,7 @@ const socket = io(socketUrl, {
   reconnectionDelayMax: 5000, // Max delay between attempts is also 5 seconds (no exponential backoff)
   timeout: 5000, // Connection timeout before triggering reconnection
 });
+
 
 
 socket.on("connect", () => {
