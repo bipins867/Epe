@@ -5,14 +5,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (chatBox.style.display === "flex") {
         const chatToken = localStorage.getItem("chatToken");
         const caseId = localStorage.getItem("caseId");
-        
-        
-      
+
         if (chatToken && caseId) {
           // Fetch case details to check if it's closed
           clearChatBox();
           checkCaseStatus(caseId);
-
         }
       }
     };
@@ -123,7 +120,7 @@ async function handleFileUpload() {
     //Display image in chatbox
     addUserResponseImage(fileUrl);
   } catch (err) {
-    alert("Error uploading file: " + err.message);
+    handleErrors(err, mapFunction);
   }
 }
 
@@ -308,7 +305,7 @@ function clearOptions() {
 
 function knowService() {
   const chatButton = document.getElementById("chatbase-bubble-button");
-  
+
   if (chatButton) {
     setTimeout(() => {
       chatButton.click();
