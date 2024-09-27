@@ -134,11 +134,18 @@ async function checkCaseStatus(caseId) {
       response.data.caseInfo.isClosedByUser; // Assuming 'isClosed' is returned from the server
 
     if (isCaseClosed) {
-      alert("Case is already closed!");
+      document.getElementById("newCaseBtn").style.display = "flex";
+      document.getElementById("closeCase").style.display = "none";
+      showInputField(false);
+      getInitialMessage();
+
+      document.getElementById("newCaseBtn").onclick = function () {
+        localStorage.removeItem("chatToken");
+        localStorage.removeItem("caseId");
+
+        showInitialOptions();
+      };
       // If case is closed, remove chatToken and caseId from localStorage and refresh the page
-      localStorage.removeItem("chatToken");
-      localStorage.removeItem("caseId");
-      location.reload();
     } else {
       updateCloseCaseButtonStatus(true);
       updateFileInputStatus(true);
@@ -219,14 +226,14 @@ function handleOption(option) {
             document.getElementById("messageInput").value = "";
 
             // Handle candidate ID input
-            document.getElementById("sendMessage").onclick = function () {
+            document.getElementById("sendMessage").onclick = async function () {
               const candidateId = document
                 .getElementById("messageInput")
                 .value.trim();
               document.getElementById("messageInput").value = "";
               if (candidateId) {
                 chatBody.innerHTML += formatClientMessage(candidateId);
-                createCaseFunction(name, email, candidateId);
+                await createCaseFunction(name, email, candidateId);
                 clearChatBox();
                 addInitalInfoMessage();
               } else {
@@ -272,12 +279,12 @@ function handleOption(option) {
         document.getElementById("messageInput").value = "";
 
         // Handle name input
-        document.getElementById("sendMessage").onclick = function () {
+        document.getElementById("sendMessage").onclick = async function () {
           const name = document.getElementById("messageInput").value.trim();
           document.getElementById("messageInput").value = "";
           if (name) {
             chatBody.innerHTML += formatClientMessage(name);
-            createCaseFunction2(name, email);
+            await createCaseFunction2(name, email);
             clearChatBox();
             addInitalInfoMessage();
           } else {
@@ -361,9 +368,13 @@ function updateChatBox(messages) {
     if (message.isFile) {
       formattedMessage = addImageResponseMessage(message.message);
     } else {
-      formattedMessage = message.isAdminSend
-        ? formatServerMessage(message.message)
-        : formatClientMessage(message.message);
+      if (message.messageType === "info" || message.messageType==='info-close') {
+        formattedMessage = formatInfoMessage(message.message);
+      } else {
+        formattedMessage = message.isAdminSend
+          ? formatServerMessage(message.message)
+          : formatClientMessage(message.message);
+      }
     }
 
     chatBody.innerHTML += formattedMessage;
@@ -381,8 +392,9 @@ function addInitalInfoMessage() {
   updateFileInputStatus(true);
 
   const chatBody = document.getElementById("chatBody");
-
-  const msg = formatInfoMessage();
+  const caseId = localStorage.getItem("caseId");
+  const message = `Your case has been created successfully. Case ID: ${caseId}. An agent will contact you soon.`;
+  const msg = formatInfoMessage(message);
   chatBody.innerHTML += msg;
 
   chatBody.scrollTop = chatBody.scrollHeight;
@@ -405,29 +417,49 @@ function addUserResponseMessage(message) {
   checkAndUpdateChatBoxLength();
   chatBody.scrollTop = chatBody.scrollHeight;
 }
-function addAdminResponseMessage(message) {
+function addAdminResponseMessage(messageInfo) {
   const chatBody = document.getElementById("chatBody");
 
-  const msg = formatServerMessage(message);
+  const message = messageInfo.message;
+  let msg;
+  if (messageInfo.messageType == "info") {
+    msg = formatInfoMessage(message);
+  } else if (messageInfo.messageType == "info-close") {
+    msg = formatInfoMessage(message);
+    document.getElementById("newCaseBtn").style.display = "flex";
+    document.getElementById("closeCase").style.display = "none";
+    showInputField(false);
+
+    document.getElementById("newCaseBtn").onclick = function () {
+      localStorage.removeItem("chatToken");
+      localStorage.removeItem("caseId");
+      document.getElementById('newCaseBtn').style.display='none'
+
+      showInitialOptions();
+    };
+  } else {
+    msg = formatServerMessage(message);
+  }
+
   chatBody.innerHTML += msg;
   checkAndUpdateChatBoxLength();
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-function createCaseFunction(name, email, candidateId) {
+async function createCaseFunction(name, email, candidateId) {
   // Implement the function logic here
   console.log("createCaseFunction called with:", { name, email, candidateId });
 
   const obj = { name, email, candidateId, isExistingUser: true };
-  createCase(obj);
+  await createCase(obj);
 }
 
-function createCaseFunction2(name, email) {
+async function createCaseFunction2(name, email) {
   // Implement the function logic here
   console.log("createCaseFunction2 called with:", { name, email });
 
   const obj = { name, email, isExistingUser: false };
-  createCase(obj);
+  await createCase(obj);
 }
 
 async function createCase(obj) {

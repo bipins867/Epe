@@ -11,7 +11,7 @@ const AdminAndRole=require('./User/adminAndRole')
 const CaseUser=require('./CustomerSupport/caseUser')
 const CaseMessage=require('./CustomerSupport/caseMessage')
 const CustomerCase=require('./CustomerSupport/customerCase');
-
+const CaseAndAdmin=require('./CustomerSupport/caseAndAdmin')
 
 const ContactUs = require('./Basic/contactUs');
 const ApplyLoan = require('./Basic/applyLoan');
@@ -34,3 +34,6 @@ CustomerCase.belongsTo(CaseUser)
 
 CustomerCase.hasMany(CaseMessage)
 CaseMessage.belongsTo(CustomerCase)
+
+// Admin.belongsToMany(CustomerCase,{ through: CaseAndAdmin, foreignKey: 'AdminId' })
+// CustomerCase.belongsToMany(Admin,{ through: CaseAndAdmin, foreignKey: 'CustomerCaseId' })

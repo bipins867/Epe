@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, Sequelize } = require('sequelize');
 const sequelize = require('../../database'); // Adjust the path as needed
 
 const CaseMessage = sequelize.define('CaseMessage', {
@@ -12,9 +12,17 @@ const CaseMessage = sequelize.define('CaseMessage', {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  adminId:{
+    type:DataTypes.STRING,
+    allowNull:true,
+  },
   isFile: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
+  },
+  messageType:{
+    type:DataTypes.STRING,
+    allowNull:true
   },
   isAdminSend: {
     type: DataTypes.BOOLEAN,

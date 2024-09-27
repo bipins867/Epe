@@ -52,6 +52,16 @@ exports.createUserAndCase = async (req, res, next) => {
       status: "Open", // Default status
     });
 
+    // Add an info message that the case is created
+    await CaseMessage.create({
+      message: `Your case has been created successfully. Case ID: ${caseNumber}. An agent will contact you soon.`,
+      messageType: 'info', // Message type is info
+      isAdminSend: true, // Indicates this is a system-generated message, not from admin
+      CustomerCaseId: customerCase.id, // Associate the message with the created case
+      creationTime: new Date(),
+      isFile: false
+    });
+
     // Prepare data for JWT payload
     const tokenPayload = {
       name: user.name,
@@ -66,7 +76,7 @@ exports.createUserAndCase = async (req, res, next) => {
       expiresIn: "1w",
     });
 
-    // Return the token to the user
+    // Return the token and caseId to the user
     res.status(201).json({
       message: "User and case created successfully.",
       chatToken: token,
@@ -80,6 +90,7 @@ exports.createUserAndCase = async (req, res, next) => {
     });
   }
 };
+
 
 exports.closeCaseByUser = async (req, res, next) => {
   try {
@@ -295,7 +306,7 @@ exports.addUserFile = async (req, res, next) => {
       "ChatSupport",
       caseId
     );
-    console.log(baseDir);
+    
     // Create directory if it doesn't exist
     if (!fs.existsSync(baseDir)) {
       fs.mkdirSync(baseDir, { recursive: true });

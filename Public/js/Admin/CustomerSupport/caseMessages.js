@@ -59,13 +59,34 @@ document.addEventListener("DOMContentLoaded", function () {
           : "N/A"
       }`;
 
-      if (caseInfo.isClosedByAdmin || caseInfo.isClosedByUser) {
+      if (caseInfo.isClosedByAdmin || caseInfo.isClosedByUser || caseInfo.status==='Open' || caseInfo.status==='Transferred') {
         document.getElementById("closeCaseButton").style.display = "none";
         document.getElementById("messageInput").style.display = "none";
         document.getElementById("sendButton").style.display = "none";
       } else {
+
         socket.emit("join-case", caseId);
       }
+
+      if(caseInfo.status==='Open' || caseInfo.status==='Transferred'){
+        document.getElementById('acceptCaseButton').style.display='flex'
+
+      }
+      else{
+        document.getElementById('acceptCaseButton').style.display='none'
+      }
+
+      if(caseInfo.status==='Pending' ){
+        document.getElementById('transferCaseButton').style.display='flex'
+
+      }
+      else{
+        document.getElementById('transferCaseButton').style.display='none'
+      }
+
+      
+
+      
     })
     .catch((error) => {
       handleErrors(error,mapFunction);
@@ -148,10 +169,45 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
+    //Accept Case button
+    document
+    .getElementById("acceptCaseButton")
+    .addEventListener("click", async () => {
+      if (confirm("Are you sure you want to Accept this case?")) {
+        try {
+          await postRequestWithToken("admin/customerSupport/post/addAdminToCase", {
+            caseId: caseId,
+          });
+          alert("Case has been Accept.");
+          window.location.reload();
+        } catch (err) {
+          handleErrors(err,mapFunction);
+        }
+      }
+    });
+    document
+    .getElementById("transferCaseButton")
+    .addEventListener("click", async () => {
+      if (confirm("Are you sure you want to Transfer this case?")) {
+        try {
+          await postRequestWithToken("admin/customerSupport/post/transferCase", {
+            caseId: caseId,
+          });
+          alert("Case has been Transfered.");
+          window.location.replace("/admin/customerSupport/dashboard");
+        } catch (err) {
+          handleErrors(err,mapFunction);
+        }
+      }
+    });
+
   window.addEventListener("beforeunload", function () {
     socket.emit("leave-case", caseId);
   });
 });
+
+
+
 function addImageResponseMessage(url) {
   const imgTag = `<div class="message client-message"><img src="/files/CustomerSupport/${url}" alt="Uploaded Image" style="max-width: 200px; height: auto;"/></div>`;
 

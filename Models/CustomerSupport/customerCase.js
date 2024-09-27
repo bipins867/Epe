@@ -30,7 +30,7 @@ const CustomerCase = sequelize.define('CustomerCase', {
     defaultValue: false,
   },
   adminId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: true,
   },
   status: {

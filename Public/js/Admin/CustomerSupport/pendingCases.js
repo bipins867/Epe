@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
     postRequestWithToken("admin/customerSupport/post/pendingCases")
         .then((response) => {
-            const cases = response.data;
+            const cases = response.data.pendingCases;
             console.log(cases);
-
+            console.log(response.data.result);
+            
             // Get the table body element
             const pendingCaseListBody = document.getElementById("pendingCaseListBody");
             const pendingCasesCount = document.getElementById("pendingCasesCount");

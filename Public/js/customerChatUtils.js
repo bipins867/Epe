@@ -1,7 +1,7 @@
-function formatInfoMessage() {
+function formatInfoMessage(message) {
   return `<div class="d-flex justify-content-center mb-2" id="info-box">
     <div class="info-box text-center p-2 small">
-      Now you are connected with our agent. Feel free to ask to query.
+      ${message}
     </div>
   </div>`;
 }

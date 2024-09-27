@@ -11,6 +11,11 @@ exports.getOpenCasesPage=async(req,res,next)=>{
     res.sendFile(path.resolve('views','Admin','CustomerSupport','openCases.html'))
 }
 
+exports.getTransferredCasesPage=async(req,res,next)=>{
+
+    res.sendFile(path.resolve('views','Admin','CustomerSupport','transferredCases.html'))
+}
+
 
 exports.getClosedCasesPage=async(req,res,next)=>{
 
