@@ -8,8 +8,8 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 let server;
 const options = isProduction ? {
-    key: fs.readFileSync('/etc/ssl/mssl/epeindia.in.key'),
-    cert: fs.readFileSync('/etc/ssl/mssl/epeindia.in.crt')
+    key: fs.readFileSync('/home/epeserver/SSLCertificates/ssl_certificate_key.key'),
+    cert: fs.readFileSync('/home/epeserver/SSLCertificates/ssl_certificate.crt')
 } : {}; // For local, we don't need SSL options
 
 // Create HTTP or HTTPS server based on environment
