@@ -28,13 +28,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     name.value = data.name;
     email.value = data.email;
     phone.value = data.phone;
+    customerId.value = data.candidateId;
 
     if (userKyc) {
       dob.value = userKyc.dob;
       aadharNumber.value = userKyc.aadharNumber;
       panNumber.value = userKyc.panNumber;
       address.value = userKyc.address;
-      customerId.value = userKyc.customerId;
+      
     }
   } catch (err) {
     handleErrors(err,mapFunction);

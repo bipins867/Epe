@@ -11,6 +11,11 @@ const Piggybox = sequelize.define('Piggybox', {
         type: DataTypes.FLOAT,
         allowNull: false
     },
+    unclearedBalance:{
+        type:DataTypes.FLOAT,
+        allowNull:false,
+        defaultValue:0
+    },
     interestBalance: {
         type: DataTypes.FLOAT,
         allowNull: false

@@ -6,6 +6,6 @@ const savedAddressController=require('../../../../Controller/Users/PiggyBox/save
 const router = express.Router();
 
 router.post('/addressInfo',savedAddressController.getSavedAddress)
-router.post('/updateAddressInf',savedAddressController.updateSavedAddress)
+router.post('/updateAddressInfo',savedAddressController.updateSavedAddress)
 
 module.exports = router;

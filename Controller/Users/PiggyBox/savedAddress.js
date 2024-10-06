@@ -1,4 +1,4 @@
-const SavedAddress = require("../../Models/PiggyBox/savedAddress");
+const SavedAddress = require("../../../Models/PiggyBox/savedAddress");
 
 
 exports.getSavedAddress = async (req, res, next) => {

@@ -1,4 +1,4 @@
-const BankDetails = require("../../Models/PiggyBox/bankDetails");
+const BankDetails = require("../../../Models/PiggyBox/bankDetails");
 
 
 exports.getBankDetails = async (req, res, next) => {

@@ -24,17 +24,17 @@ exports.getTransferInfo = async (req, res, next) => {
       where: { UserId: req.user.id }, // Use candidateId to find user KYC
     });
 
-    if (!userKyc) {
-      return res
-        .status(404)
-        .json({ message: "User KYC information not found." });
-    }
+    // if (!userKyc) {
+    //   return res
+    //     .status(404)
+    //     .json({ message: "User KYC information not found." });
+    // }
 
     // Step 3: Prepare the response data
     const responseData = {
       piggyBoxBalance: piggyBox.piggyBalance,
-      kycStatus: userKyc.status, // You can customize what status to return if needed
-      userKycAccepted: userKyc.userAggreementAccepted, // Check if KYC agreement is accepted
+      kycStatus: userKyc?userKyc.status:"Pending.", // You can customize what status to return if needed
+      userKycAccepted:userKyc? userKyc.userAggreementAccepted:false, // Check if KYC agreement is accepted
     };
 
     // Return success response
@@ -157,7 +157,7 @@ exports.transferMoney = async (req, res, next) => {
     }
 
     // Check if the piggybox balance is sufficient after the transfer
-    const newSenderBalance = senderPiggybox.piggyBalance - amount;
+    const newSenderBalance = parseFloat(senderPiggybox.piggyBalance) - parseFloat(amount);
     if (newSenderBalance < 2000) {
       return res
         .status(400)
@@ -167,6 +167,9 @@ exports.transferMoney = async (req, res, next) => {
         });
     }
 
+    if(req.user.candidateId===candidateId){
+      return res.status(405).json({ message: "Self transfer is not available!" });
+    }
     // Fetch receiver's user info using candidateId
     const receiver = await User.findOne({ where: { candidateId, name } });
     if (!receiver) {
@@ -200,7 +203,7 @@ exports.transferMoney = async (req, res, next) => {
       where: { UserId: receiver.id },
       transaction: t,
     });
-    const newReceiverBalance = receiverPiggybox.piggyBalance + amount;
+    const newReceiverBalance = parseFloat(receiverPiggybox.piggyBalance )+ parseFloat(amount);
     await receiverPiggybox.update(
       { piggyBalance: newReceiverBalance },
       { transaction: t }

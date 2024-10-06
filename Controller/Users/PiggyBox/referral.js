@@ -17,12 +17,12 @@ exports.getReferalInfo = async (req, res, next) => {
       if (!referralInfo) {
         return res.status(404).json({ message: "No referral information found." });
       }
-  
+     
       // Return the referral information along with the referred users
       return res.status(200).json({
-        referralId: referralInfo.referalId,
-        numberOfReferrals: referralInfo.noOfReferals,
-        pendingReferrals: referralInfo.pendingReferals,
+        referralId: referralInfo.referralId,
+        numberOfReferrals: referralInfo.noOfReferrals,
+        pendingReferrals: referralInfo.pendingReferrals,
         referredUsers: referralInfo.ReferredUsers, // List of referred users
       });
     } catch (err) {

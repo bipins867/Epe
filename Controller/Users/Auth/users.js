@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const { sendOtpToPhone } = require("../../../Utils/utils");
-const { otpStore } = require("../../../Utils/MailService");
+const { otpStore, sendRegistrationTemplate } = require("../../../Utils/MailService");
 const { Op } = require("sequelize");
 const { v4: uuidv4 } = require('uuid');
 const Referrals = require("../../../Models/PiggyBox/referrals");
@@ -37,10 +37,11 @@ exports.userSignUp = async (req, res, next) => {
       await transaction.rollback(); // Rollback transaction
       return res.status(400).send({ message: "Invalid OTP." });
     }
+    
 
     // Find the last candidateId and increment by 1
     const lastUser = await User.findOne({ order: [['candidateId', 'DESC']] });
-    const newCandidateId = lastUser ? lastUser.candidateId + 1 : 2000000; // Starting candidateId from 2000000
+    const newCandidateId = lastUser ? parseInt(lastUser.candidateId) + 1 : 2000000; // Starting candidateId from 2000000
 
     // Check if byReferallId exists and is valid
     if (byReferallId && byReferallId.trim() !== "") {
@@ -97,7 +98,9 @@ exports.userSignUp = async (req, res, next) => {
 
     // If everything is successful, commit the transaction
     await transaction.commit();
-
+    
+    await sendRegistrationTemplate(phone,newCandidateId)
+    
     return res.status(201).json({ 
       message: "SignUp Successful", 
       userId: newUser.id, 
@@ -136,7 +139,7 @@ exports.userLogin = async (req, res, next) => {
         const token = jwt.sign(
           { name: user.name, id: user.id },
           process.env.JWT_SECRET_KEY,
-          { expiresIn: "2h" }
+          { expiresIn: "2d" }
         );
 
         return res

@@ -58,3 +58,23 @@ exports.sendOtp = async (mobileNumber, otp) => {
   //console.log(response.data);
   return response;
 };
+
+
+
+exports.sendRegistrationTemplate=async (mobileNumber, candidateId) => {
+  const apikey = process.env.SMS_API_KEY;
+  const senderid = process.env.SMS_SENDER_ID;
+  let message = process.env.SMS_REGISTER_TEMPLATE;
+  const number = mobileNumber;
+  
+  message = message.replace("{customer_id}", candidateId);
+  message = message.replace("{password}", '*********');
+  
+  
+  const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${number}&message=${message}&format=json`;
+  const response= await axios.get(url);
+  console.log(url)
+  console.log("*************")
+  console.log(response.data);
+  return response;
+};

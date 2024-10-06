@@ -3,7 +3,7 @@ exports.getUserDasboardInfo = async (req, res, next) => {
 
   try {
     const userKyc = await user.getUserKyc();
-    const obj = { name: user.name, email: user.email, phone: user.phone };
+    const obj = { name: user.name, email: user.email, phone: user.phone,candidateId:user.candidateId };
     if (userKyc) {
       obj.kycStatus = userKyc.status;
     } else {

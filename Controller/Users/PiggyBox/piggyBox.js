@@ -31,6 +31,7 @@ exports.getPiggyBoxInfo = async (req, res, next) => {
         customerId: candidateId,
         kycStatus: userKyc ? userKyc.status : "Pending.",
         piggyboxBalance: piggyBox ? piggyBox.piggyBalance : 0,
+        unclearedBalance:piggyBox?piggyBox.unclearedBalance:0,
         transactionHistory,
       };
   
