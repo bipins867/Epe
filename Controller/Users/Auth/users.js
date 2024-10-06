@@ -5,19 +5,28 @@ const crypto = require("crypto");
 const { sendOtpToPhone } = require("../../../Utils/utils");
 const { otpStore } = require("../../../Utils/MailService");
 const { Op } = require("sequelize");
+const { v4: uuidv4 } = require('uuid');
+const Referrals = require("../../../Models/PiggyBox/referrals");
+const ReferredUser = require("../../../Models/PiggyBox/referredUsers");
+const Piggybox = require("../../../Models/PiggyBox/piggyBox");
+const sequelize=require('../../../database')
+
 
 exports.userSignUp = async (req, res, next) => {
   const { userPhoneOtp, signUpToken } = req.body;
 
+  const transaction = await sequelize.transaction(); // Start the transaction
+
   try {
     const token = signUpToken;
     const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    const { name, email, phone, password } = payload;
+    const { name, email, phone, password, employeeId, byReferallId } = payload;
 
     // Use phone as the primary field for OTP validation
-    const otpKey = phone ;//|| email; // Use phone if email is absent
+    const otpKey = phone;
 
     if (!otpStore[otpKey]) {
+      await transaction.rollback(); // Rollback transaction
       return res.status(400).send({ message: "OTP expired or invalid." });
     }
 
@@ -25,35 +34,84 @@ exports.userSignUp = async (req, res, next) => {
 
     // Validate OTP
     if (`${userPhoneOtp}` != `${phoneOtp}`) {
+      await transaction.rollback(); // Rollback transaction
       return res.status(400).send({ message: "Invalid OTP." });
     }
 
-    // OTP is valid, proceed with the sign-up
-    bcrypt.hash(password, 10, async (err, hashedPassword) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ message: "Internal server error. Please try again later." });
+    // Find the last candidateId and increment by 1
+    const lastUser = await User.findOne({ order: [['candidateId', 'DESC']] });
+    const newCandidateId = lastUser ? lastUser.candidateId + 1 : 2000000; // Starting candidateId from 2000000
+
+    // Check if byReferallId exists and is valid
+    if (byReferallId && byReferallId.trim() !== "") {
+      const referral = await Referrals.findOne({ where: { referralId: byReferallId }, transaction });
+
+      if (!referral) {
+        await transaction.rollback(); // Rollback transaction
+        return res.status(400).send({ message: "Invalid referral ID." });
       }
 
-      // Create the new user (email can be null if not provided)
-      const newUser = await User.create({
-        name,
-        email: email || null, // Email optional
-        password: hashedPassword,
-        phone,
-      });
+      // Update referral statistics
+      await referral.increment('noOfReferrals', { by: 1, transaction });
+      await referral.increment('pendingReferrals', { by: 1, transaction });
 
-      return res
-        .status(201)
-        .json({ message: "SignUp Successful", userId: newUser.id });
+      // Create a new ReferredUser associated with the valid referral
+      await ReferredUser.create({
+        candidateId: newCandidateId,
+        name,
+        status: "pending",
+        dateOfJoining: new Date(),
+        ReferralsId: referral.id // Associate with the referral
+      }, { transaction });
+    }
+
+    // OTP is valid, proceed with the sign-up
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create the new user, ensuring employeeId is empty string if null
+    const newUser = await User.create({
+      candidateId: newCandidateId,
+      name,
+      email: email || null, // Email optional
+      phone,
+      password: hashedPassword,
+      employeeId: employeeId || "", // Set employeeId as empty string if null
+      byReferallId: byReferallId || null // Store referral ID if present
+    }, { transaction });
+
+    // Create a new referral for the new user with a UUID
+    const newReferral = await Referrals.create({
+      referralId: uuidv4(), // Generate a UUID for the referral ID
+      noOfReferrals: 0, // Initially 0
+      pendingReferrals: 0, // Initially 0
+      UserId: newUser.id // Associate the referral with the new user
+    }, { transaction });
+
+    // Create an associated Piggybox for the new user
+    const newPiggybox = await Piggybox.create({
+      piggyBalance: 0, // Initial balance
+      interestBalance: 0, // Initial interest balance
+      isFundedFirst: false, // No funding initially
+      UserId: newUser.id // Associate with the new user
+    }, { transaction });
+
+    // If everything is successful, commit the transaction
+    await transaction.commit();
+
+    return res.status(201).json({ 
+      message: "SignUp Successful", 
+      userId: newUser.id, 
+      referralId: newReferral.referralId,  // Return the referral ID
+      piggyBoxId: newPiggybox.id // Return the piggybox ID
     });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Internal server error. Please try again later." });
+    // If any error occurs, rollback the transaction
+    await transaction.rollback();
+
+    return res.status(500).json({ message: "Internal server error. Please try again later." });
   }
 };
+
 
 exports.userLogin = async (req, res, next) => {
   const { phone, password } = req.body;

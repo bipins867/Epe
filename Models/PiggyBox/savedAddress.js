@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database"); // Replace with your actual Sequelize instance
+const sequelize = require('../../database');  // Replace with your actual Sequelize instance
 
 const SavedAddress = sequelize.define(
   "SavedAddress",

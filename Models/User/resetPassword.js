@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');  // Make sure to replace with your actual sequelize instance
+const sequelize = require('../../database');   // Make sure to replace with your actual sequelize instance
 
 const ResetPassword = sequelize.define('ResetPassword', {
     id: {

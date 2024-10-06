@@ -13,8 +13,6 @@ const User = sequelize.define(
       type:Sequelize.STRING,
       unique:true,
       allowNull:true,
-      defaultValue: 2000000,
-      autoIncrement:true,
     },
     byReferallId:{
       type:Sequelize.STRING,

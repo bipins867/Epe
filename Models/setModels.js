@@ -26,6 +26,8 @@ const BankDetails = require('./PiggyBox/bankDetails');
 const RequestWithdrawal = require('./PiggyBox/requestWithdrawal');
 const SavedAddress = require('./PiggyBox/savedAddress');
 const TransactionHistory = require('./PiggyBox/transactionHistory');
+const Referrals = require('./PiggyBox/referrals');
+const ReferredUser = require('./PiggyBox/referredUsers');
 
 
 
@@ -69,3 +71,12 @@ RequestWithdrawal.belongsTo(User)
 
 User.hasMany(TransactionHistory)
 TransactionHistory.belongsTo(User)
+
+
+
+User.hasOne(Referrals)
+Referrals.belongsTo(User)
+
+
+Referrals.hasMany(ReferredUser)
+ReferredUser.belongsTo(Referrals)

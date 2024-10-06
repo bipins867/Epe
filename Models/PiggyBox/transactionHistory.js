@@ -1,20 +1,24 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');  // Make sure to replace with your actual sequelize instance
+const sequelize = require('../../database');   // Make sure to replace with your actual sequelize instance
 
 const TransactionHistory = sequelize.define('TransactionHistory', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
-        primaryKey: true,
-        defaultValue: 2000000  // Start the ID from 2000000
+        primaryKey: true, // Start the ID from 2000000
+    },
+    transactionType:{
+        type:DataTypes.STRING,
+        allowNull:false,
+        // defaultValue:"transfer" // add ,withdrawal
     },
     merchantUserId: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     merchantTransactionId: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     remark: {
         type: DataTypes.TEXT,
