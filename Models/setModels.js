@@ -1,6 +1,7 @@
 //User-Models
 const User=require('./User/users');
 const UserKyc = require('./Kyc/userKyc');
+const ResetPassword = require('./User/resetPassword');
 
 
 const Admin=require('./User/admins')
@@ -16,6 +17,15 @@ const CaseAndAdmin=require('./CustomerSupport/caseAndAdmin')
 const ContactUs = require('./Basic/contactUs');
 const ApplyLoan = require('./Basic/applyLoan');
 const Newsletter = require('./Basic/newsLetter');
+
+
+
+//PiggyBox related Models
+const Piggybox = require('./PiggyBox/piggyBox');
+const BankDetails = require('./PiggyBox/bankDetails');
+const RequestWithdrawal = require('./PiggyBox/requestWithdrawal');
+const SavedAddress = require('./PiggyBox/savedAddress');
+const TransactionHistory = require('./PiggyBox/transactionHistory');
 
 
 
@@ -37,3 +47,25 @@ CaseMessage.belongsTo(CustomerCase)
 
 // Admin.belongsToMany(CustomerCase,{ through: CaseAndAdmin, foreignKey: 'AdminId' })
 // CustomerCase.belongsToMany(Admin,{ through: CaseAndAdmin, foreignKey: 'CustomerCaseId' })
+
+
+User.hasMany(ResetPassword)
+ResetPassword.belongsTo(User)
+
+
+/*This is the model section for the PiggyBox------------------------------------*/
+
+User.hasOne(Piggybox)
+Piggybox.belongsTo(User)
+
+User.hasOne(BankDetails)
+BankDetails.belongsTo(User)
+
+User.hasOne(SavedAddress)
+SavedAddress.belongsTo(User)
+
+User.hasMany(RequestWithdrawal)
+RequestWithdrawal.belongsTo(User)
+
+User.hasMany(TransactionHistory)
+TransactionHistory.belongsTo(User)

@@ -9,6 +9,17 @@ const User = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    candidateId:{
+      type:Sequelize.STRING,
+      unique:true,
+      allowNull:true,
+      defaultValue: 2000000,
+      autoIncrement:true,
+    },
+    byReferallId:{
+      type:Sequelize.STRING,
+      allowNull:true,
+    },
     name: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -17,6 +28,10 @@ const User = sequelize.define(
       type: Sequelize.STRING,
       allowNull: true,
       
+    },
+    employeeId:{
+      type:Sequelize.STRING,
+      allowNull:true
     },
     phone: {
       type: Sequelize.STRING,
