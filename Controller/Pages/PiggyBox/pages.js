@@ -10,6 +10,12 @@ exports.getAddFundsPage = async (req, res, next) => {
     path.resolve("views", "PiggyBox", "Dashboard", "addFunds.html")
   );
 };
+exports.getPaymentStatusPage = async (req, res, next) => {
+  res.sendFile(
+    path.resolve("views", "PiggyBox", "Dashboard", "paymentStatus.html")
+  );
+};
+
 exports.getKitPage = async (req, res, next) => {
   res.sendFile(path.resolve("views", "PiggyBox", "Kit", "kit.html"));
 };

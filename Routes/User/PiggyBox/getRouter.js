@@ -12,6 +12,7 @@ router.get('/referral',piggyBoxController.getReferralPage)
 router.get('/requestWithdrawal',piggyBoxController.getRequestWithdrawalPage)
 router.get('/kit',piggyBoxController.getKitPage)
 router.get('/addFunds',piggyBoxController.getAddFundsPage)
+router.get('/paymentStatus/:merchantTransactionId',piggyBoxController.getPaymentStatusPage)
 router.get('/',piggyBoxController.getDashboardPage)
 
 module.exports = router;

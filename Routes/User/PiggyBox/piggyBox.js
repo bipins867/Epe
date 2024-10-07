@@ -23,7 +23,7 @@ router.use('/savedAddress',savedAddressRouter)
 router.use('/settlement',settlementRouter)
 router.use('/transferMoney',transferMoneyRouter)
 
-router.use('/post',userAuthentication,postRouter);
+router.use('/post',postRouter);
 router.use('/',getRouter)
 
 module.exports=router;
