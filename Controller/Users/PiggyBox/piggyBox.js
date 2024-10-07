@@ -1,3 +1,4 @@
+const { Sequelize } = require("sequelize");
 const UserKyc = require("../../../Models/Kyc/userKyc");
 const Piggybox = require("../../../Models/PiggyBox/piggyBox");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
@@ -22,7 +23,8 @@ exports.getPiggyBoxInfo = async (req, res, next) => {
   
       // Fetch transaction history for the user
       const transactionHistory = await TransactionHistory.findAll({
-        where: { UserId: userId }, // Assuming merchantUserId corresponds to the user's ID
+        where: { UserId: userId },
+        order: [['createdAt', 'DESC'],], // Assuming merchantUserId corresponds to the user's ID
       });
   
       // Prepare the response data
@@ -64,7 +66,7 @@ exports.getTransactionHistory = async (req, res, next) => {
         },
         order: [['createdAt', 'DESC'],], // Optional: Order transactions by creation date
       });
-  
+      
       // Return the transaction history
       return res.status(200).json(transactions);
     } catch (err) {

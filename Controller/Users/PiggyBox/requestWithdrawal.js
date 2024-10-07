@@ -36,6 +36,7 @@ exports.requestWithdrawalInfo = async (req, res, next) => {
       piggyBoxBalance: piggyBox ? piggyBox.piggyBalance : 0, // Fallback to 0 if no piggybox found
       bankDetails: bankDetails || {}, // Return bank details or empty object if not found
       kycStatus: userKyc ? userKyc.status : "Pending.", // Fallback if no KYC found
+      kycAccepted:userKyc?userKyc.userAggreementAccepted:false,
       withdrawalHistory,
     };
 

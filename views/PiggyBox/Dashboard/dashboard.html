@@ -124,6 +124,10 @@
                 <td>₹<span id="piggybox-balance">5000</span></td>
               </tr>
               <tr>
+                <th>PIGGYBOX Uncleared BALANCE</th>
+                <td>₹<span id="piggybox-uncleared-balance">5000</span></td>
+              </tr>
+              <tr>
                 <th>ADD RESERVE</th>
                 <td><a href="#">CLICK HERE TO ADD RESERVE</a></td>
               </tr>
@@ -133,26 +137,20 @@
             <div class="piggybox-heading text-white p-1 align-middle">
               <h6>LAST 10 TRANSACTIONS</h6>
             </div>
+            
             <div class="d-flex p-2" id="mobile-responsive">
-              <label>Date Range:</label>
-              <input
-                type="text"
-                id="ui_date_picker_range_from"
-                placeholder="From"
-              />
-              <span>-</span>
-              <input
-                type="text"
-                id="ui_date_picker_range_to"
-                placeholder="To"
-              />
+              <label for="fromDate">From:</label>
+              <input type="date" id="fromDate" />
+
+              <label for="toDate" class="ms-2">To:</label>
+              <input type="date" id="toDate" />
+
               <button
                 type="button"
-                id="btnlistvoucher"
+                id="btnFetchTransactions"
                 class="btn btn-success ms-2"
-                onclick="getTransactionReport()"
               >
-                Search
+                Get Transactions
               </button>
             </div>
 
@@ -161,6 +159,8 @@
                 <thead>
                   <tr>
                     <th>Date</th>
+                    <th>Time</th>
+                    <th>Transaction Type</th>
                     <th>Description</th>
                     <th>Credit</th>
                     <th>Debit</th>

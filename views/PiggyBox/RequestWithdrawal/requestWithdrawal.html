@@ -88,9 +88,8 @@
                     <div class="welcome-heading text-white p-1 align-middle">
                         <h2>Request For withdrawal</h2>
                     </div>
-                    <div id="ctl00_ContentPlaceHolder1_error_Div2" class="alert alert-info">
-                        <button data-dismiss='alert' class='close'>×</button> 
-                        <Strong>Warning </Strong>You can't perform any activities . because your account balance is insufficient.
+                    <div id="warning-container" class="alert alert-info">
+                        <Strong>Warning! </Strong><span id="warning-content"></span>
                     </div>
                     <div id="withdrawalForm">
                         <label>Current Balance ₹</label>
@@ -98,19 +97,19 @@
     
                         <div class="form-group">
                             <label>Account Holder Name</label>
-                            <input type="text" class="form-control" id="accountHolder" placeholder="Enter Account Holder Name" required>
+                            <input type="text" class="form-control" id="accountHolder" placeholder="Enter Account Holder Name" disabled>
                         </div>
                         <div class="form-group">
                             <label>Bank Name</label>
-                            <input type="text" class="form-control" id="bankName" placeholder="Enter Bank Name" required>
+                            <input type="text" class="form-control" id="bankName" placeholder="Enter Bank Name" disabled>
                         </div>
                         <div class="form-group">
                             <label>Account No.</label>
-                            <input type="text" class="form-control" id="accountNo" placeholder="Enter Account No." required>
+                            <input type="text" class="form-control" id="accountNo" placeholder="Enter Account No." disabled>
                         </div>
                         <div class="form-group">
                             <label>IFSC Code</label>
-                            <input type="text" class="form-control" id="ifscCode" placeholder="Enter IFSC Code" required>
+                            <input type="text" class="form-control" id="ifscCode" placeholder="Enter IFSC Code" disabled>
                         </div>
                         <div class="form-group">
                             <label>Withdrawal Amount ₹</label>
@@ -131,7 +130,7 @@
                                     <th>#</th>
                                     <th>Requested ID</th>
                                     <th>Requested Date</th>
-                                    <th>User ID</th>
+                                    <th>Candidate ID</th>
                                     <th>Mobile No</th>
                                     <th>Amount</th>
                                     <th>Remark</th>
