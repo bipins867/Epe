@@ -2,13 +2,11 @@ const Referrals = require("../../../Models/PiggyBox/referrals");
 const ReferredUser = require("../../../Models/PiggyBox/referredUsers");
 const User = require("../../../Models/User/users");
 
-
 exports.getUserReferallInfo = async (req, res, next) => {
   try {
     // Extract the referralId from the request body
     const { referralId } = req.body;
-    
-    
+
     // Find the referral using the referralId
     const referral = await Referrals.findOne({
       where: { referralId: referralId }, // Assuming 'id' is the key in your Referrals model
@@ -52,10 +50,18 @@ exports.getReferalInfo = async (req, res, next) => {
         .status(404)
         .json({ message: "No referral information found." });
     }
+    let baseUrl;
+
+    if (process.env.NODE_ENV === "testing") {
+      baseUrl = `http://localhost:3000/`;
+    } else {
+      baseUrl = `https://epeindia.in/`;
+    }
+    const referralUrl = `${baseUrl}user/auth/signUp?referralId=${referralInfo.referralId}`;
 
     // Return the referral information along with the referred users
     return res.status(200).json({
-      referralId: referralInfo.referralId,
+      referralUrl: referralUrl,
       numberOfReferrals: referralInfo.noOfReferrals,
       pendingReferrals: referralInfo.pendingReferrals,
       referredUsers: referralInfo.ReferredUsers, // List of referred users

@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
-    <title>Piggy Box</title>
+    <title>Referral</title>
 
     <!-- Bootstrap and Font Awesome -->
     <link
@@ -19,7 +19,7 @@
     />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/PiggyBox/Dashboard/dashboard.css" />
+    <link rel="stylesheet" href="/css/PiggyBox/Referral/referral.css" />
 
     <!-- jQuery (if necessary) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -107,75 +107,93 @@
 
           <!-- Main Body Content -->
           <div class="body-details w-100">
-            <div class="piggybox-heading text-white p-1 align-middle">
-              <h6>PIGGYBOX</h6>
+            <div class="welcome-heading text-white p-1 align-middle">
+              <h2>Referral Link</h2>
             </div>
-            <!-- Customer Details -->
-            <table class="table">
-              <tr>
-                <th>CUSTOMER NAME</th>
-                <td id="customer-name">John Doe</td>
-              </tr>
-              <tr>
-                <th>CUSTOMER ID</th>
-                <td id="customer-id">2177587</td>
-              </tr>
-              <tr>
-                <th>KYC STATUS</th>
-                <td id="kyc-status">Verified</td>
-              </tr>
-              <tr>
-                <th>PIGGYBOX BALANCE</th>
-                <td>₹<span id="piggybox-balance">5000</span></td>
-              </tr>
-              <tr>
-                <th>PIGGYBOX Uncleared BALANCE</th>
-                <td>₹<span id="piggybox-uncleared-balance">5000</span></td>
-              </tr>
-              <tr>
-                <th>ADD RESERVE</th>
-                <td><a href="/user/piggyBox/addFunds">CLICK HERE TO ADD RESERVE</a></td>
-              </tr>
-            </table>
+            <div class="referral-link-form">
+              <form>
+                <div class="form-group">
+                  <label for="referralLink">Referral Link :</label>
+                  <input
+                    type="text"
+                    id="referralLink"
+                    class="form-control"
+                    value="https://epeindia.in/"
+                    readonly
+                  />
+                </div>
+                <div class="share-buttons">
+                  <button class="share-btn facebook">
+                    <i class="fab fa-facebook"></i> Share
+                  </button>
+                  <button class="share-btn twitter">
+                    <i class="fab fa-twitter"></i> Tweet
+                  </button>
+                  <button class="share-btn pinterest">
+                    <i class="fab fa-pinterest"></i> Pin
+                  </button>
+                  <button class="share-btn email">
+                    <i class="fas fa-envelope"></i> Email
+                  </button>
+                  <button class="share-btn whatsapp">
+                    <i class="fab fa-whatsapp"></i> Share
+                  </button>
+                  <button class="share-btn link">
+                    <i class="fas fa-link"></i> Share
+                  </button>
+                </div>
+                <button type="button" class="btn-copy">Copy</button>
+              </form>
+              <div class="info-section" style="background-color: aqua;">
+                <div>
+                  <strong>Total No of Referrals :- </strong><span id="totalNoOfReferrals"></span>
+                </div>
+                <div>
+                  <strong>Total No of Pending Referrals :- </strong><span id="totalNoOfPendingReferrals"></span>
+                </div>
+              </div>
+              <div id="referHistory" class="mt-4">
+                <h4>Referral History</h4>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Date of Joining</th>
+                      <th>Candidate ID</th>
+                      <th>Name</th>
+                      <th>Date of Completion</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="6" class="text-center">
+                        No data available in table
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
-            <!-- Last 10 Transactions -->
-            <div class="piggybox-heading text-white p-1 align-middle">
-              <h6>LAST 10 TRANSACTIONS</h6>
-            </div>
-            
-            <div class="d-flex p-2" id="mobile-responsive">
-              <label for="fromDate">From:</label>
-              <input type="date" id="fromDate" />
-
-              <label for="toDate" class="ms-2">To:</label>
-              <input type="date" id="toDate" />
-
-              <button
-                type="button"
-                id="btnFetchTransactions"
-                class="btn btn-success ms-2"
-              >
-                Get Transactions
-              </button>
-            </div>
-
-            <div class="table-responsive">
-              <table class="table table-bordered table-hover mt-3">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Transaction Type</th>
-                    <th>Description</th>
-                    <th>Credit</th>
-                    <th>Debit</th>
-                    <th>Balance</th>
-                  </tr>
-                </thead>
-                <tbody id="transaction-table">
-                  <!-- JavaScript will populate the transactions here -->
-                </tbody>
-              </table>
+                <div class="pagination-controls">
+                  <div>
+                    <label>Show</label>
+                    <select name="recordsPerPage">
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                    </select>
+                    <label>records per page</label>
+                  </div>
+                  <ul class="pagination">
+                    <li class="page-item disabled">
+                      <a class="page-link" href="#">Previous</a>
+                    </li>
+                    <li class="page-item disabled">
+                      <a class="page-link" href="#">Next</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -191,7 +209,6 @@
     </div>
 
     <!-- Custom JS -->
-    <script src="/js/PiggyBox/Dashboard/dashboard.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
       integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
@@ -199,5 +216,6 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="/js/Utils/utils.js"></script>
+    <script src="/js/PiggyBox/Referral/referral.js"></script>
   </body>
 </html>

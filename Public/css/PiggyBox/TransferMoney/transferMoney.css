@@ -1,0 +1,235 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.header {
+    background: linear-gradient(45deg, #056ce2, #1101a1);
+    padding: 10px 0;
+}
+
+.logo a {
+    color: white;
+    text-decoration: none;
+    font-size: 28px;
+}
+
+.btn-responsive {
+    border: 1px solid white;
+    background-color: transparent;
+    padding: 2px 5px;
+    border-radius: 6px;
+}
+
+.btn-responsive:hover {
+    background-color: #1C4D86;
+    transform: scale(1.02);
+}
+
+.dashboard-body {
+    background: #EEEEEE;
+    padding-top: 20px;
+}
+
+.sidebar-menu {
+    width: 150px;
+    background: linear-gradient(92deg, #525253, #6e7071);
+    color: white;
+    border-bottom: 2px solid white;
+    padding: 5px 10px;
+    font-weight: 600;
+}
+
+.sidebar-menu:hover {
+    background: white;
+    color: #3187EC;
+    border-left: 2px solid #3187EC;
+    transform: scale(1.02);
+}
+
+a {
+    text-decoration: none;
+}
+
+.welcome-heading {
+    background: linear-gradient(#0e38f1, #021581);
+    border-radius: 13px 13px 0 0;
+    margin-bottom: 7px;
+}
+
+.footer-content {
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Main Body Content CSS */
+.body-details {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.welcome-heading {
+    background-color: #0056b3;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.welcome-heading h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Two-column layout for form fields */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.form-column {
+    width: 48%; /* Adjusts both columns to take up equal space */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.transfer-form label {
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #0056b3;
+    box-shadow: 0 0 4px #0056b3;
+}
+
+.action-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.action-buttons .btn {
+    width: 120px;
+    font-size: 16px;
+}
+
+#submitBtn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+}
+
+#submitBtn:hover {
+    background-color: #218838;
+}
+
+#cancelBtn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+}
+
+#cancelBtn:hover {
+    background-color: #c82333;
+}
+
+/* Transaction History */
+#transactionHistory {
+    margin-top: 30px;
+}
+
+#transactionHistory h4 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.table tbody td {
+    background-color: white;
+    text-align: center;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pagination-controls select {
+    width: auto;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+.pagination {
+    margin: 0;
+}
+
+.pagination li {
+    display: inline-block;
+}
+
+.pagination .page-link {
+    color: #0056b3;
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+}
+
+.pagination .page-link:hover {
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+
+.page-item.disabled .page-link {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #6c757d;
+}
+
+
+
+/* Responsive Styles */
+@media(max-width:576px) {
+    .header-containt, .body-containt, .sidebar-menu {
+        flex-direction: column;
+    }
+    .btn-responsive {
+        font-size: 16px;
+    }
+}
+

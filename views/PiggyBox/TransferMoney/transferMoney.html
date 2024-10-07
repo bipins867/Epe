@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
-    <title>Piggy Box</title>
+    <title>Transfer Money</title>
 
     <!-- Bootstrap and Font Awesome -->
     <link
@@ -19,7 +19,10 @@
     />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/PiggyBox/Dashboard/dashboard.css" />
+    <link
+      rel="stylesheet"
+      href="/css/PiggyBox/TransferMoney/transferMoney.css"
+    />
 
     <!-- jQuery (if necessary) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -107,75 +110,111 @@
 
           <!-- Main Body Content -->
           <div class="body-details w-100">
-            <div class="piggybox-heading text-white p-1 align-middle">
-              <h6>PIGGYBOX</h6>
+            <div class="welcome-heading text-white p-1 align-middle">
+              <h2>Transfer Money</h2>
             </div>
-            <!-- Customer Details -->
-            <table class="table">
-              <tr>
-                <th>CUSTOMER NAME</th>
-                <td id="customer-name">John Doe</td>
-              </tr>
-              <tr>
-                <th>CUSTOMER ID</th>
-                <td id="customer-id">2177587</td>
-              </tr>
-              <tr>
-                <th>KYC STATUS</th>
-                <td id="kyc-status">Verified</td>
-              </tr>
-              <tr>
-                <th>PIGGYBOX BALANCE</th>
-                <td>₹<span id="piggybox-balance">5000</span></td>
-              </tr>
-              <tr>
-                <th>PIGGYBOX Uncleared BALANCE</th>
-                <td>₹<span id="piggybox-uncleared-balance">5000</span></td>
-              </tr>
-              <tr>
-                <th>ADD RESERVE</th>
-                <td><a href="/user/piggyBox/addFunds">CLICK HERE TO ADD RESERVE</a></td>
-              </tr>
-            </table>
+            <div class="transfer-form">
+              <form>
+                <div class="form-row">
+                  <!-- Left Column -->
+                  <div class="form-column">
+                    <div class="form-group">
+                      <label>Piggybox Balance</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="piggyboxBalance"
+                        value="0.00"
+                        readonly
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label>Transfer To Customer*</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="transferToCustomer"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <!-- Right Column -->
+                  <div class="form-column">
+                    <div class="form-group">
+                      <label>Transfer Reserve</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="transferReserve"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label>Customer Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="customerName"
+                      />
+                    </div>
+                  </div>
+                </div>
 
-            <!-- Last 10 Transactions -->
-            <div class="piggybox-heading text-white p-1 align-middle">
-              <h6>LAST 10 TRANSACTIONS</h6>
+                <div class="form-group">
+                  <label>Remarks</label>
+                  <textarea
+                    class="form-control"
+                    id="remarks"
+                    rows="3"
+                  ></textarea>
+                </div>
+                <div class="action-buttons">
+                  <button type="submit" class="btn btn-primary" id="submitBtn">
+                    Submit
+                  </button>
+                  <button type="button" class="btn btn-danger" id="cancelBtn">
+                    Cancel
+                  </button>
+                </div>
+              </form>
             </div>
-            
-            <div class="d-flex p-2" id="mobile-responsive">
-              <label for="fromDate">From:</label>
-              <input type="date" id="fromDate" />
 
-              <label for="toDate" class="ms-2">To:</label>
-              <input type="date" id="toDate" />
-
-              <button
-                type="button"
-                id="btnFetchTransactions"
-                class="btn btn-success ms-2"
-              >
-                Get Transactions
-              </button>
-            </div>
-
-            <div class="table-responsive">
-              <table class="table table-bordered table-hover mt-3">
+            <!-- Transaction History Section -->
+            <div id="transactionHistory" class="mt-4">
+              <h4>Transaction History</h4>
+              <table class="table">
                 <thead>
                   <tr>
+                    <th>#</th>
                     <th>Date</th>
-                    <th>Time</th>
-                    <th>Transaction Type</th>
-                    <th>Description</th>
-                    <th>Credit</th>
+                    <th>Particulars</th>
                     <th>Debit</th>
-                    <th>Balance</th>
+                    <th>Credit</th>
                   </tr>
                 </thead>
-                <tbody id="transaction-table">
-                  <!-- JavaScript will populate the transactions here -->
+                <tbody>
+                  <tr>
+                    <td colspan="5" class="text-center">
+                      No data available in table
+                    </td>
+                  </tr>
                 </tbody>
               </table>
+
+              <!-- <div class="pagination-controls">
+                            <div>
+                                <label>Show</label>
+                                <select name="recordsPerPage">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                </select>
+                                <label>records per page</label>
+                            </div>
+                            <ul class="pagination">
+                                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                                <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                            </ul>
+                        </div> -->
             </div>
           </div>
         </div>
@@ -191,7 +230,6 @@
     </div>
 
     <!-- Custom JS -->
-    <script src="/js/PiggyBox/Dashboard/dashboard.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
       integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
@@ -199,5 +237,6 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="/js/Utils/utils.js"></script>
+    <script src="/js/PiggyBox/TransferMoney/transferMoney.js"></script>
   </body>
 </html>

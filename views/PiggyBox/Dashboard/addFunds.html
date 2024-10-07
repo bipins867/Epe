@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
-    <title>Piggy Box</title>
+    <title>Add Funds</title>
 
     <!-- Bootstrap and Font Awesome -->
     <link
@@ -19,7 +19,7 @@
     />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/PiggyBox/Dashboard/dashboard.css" />
+    <link rel="stylesheet" href="/css/PiggyBox/Dashboard/addFunds.css" />
 
     <!-- jQuery (if necessary) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -107,75 +107,32 @@
 
           <!-- Main Body Content -->
           <div class="body-details w-100">
-            <div class="piggybox-heading text-white p-1 align-middle">
-              <h6>PIGGYBOX</h6>
+            <div class="welcome-heading text-white p-1 align-middle">
+              <h2>Add Fund</h2>
             </div>
-            <!-- Customer Details -->
-            <table class="table">
-              <tr>
-                <th>CUSTOMER NAME</th>
-                <td id="customer-name">John Doe</td>
-              </tr>
-              <tr>
-                <th>CUSTOMER ID</th>
-                <td id="customer-id">2177587</td>
-              </tr>
-              <tr>
-                <th>KYC STATUS</th>
-                <td id="kyc-status">Verified</td>
-              </tr>
-              <tr>
-                <th>PIGGYBOX BALANCE</th>
-                <td>₹<span id="piggybox-balance">5000</span></td>
-              </tr>
-              <tr>
-                <th>PIGGYBOX Uncleared BALANCE</th>
-                <td>₹<span id="piggybox-uncleared-balance">5000</span></td>
-              </tr>
-              <tr>
-                <th>ADD RESERVE</th>
-                <td><a href="/user/piggyBox/addFunds">CLICK HERE TO ADD RESERVE</a></td>
-              </tr>
-            </table>
+            <div class="bank-details-form">
+              <form>
+                <div class="form-group">
+                  <label for="fund">Enter Fund</label>
+                  <input
+                    type="number"
+                    id="fund"
+                    class="form-control"
+                    placeholder="0.00"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="remark">Remark</label>
+                  <input
+                    type="text"
+                    id="remark"
+                    class="form-control"
+                    placeholder=""
+                  />
+                </div>
 
-            <!-- Last 10 Transactions -->
-            <div class="piggybox-heading text-white p-1 align-middle">
-              <h6>LAST 10 TRANSACTIONS</h6>
-            </div>
-            
-            <div class="d-flex p-2" id="mobile-responsive">
-              <label for="fromDate">From:</label>
-              <input type="date" id="fromDate" />
-
-              <label for="toDate" class="ms-2">To:</label>
-              <input type="date" id="toDate" />
-
-              <button
-                type="button"
-                id="btnFetchTransactions"
-                class="btn btn-success ms-2"
-              >
-                Get Transactions
-              </button>
-            </div>
-
-            <div class="table-responsive">
-              <table class="table table-bordered table-hover mt-3">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Transaction Type</th>
-                    <th>Description</th>
-                    <th>Credit</th>
-                    <th>Debit</th>
-                    <th>Balance</th>
-                  </tr>
-                </thead>
-                <tbody id="transaction-table">
-                  <!-- JavaScript will populate the transactions here -->
-                </tbody>
-              </table>
+                <button type="submit" class="btn-submit">Add</button>
+              </form>
             </div>
           </div>
         </div>
@@ -191,7 +148,6 @@
     </div>
 
     <!-- Custom JS -->
-    <script src="/js/PiggyBox/Dashboard/dashboard.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
       integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
@@ -199,5 +155,6 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="/js/Utils/utils.js"></script>
+    <script src="/js/PiggyBox/Dashboard/addFunds.js"></script>
   </body>
 </html>
