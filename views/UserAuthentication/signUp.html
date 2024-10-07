@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Registration</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
-
     <link rel="stylesheet" href="/css/UserAuthentication/signUp.css" />
     <link
       rel="stylesheet"
@@ -19,12 +18,10 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <!-- Bootstrap JS (including Popper.js for the toggle to work) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
   </head>
   <body>
-    <!-- Header -->
     <section id="header">
       <header class="header_area">
         <div class="main-menu">
@@ -55,12 +52,48 @@
         </div>
       </header>
     </section>
-    <!-- Signup Form -->
+
     <section class="home show">
       <div class="form_container">
         <div class="form signup_form">
           <form id="registrationForm" action="#">
             <h2>Signup</h2>
+            <!-- Referral Candidate ID -->
+            <div id="referralBlock" style="display: none; background-color: rgb(180, 235, 216);">
+              <b>Referral Info</b>
+              <div class="input_box" id="referralFields">
+                <input
+                  type="text"
+                  id="referralCandidateId"
+                  name="referralCandidateId"
+                  placeholder="Referral Candidate ID"
+                  disabled
+                />
+                <i class="uil uil-user user"></i>
+              </div>
+              <!-- Referral Candidate Name -->
+              <div class="input_box" id="referralNameField">
+                <input
+                  type="text"
+                  id="referralCandidateName"
+                  name="referralCandidateName"
+                  placeholder="Referral Candidate Name"
+                  disabled
+                />
+                <i class="uil uil-user user"></i>
+              </div>
+            </div>
+            <!-- Employee ID -->
+            <div class="input_box">
+              <input
+                type="text"
+                id="employeeId"
+                name="employeeId"
+                placeholder="Employee ID (Optional)"
+                
+              />
+              <i class="uil uil-id-card user"></i>
+            </div>
             <!-- Name -->
             <div class="input_box">
               <input
@@ -72,6 +105,7 @@
               />
               <i class="uil uil-user user"></i>
             </div>
+
             <!-- Phone -->
             <div class="input_box">
               <input

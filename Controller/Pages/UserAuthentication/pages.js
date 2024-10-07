@@ -1,18 +1,29 @@
-const path=require('path')
+const path = require("path");
 
+exports.getLoginPage = async (req, res, next) => {
+  res.sendFile(path.resolve("views", "UserAuthentication", "login.html"));
+};
 
+exports.getSignUpPage = async (req, res, next) => {
+  res.sendFile(path.resolve("views", "UserAuthentication", "signUp.html"));
+};
 
-exports.getLoginPage=async(req,res,next)=>{
+exports.getForgetPasswordPage = async (req, res, next) => {
+  res.sendFile(
+    path.resolve("views", "UserAuthentication", "forgetPassword.html")
+  );
+};
+exports.getCandidateIdPage = async (req, res, next) => {
+    res.sendFile(
+      path.resolve("views", "UserAuthentication", "getCandidateId.html")
+    );
+  };
+  exports.getResetPasswordPage = async (req, res, next) => {
+    res.sendFile(
+      path.resolve("views", "UserAuthentication", "resetPassword.html")
+    );
+  };
 
-    res.sendFile(path.resolve('views','UserAuthentication','login.html'))
-}
-
-exports.getSignUpPage=async(req,res,next)=>{
-
-    res.sendFile(path.resolve('views','UserAuthentication','signUp.html'))
-}
-
-exports.getOtpVerifyPage=async(req,res,next)=>{
-
-    res.sendFile(path.resolve('views','UserAuthentication','otpVerify.html'))
-}
+exports.getOtpVerifyPage = async (req, res, next) => {
+  res.sendFile(path.resolve("views", "UserAuthentication", "otpVerify.html"));
+};

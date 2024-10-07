@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Get Candidate ID</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/UserAuthentication/login.css" />
     <link rel="icon" href="/Favicon/ImageAI-522x425.ico" type="image/x-icon" />
@@ -38,12 +38,12 @@
       </header>
     </section>
 
-    <!-- Login Form -->
+    <!-- Get Candidate ID Form -->
     <section class="home show">
       <div class="form_container">
         <div class="form login_form">
-          <form id="loginForm">
-            <h2>Login</h2>
+          <form id="getCandidateIdForm">
+            <h2>Get Candidate ID</h2>
             <!-- Phone -->
             <div class="input_box">
               <input
@@ -53,35 +53,19 @@
                 placeholder="Enter your phone number"
                 required
               />
-              <i class="uil uil-phone-alt phone"></i>
+              <i class="uil uil-phone-alt"></i>
             </div>
-            <!-- Password -->
-            <div class="input_box">
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter your password"
-                required
-              />
-              <i class="uil uil-lock password"></i>
-            </div>
-            <!-- Login Button -->
-            <button class="button" id="login-btn">Login Now</button>
+            <!-- Send OTP Button -->
+            <button class="button" id="send-otp-btn-id">Send OTP</button>
             <div class="login_signup">
-              Forget Candidate Id ? <a href="/user/auth/getCandidateId">Get Now</a>
-            </div><div class="login_signup">
-              Forget Password? <a href="/user/auth/forgetPassword">Reset Now</a>
-            </div>
-            <div class="login_signup">
-              Don't have an account? <a href="/user/auth/signUp">Signup</a>
+              <a href="/user/auth/login">Login</a>
             </div>
           </form>
         </div>
       </div>
     </section>
 
-    <script src="/js/UserAuthentication/login.js"></script>
+    <script src="/js/UserAuthentication/getCandidateId.js"></script>
     <script src="/js/Utils/utils.js"></script>
   </body>
 </html>

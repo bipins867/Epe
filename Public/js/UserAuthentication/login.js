@@ -20,7 +20,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
     const data = result.data;
     localStorage.setItem("token", data.token);
-    window.location.replace("/user/dashboard");
+    window.location.replace("/user/piggyBox");
   } catch (err) {
     document.getElementById('login-btn').disabled = false;
     handleErrors(err);

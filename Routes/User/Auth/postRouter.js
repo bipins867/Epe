@@ -34,6 +34,8 @@ router.post(
   userAuthenticationController.changeUserPassword
 );
 
+router.post("/getUserInfo", userAuthenticationController.getUserInfo);
+
 router.post(
   "/verifyUserForgetCandidateIdOtp",
   userAuthenticationController.userForgetCandidateIdOtpVerify

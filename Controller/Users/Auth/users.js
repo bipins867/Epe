@@ -14,7 +14,6 @@ const ReferredUser = require("../../../Models/PiggyBox/referredUsers");
 const Piggybox = require("../../../Models/PiggyBox/piggyBox");
 const sequelize = require("../../../database");
 
-
 exports.userSignUp = async (req, res, next) => {
   const { userPhoneOtp, signUpToken } = req.body;
 
@@ -70,7 +69,7 @@ exports.userSignUp = async (req, res, next) => {
           name,
           status: "pending",
           dateOfJoining: new Date(),
-          ReferralsId: referral.id, // Associate with the referral
+          ReferralId: referral.id, // Associate with the referral
         },
         { transaction }
       );
@@ -177,12 +176,25 @@ exports.userLogin = async (req, res, next) => {
 };
 
 exports.getUserInfo = async (req, res, next) => {
-  const { signUpToken } = req.body;
+  const { signUpToken, userPhoneOtp } = req.body;
 
   try {
     // Verify the signUpToken
     const payload = jwt.verify(signUpToken, process.env.JWT_SECRET_KEY);
     const { phone } = payload;
+
+    const otpKey = phone;
+
+    if (!otpStore[otpKey]) {
+      return res.status(400).send({ message: "OTP expired or invalid." });
+    }
+
+    const { phoneOtp } = otpStore[otpKey];
+
+    // Validate OTP
+    if (`${userPhoneOtp}` != `${phoneOtp}`) {
+      return res.status(400).send({ message: "Invalid OTP." });
+    }
 
     const user = await User.findOne({
       where: {
@@ -209,7 +221,7 @@ exports.getUserInfo = async (req, res, next) => {
 };
 
 exports.changeUserPassword = async (req, res, next) => {
-  const { signUpToken, password } = req.body;
+  const { signUpToken, password, userPhoneOtp } = req.body;
 
   try {
     // Verify the signUpToken
@@ -223,6 +235,19 @@ exports.changeUserPassword = async (req, res, next) => {
 
     if (!user) {
       return res.status(404).json({ message: "User not found!" });
+    }
+
+    const otpKey = phone;
+
+    if (!otpStore[otpKey]) {
+      return res.status(400).send({ message: "OTP expired or invalid." });
+    }
+
+    const { phoneOtp } = otpStore[otpKey];
+
+    // Validate OTP
+    if (`${userPhoneOtp}` != `${phoneOtp}`) {
+      return res.status(400).send({ message: "Invalid OTP." });
     }
 
     // Hash the new password
@@ -251,7 +276,7 @@ exports.changeUserPassword = async (req, res, next) => {
 
 exports.userOtpVerify = async (req, res, next) => {
   try {
-    const { name, email, phone, password } = req.body;
+    const { phone } = req.body;
 
     // Use Sequelize to find an existing user by phone or email
     const existingUser = await User.findOne({
@@ -286,7 +311,11 @@ exports.userOtpVerify = async (req, res, next) => {
 
     res
       .status(200)
-      .send({ message: "OTP sent successfully.", signUpToken: token });
+      .send({
+        message: "OTP sent successfully.",
+        signUpToken: token,
+        type: "signUp",
+      });
   } catch (err) {
     console.log(err);
     return res
@@ -332,7 +361,11 @@ exports.userResetOrForgetPasswordOtpVerify = async (req, res, next) => {
 
     res
       .status(200)
-      .send({ message: "OTP sent successfully.", signUpToken: token });
+      .send({
+        message: "OTP sent successfully.",
+        signUpToken: token,
+        type: "resetPassword",
+      });
   } catch (err) {
     console.log(err);
     return res
@@ -377,7 +410,11 @@ exports.userForgetCandidateIdOtpVerify = async (req, res, next) => {
 
     res
       .status(200)
-      .send({ message: "OTP sent successfully.", signUpToken: token });
+      .send({
+        message: "OTP sent successfully.",
+        signUpToken: token,
+        type: "forgetCandidateId",
+      });
   } catch (err) {
     console.log(err);
     return res

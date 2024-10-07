@@ -73,8 +73,8 @@ exports.sendRegistrationTemplate=async (mobileNumber, candidateId) => {
   
   const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${number}&message=${message}&format=json`;
   const response= await axios.get(url);
-  console.log(url)
-  console.log("*************")
-  console.log(response.data);
+  // console.log(url)
+  // console.log("*************")
+  // console.log(response.data);
   return response;
 };

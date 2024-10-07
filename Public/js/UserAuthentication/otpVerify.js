@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (token) {
     window.location.replace("/user/dashboard");
+  }
+  if (localStorage.getItem("otpType") === "resetPassword") {
+    togglePasswordSectionView(true);
   }
 
   let resendTimer = 10;
@@ -23,15 +26,45 @@ document.addEventListener("DOMContentLoaded", function () {
   otpSubmitButton.addEventListener("click", async (event) => {
     event.preventDefault();
     const userPhoneOtp = document.getElementById("phoneOtp").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
     const signUpToken = localStorage.getItem("signUpToken");
+    const otpType = localStorage.getItem("otpType");
 
     try {
       const obj = { userPhoneOtp, signUpToken };
       otpSubmitButton.disabled = true;
-      const response = await postRequest("user/auth/post/signUp", obj);
-      if (response.status === 201) {
-        alert(response.data.message);
-        window.location.replace("/user/auth/login");
+      let response;
+      if (otpType === "signUp") {
+        response = await postRequest("user/auth/post/signUp", obj);
+        if (response.status === 201) {
+          alert(response.data.message);
+          window.location.replace("/user/auth/login");
+        }
+      } else if (otpType === "resetPassword") {
+        if (password !== confirmPassword) {
+          return alert("Password Mismatch!");
+        }
+
+        response = await postRequest("user/auth/post/changeUserPassword", {
+          ...obj,
+          password: password,
+        });
+        if (response.status === 200) {
+          alert(response.data.message);
+          window.location.replace("/user/auth/login");
+        }
+      } else if (otpType === "forgetCandidateId") {
+        response = await postRequest("user/auth/post/getUserInfo", obj);
+        const data = response.data;
+        console.log("What happend just now!");
+        if (response.status === 200) {
+          const message = `Candidate Id:-${data.candidateId}\nName :- ${data.name}`;
+          alert(message);
+          window.location.replace("/user/auth/login");
+        }
+      } else {
+        alert("Something went Wrong!");
       }
     } catch (err) {
       otpSubmitButton.disabled = false;
@@ -47,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
       const signUpToken = localStorage.getItem("signUpToken");
-      const obj = { signUpToken, otpType: "phone" };
+      const obj = { signUpToken, otpType: localStorage.getItem("otpType") };
       const response = await postRequest("user/auth/post/resendOtp", obj);
       alert(response.data.message);
     } catch (err) {
@@ -66,3 +99,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 1000);
   });
 });
+
+function togglePasswordSectionView(cond) {
+  if (cond) {
+    document.getElementById("password-section").style.display = "flex";
+  } else {
+    document.getElementById("password-section").style.display = "none";
+  }
+}

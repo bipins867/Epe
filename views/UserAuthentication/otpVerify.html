@@ -7,12 +7,12 @@
     <title>OTP Verification</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/UserAuthentication/otpVerify.css" />
-    <link rel="stylesheet" href="/css/Header/header.css"/>
+    <link rel="stylesheet" href="/css/Header/header.css" />
     <link
       rel="stylesheet"
       href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
     />
-    <link rel="icon" href="/Favicon/ImageAI-522x425.ico" type="image/x-icon">
+    <link rel="icon" href="/Favicon/ImageAI-522x425.ico" type="image/x-icon" />
   </head>
   <body>
     <!-- Header -->
@@ -63,8 +63,35 @@
               />
               <i class="uil uil-phone-alt"></i>
             </div>
+            <div id="password-section" style="display: none">
+              <div class="input_box">
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  placeholder="Create password"
+                  required
+                />
+                <i class="uil uil-lock password"></i>
+                <i class="uil uil-eye-slash-alt pw_hide"></i>
+              </div>
+              <!-- Confirm Password -->
+              <div class="input_box">
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  placeholder="Confirm password"
+                  required
+                />
+                <i class="uil uil-lock password"></i>
+                <i class="uil uil-eye-slash-alt pw_hide"></i>
+              </div>
+            </div>
             <button class="button" id="otp-submit">Submit OTP</button>
-            <button class="button" id="resendOtp" disabled>Resend OTP <span id="timer">10</span></button>
+            <button class="button" id="resendOtp" disabled>
+              Resend OTP <span id="timer">10</span>
+            </button>
           </form>
         </div>
       </div>
