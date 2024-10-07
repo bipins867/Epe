@@ -23,6 +23,19 @@ router.post(
   userAuthenticationController.userOtpVerify
 );
 
-router.post('/resendOtp',userAuthenticationController.userResendOtp)
+router.post("/resendOtp", userAuthenticationController.userResendOtp);
 
+router.post(
+  "/verifyUserResetOrForgetPasswordOtp",
+  userAuthenticationController.userResetOrForgetPasswordOtpVerify
+);
+router.post(
+  "/changeUserPassword",
+  userAuthenticationController.changeUserPassword
+);
+
+router.post(
+  "/verifyUserForgetCandidateIdOtp",
+  userAuthenticationController.userForgetCandidateIdOtpVerify
+);
 module.exports = router;
