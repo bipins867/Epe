@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>Piggy Box</title>
+
+    <!-- Bootstrap and Font Awesome -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/PiggyBox/Dashboard/dashboard.css" />
+
+    <!-- jQuery (if necessary) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <!-- Header Section -->
+    <div class="header">
+      <div class="container-lg">
+        <div
+          class="header-containt d-flex justify-content-between align-items-center"
+        >
+          <div class="logo">
+            <a href="/"
+              ><img src="/img/epeLogo.gif" width="auto" height="80px" alt=""
+            /></a>
+          </div>
+          <div class="admin massage text-white">
+            <marquee><span>Welcome to E PE India.</span></marquee>
+          </div>
+          <div class="logout-reset">
+            <a href="#" class="text-white btn-responsive"
+              ><i class="fas fa-sign-out"></i> LOGOUT</a
+            >
+            <a href="#" class="text-white btn-responsive"
+              ><i class="fas fa-undo"></i> RESET PASSWORD</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar and Main Content Section -->
+    <div class="dashboard-body">
+      <div class="container-lg">
+        <div class="body-containt d-flex gap-sm-3 gap-0">
+          <!-- Sidebar -->
+          <div class="sidebar" id="toggle-bar">
+            <!-- Sidebar Menu Items -->
+            <a href="/user/piggyBox/kit"
+              ><div class="sidebar-menu text-center">
+                <i class="fa-solid fa-box"></i> KIT
+              </div></a
+            >
+            <a href="/user/piggyBox/"
+              ><div class="sidebar-menu text-center">
+                <i class="fa-solid fa-piggy-bank"></i> PIGGYBOX
+              </div></a
+            >
+            <a href="#"
+              ><div class="sidebar-menu text-center">
+                <i class="fas fa-user-friends"></i> EPE REFERRAL PROGRAM
+              </div></a
+            >
+            <a href="#"
+              ><div class="sidebar-menu text-center">
+                <i class="fas fa-hand-holding-usd"></i> LOANS
+              </div></a
+            >
+            <a href="/user/piggyBox/requestWithdrawal"
+              ><div class="sidebar-menu text-center">
+                <i class="fa-solid fa-wallet"></i> REQUEST WITHDRAWAL
+              </div></a
+            >
+            <a href="#"
+              ><div class="sidebar-menu text-center">
+                <i class="fa-solid fa-money-bill-transfer"></i> TRANSFER
+              </div></a
+            >
+            <a href="#"
+              ><div class="sidebar-menu text-center">
+                <i class="fa-solid fa-handshake"></i> SETTLEMENT
+              </div></a
+            >
+            <a href="#"
+              ><div class="sidebar-menu text-center">
+                <i class="fas fa-address-card"></i> SAVED ADDRESS
+              </div></a
+            >
+          </div>
+
+          <!-- Main Body Content -->
+          <div class="body-details w-100">
+            <div class="piggybox-heading text-white p-1 align-middle">
+              <h6>PIGGYBOX</h6>
+            </div>
+            <!-- Customer Details -->
+            <table class="table">
+              <tr>
+                <th>CUSTOMER NAME</th>
+                <td id="customer-name">John Doe</td>
+              </tr>
+              <tr>
+                <th>CUSTOMER ID</th>
+                <td id="customer-id">2177587</td>
+              </tr>
+              <tr>
+                <th>KYC STATUS</th>
+                <td id="kyc-status">Verified</td>
+              </tr>
+              <tr>
+                <th>PIGGYBOX BALANCE</th>
+                <td>₹<span id="piggybox-balance">5000</span></td>
+              </tr>
+              <tr>
+                <th>ADD RESERVE</th>
+                <td><a href="#">CLICK HERE TO ADD RESERVE</a></td>
+              </tr>
+            </table>
+
+            <!-- Last 10 Transactions -->
+            <div class="piggybox-heading text-white p-1 align-middle">
+              <h6>LAST 10 TRANSACTIONS</h6>
+            </div>
+            <div class="d-flex p-2" id="mobile-responsive">
+              <label>Date Range:</label>
+              <input
+                type="text"
+                id="ui_date_picker_range_from"
+                placeholder="From"
+              />
+              <span>-</span>
+              <input
+                type="text"
+                id="ui_date_picker_range_to"
+                placeholder="To"
+              />
+              <button
+                type="button"
+                id="btnlistvoucher"
+                class="btn btn-success ms-2"
+                onclick="getTransactionReport()"
+              >
+                Search
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover mt-3">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Credit</th>
+                    <th>Debit</th>
+                    <th>Balance</th>
+                  </tr>
+                </thead>
+                <tbody id="transaction-table">
+                  <!-- JavaScript will populate the transactions here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+      <div class="footer-content bg-dark text-white text-center p-2">
+        &copy; 2024 by Techfin Innovations Private Limited, All Rights Reserved.
+        Created with ❤️ in INDIA
+      </div>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="/js/PiggyBox/Dashboard/dashboard.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/js/Utils/utils.js"></script>
+  </body>
+</html>

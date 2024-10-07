@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Request Withdrawal</title>
+
+    <!-- Bootstrap and Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/PiggyBox/RequestWithdrawal/RequestWithdrawal.css">
+
+    <!-- jQuery (if necessary) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Header Section -->
+    <div class="header">
+        <div class="container-lg">
+            <div class="header-containt d-flex justify-content-between align-items-center">
+                <div class="logo">
+                    <a href="/"><img src="/img/epeLogo.gif" width="auto" height="80px" alt="" /></a>
+                </div>
+                <div class="admin massage text-white">
+                    <marquee><span>Welcome to E PE India.</span></marquee>
+                </div>
+                <div class="logout-reset">
+                    <a href="#" class="text-white btn-responsive"><i class="fas fa-sign-out"></i> LOGOUT</a>
+                    <a href="#" class="text-white btn-responsive"><i class="fas fa-undo"></i> RESET PASSWORD</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar and Main Content Section -->
+    <div class="dashboard-body">
+        <div class="container-lg">
+            <div class="body-containt d-flex gap-sm-3 gap-0">
+                <!-- Sidebar -->
+                <div class="sidebar" id="toggle-bar">
+                    <!-- Sidebar Menu Items -->
+                    <a href="/user/piggyBox/kit"
+                      ><div class="sidebar-menu text-center">
+                        <i class="fa-solid fa-box"></i> KIT
+                      </div></a
+                    >
+                    <a href="/user/piggyBox/"
+                      ><div class="sidebar-menu text-center">
+                        <i class="fa-solid fa-piggy-bank"></i> PIGGYBOX
+                      </div></a
+                    >
+                    <a href="#"
+                      ><div class="sidebar-menu text-center">
+                        <i class="fas fa-user-friends"></i> EPE REFERRAL PROGRAM
+                      </div></a
+                    >
+                    <a href="#"
+                      ><div class="sidebar-menu text-center">
+                        <i class="fas fa-hand-holding-usd"></i> LOANS
+                      </div></a
+                    >
+                    <a href="/user/piggyBox/requestWithdrawal"
+                      ><div class="sidebar-menu text-center">
+                        <i class="fa-solid fa-wallet"></i> REQUEST WITHDRAWAL
+                      </div></a
+                    >
+                    <a href="#"
+                      ><div class="sidebar-menu text-center">
+                        <i class="fa-solid fa-money-bill-transfer"></i> TRANSFER
+                      </div></a
+                    >
+                    <a href="#"
+                      ><div class="sidebar-menu text-center">
+                        <i class="fa-solid fa-handshake"></i> SETTLEMENT
+                      </div></a
+                    >
+                    <a href="#"
+                      ><div class="sidebar-menu text-center">
+                        <i class="fas fa-address-card"></i> SAVED ADDRESS
+                      </div></a
+                    >
+                  </div>
+
+                <!-- Main Body Content -->
+                <div class="body-details w-100">
+                    <div class="welcome-heading text-white p-1 align-middle">
+                        <h2>Request For withdrawal</h2>
+                    </div>
+                    <div id="ctl00_ContentPlaceHolder1_error_Div2" class="alert alert-info">
+                        <button data-dismiss='alert' class='close'>×</button> 
+                        <Strong>Warning </Strong>You can't perform any activities . because your account balance is insufficient.
+                    </div>
+                    <div id="withdrawalForm">
+                        <label>Current Balance ₹</label>
+                        <div id="currentBalance">0.00</div>
+    
+                        <div class="form-group">
+                            <label>Account Holder Name</label>
+                            <input type="text" class="form-control" id="accountHolder" placeholder="Enter Account Holder Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Bank Name</label>
+                            <input type="text" class="form-control" id="bankName" placeholder="Enter Bank Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Account No.</label>
+                            <input type="text" class="form-control" id="accountNo" placeholder="Enter Account No." required>
+                        </div>
+                        <div class="form-group">
+                            <label>IFSC Code</label>
+                            <input type="text" class="form-control" id="ifscCode" placeholder="Enter IFSC Code" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Withdrawal Amount ₹</label>
+                            <input type="number" class="form-control" id="withdrawalAmount" placeholder="Enter Withdrawal Amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Narration</label>
+                            <textarea class="form-control" id="narration" rows="3" placeholder="Enter Narration"></textarea>
+                        </div>
+                        <button class="btn btn-primary" id="submitBtn">Submit</button>
+                        <button class="btn btn-danger" id="cancelBtn">Cancel</button>
+                    </div>
+                    <div id="requestHistory" class="mt-4">
+                        <h4>Withdrawal Requests History</h4>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Requested ID</th>
+                                    <th>Requested Date</th>
+                                    <th>User ID</th>
+                                    <th>Mobile No</th>
+                                    <th>Amount</th>
+                                    <th>Remark</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Historical data will be filled here -->
+                            </tbody>
+                        </table>
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <div class="footer-content bg-dark text-white text-center p-2">&copy; 2024 by Techfin Innovations Private Limited, All Rights
+            Reserved. Created with ❤️ in INDIA </div>
+    </div>
+
+    <!-- Custom JS -->
+    <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+    integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  ></script>
+  <script src="/js/Utils/utils.js"></script>
+    <script src="/js/PiggyBox/RequestWithdrawal/RequestWithdrawal.js"></script>
+</body>
+</html>
