@@ -36,7 +36,7 @@ exports.requestWithdrawalInfo = async (req, res, next) => {
       piggyBoxBalance: piggyBox ? piggyBox.piggyBalance : 0, // Fallback to 0 if no piggybox found
       bankDetails: bankDetails || {}, // Return bank details or empty object if not found
       kycStatus: userKyc ? userKyc.status : "Pending.", // Fallback if no KYC found
-      kycAccepted:userKyc?userKyc.userAggreementAccepted:false,
+      kycAccepted: userKyc ? userKyc.userAggreementAccepted : false,
       withdrawalHistory,
     };
 
@@ -49,7 +49,6 @@ exports.requestWithdrawalInfo = async (req, res, next) => {
       .json({ message: "Internal server error. Please try again later." });
   }
 };
-
 
 exports.requestForWithdrawal = async (req, res, next) => {
   const { amount, userRemark } = req.body; // Extract amount and user remark from the request body
@@ -80,11 +79,9 @@ exports.requestForWithdrawal = async (req, res, next) => {
 
     if (!bankDetails) {
       await transaction.rollback();
-      return res
-        .status(400)
-        .json({
-          message: "Bank details not found. Please provide bank information.",
-        });
+      return res.status(400).json({
+        message: "Bank details not found. Please provide bank information.",
+      });
     }
 
     // Step 3: Check the user's piggybox balance
@@ -98,8 +95,15 @@ exports.requestForWithdrawal = async (req, res, next) => {
       return res.status(400).json({ message: "PiggyBox not found." });
     }
 
+    if (parseFloat(amount) <= 0) {
+      return res
+        .status(405)
+        .json({ message: "Invalid Amount the value should be greter than 0." });
+    }
+
     // Check if the withdrawal would violate the minimum balance requirement
-    const remainingBalance = piggyBox.piggyBalance - amount; // Calculate remaining balance after withdrawal
+    const remainingBalance =
+      parseFloat(piggyBox.piggyBalance) - parseFloat(amount); // Calculate remaining balance after withdrawal
 
     if (remainingBalance < 2000) {
       await transaction.rollback();
@@ -129,7 +133,7 @@ exports.requestForWithdrawal = async (req, res, next) => {
 
     // Step 6: Get the last `requestId` and increment it
     const lastRequest = await RequestWithdrawal.findOne({
-      order: [['requestId', 'DESC']], // Get the latest request ID
+      order: [["requestId", "DESC"]], // Get the latest request ID
       transaction,
     });
 
@@ -148,7 +152,7 @@ exports.requestForWithdrawal = async (req, res, next) => {
         status: "Pending", // Initial status for the withdrawal request
         UserId: userId,
         candidateId: req.user.candidateId,
-        phone: req.user.phone // Associate with the user
+        phone: req.user.phone, // Associate with the user
       },
       { transaction }
     );
