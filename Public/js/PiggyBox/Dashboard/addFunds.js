@@ -26,11 +26,11 @@ document.addEventListener("DOMContentLoaded", function () {
     postRequestWithToken(apiUrl, payload)
       .then((response) => {
         const redirectUrl = response.data.redirectInfo.url;
-        window.open(redirectUrl, "_blank"); // Change to your desired URL
+        //window.open(redirectUrl, "_blank");
+        window.location.replace(redirectUrl) // Change to your desired URL
       })
       .catch((error) => {
-        console.error("Error adding funds:", error);
-        // Optionally, display an error message to the user
+        handleErrors(error);
       });
   });
 });

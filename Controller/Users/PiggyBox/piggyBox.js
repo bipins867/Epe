@@ -5,6 +5,11 @@ const { savePaymentRequest, verifyPaymentRequest } = require("./phonePayUtils");
 const Transaction = require("../../../Models/PiggyBox/transaction");
 const sequelize = require("../../../database");
 const { Sequelize } = require("sequelize");
+const User = require("../../../Models/User/users");
+const Referrals = require("../../../Models/PiggyBox/referrals");
+const ReferredUser = require("../../../Models/PiggyBox/referredUsers");
+
+
 
 exports.addFunds = async (req, res, next) => {
   const { amount } = req.body; // Get amount from request body
@@ -27,6 +32,14 @@ exports.addFunds = async (req, res, next) => {
 
     if (!userPiggybox) {
       throw new Error("Piggybox not found for the user.");
+    }
+
+    if (!userPiggybox.isFundedFirst) {
+      if (amount < 2000) {
+        return res.status(403).json({
+          message: "First time payment must be greater than or equal to 2000.",
+        });
+      }
     }
 
     const currentBalance = userPiggybox.piggyBalance;
@@ -111,7 +124,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
 
     // Find the transaction by merchantTransactionId
     const transaction = await Transaction.findOne({
-      where: { merchantTransactionId },
+      where: { merchantTransactionId, userId: req.user.id },
       transaction: t,
     });
 
@@ -119,11 +132,11 @@ exports.checkPaymentStatus = async (req, res, next) => {
       return res.status(404).json({ message: "Transaction not found." });
     }
 
-    // Check if the transaction is already verified//transaction.isVerified)
+    // Check if the transaction is already verified
     if (transaction.isVerified) {
       return res.status(201).json({
         merchantTransactionId: transaction.merchantTransactionId,
-        status: transaction.status === "Successfull" ? "Successfull" : "Failed",
+        status: transaction.status === "Successful" ? "Successful" : "Failed",
         amount: transaction.amount,
         time: transaction.time,
       });
@@ -136,7 +149,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
     if (response.data && response.data.state === "COMPLETED") {
       // Update transaction to mark as verified and successful
       transaction.isVerified = true;
-      transaction.status = "Successfull";
+      transaction.status = "Successful";
       await transaction.save({ transaction: t });
 
       // Get the user's Piggybox and update the balance
@@ -154,7 +167,69 @@ exports.checkPaymentStatus = async (req, res, next) => {
       piggyBox.piggyBalance = newBalance;
       await piggyBox.save({ transaction: t });
 
-      // Create a new transaction history record for successful payment
+      // If it's the first time the piggyBox is funded, check referral logic
+      if (!piggyBox.isFundedFirst) {
+        piggyBox.isFundedFirst = true;
+        await piggyBox.save({ transaction: t });
+
+        const user = await User.findByPk(req.user.id, { transaction: t });
+        if (user.byReferallId) {
+          const referral = await Referrals.findOne({
+            where: { referralId: user.byReferallId },
+            transaction: t,
+          });
+
+          if (referral) {
+            const referringUser = await User.findByPk(referral.UserId, {
+              transaction: t,
+            });
+            const referringPiggyBox = await Piggybox.findOne({
+              where: { UserId: referringUser.id },
+              transaction: t,
+            });
+
+            if (referringPiggyBox) {
+              const updatedBalance =
+                parseFloat(referringPiggyBox.piggyBalance) + 800;
+              referringPiggyBox.piggyBalance = updatedBalance;
+              await referringPiggyBox.save({ transaction: t });
+
+              // Decrease pendingReferrals for the referring user
+              referral.pendingReferrals = referral.pendingReferrals - 1;
+              await referral.save({ transaction: t });
+
+              // Update ReferredUser status and date of completion
+              await ReferredUser.update(
+                {
+                  status: "completed",
+                  dateOfCompletion: new Date(),
+                },
+                {
+                  where: { candidateId: user.candidateId },
+                  transaction: t,
+                }
+              );
+
+              // Create a new transaction history record for the referring user
+              await TransactionHistory.create(
+                {
+                  transactionType: "referral",
+                  merchantUserId: referringUser.id,
+                  merchantTransactionId: transaction.merchantTransactionId,
+                  remark: `Referral bonus for candidateId ${user.candidateId}`,
+                  credit: 800,
+                  debit: 0,
+                  balance: updatedBalance,
+                  UserId: referringUser.id,
+                },
+                { transaction: t }
+              );
+            }
+          }
+        }
+      }
+
+      // Create a new transaction history record for the user
       await TransactionHistory.create(
         {
           transactionType: "paymentGateway",
@@ -220,6 +295,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
     return res.status(500).json({ message: "Internal server error." });
   }
 };
+
 exports.getPiggyBoxInfo = async (req, res, next) => {
   try {
     // Get the user information from the request

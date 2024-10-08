@@ -33,19 +33,19 @@
         >
           <div class="logo">
             <a href="/"
-              ><img src="/img/epeLogo.gif" width="auto" height="80px" alt=""
+              ><img src="/img/epeLogo.png" width="auto" height="80px" alt=""
             /></a>
           </div>
           <div class="admin massage text-white">
             <marquee><span>Welcome to E PE India.</span></marquee>
           </div>
           <div class="logout-reset">
-            <a href="#" class="text-white btn-responsive"
-              ><i class="fas fa-sign-out"></i> LOGOUT</a
-            >
-            <a href="#" class="text-white btn-responsive"
-              ><i class="fas fa-undo"></i> RESET PASSWORD</a
-            >
+            <button id="userLogoutButton" class="text-white btn-responsive">
+              <i class="fas fa-sign-out"></i> LOGOUT
+            </button>
+            <button id="userResetPasswordButton" class="text-white btn-responsive">
+              <i class="fas fa-undo"></i> RESET PASSWORD
+            </button>
           </div>
         </div>
       </div>
@@ -134,7 +134,11 @@
               </tr>
               <tr>
                 <th>ADD RESERVE</th>
-                <td><a href="/user/piggyBox/addFunds">CLICK HERE TO ADD RESERVE</a></td>
+                <td>
+                  <a href="/user/piggyBox/addFunds"
+                    >CLICK HERE TO ADD RESERVE</a
+                  >
+                </td>
               </tr>
             </table>
 
@@ -142,7 +146,7 @@
             <div class="piggybox-heading text-white p-1 align-middle">
               <h6>LAST 10 TRANSACTIONS</h6>
             </div>
-            
+
             <div class="d-flex p-2" id="mobile-responsive">
               <label for="fromDate">From:</label>
               <input type="date" id="fromDate" />

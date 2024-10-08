@@ -67,8 +67,8 @@ exports.sendRegistrationTemplate=async (mobileNumber, candidateId) => {
   let message = process.env.SMS_REGISTER_TEMPLATE;
   const number = mobileNumber;
   
-  message = message.replace("{customer_id}", candidateId);
-  message = message.replace("{password}", '*********');
+  message = message.replace("{candidate_id}", candidateId);
+  //message = message.replace("{password}", '*********');
   
   
   const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${number}&message=${message}&format=json`;

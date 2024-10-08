@@ -4,6 +4,29 @@ const BankDetails = require("../../../Models/PiggyBox/bankDetails");
 const Piggybox = require("../../../Models/PiggyBox/piggyBox");
 const RequestWithdrawal = require("../../../Models/PiggyBox/requestWithdrawal");
 const sequelize = require("../../../database");
+const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
+
+function generateRandomRequestId() {
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Only letters
+  const numbers = '0123456789'; // Only digits
+
+  let letterPart = '';
+  let numberPart = '';
+
+  // Generate the 5-letter part
+  for (let i = 0; i < 5; i++) {
+    letterPart += letters.charAt(Math.floor(Math.random() * letters.length));
+  }
+
+  // Generate the 5-digit part
+  for (let i = 0; i < 5; i++) {
+    numberPart += numbers.charAt(Math.floor(Math.random() * numbers.length));
+  }
+
+  // Combine both parts
+  return letterPart + numberPart;
+}
+
 
 exports.requestWithdrawalInfo = async (req, res, next) => {
   try {
@@ -98,7 +121,9 @@ exports.requestForWithdrawal = async (req, res, next) => {
     if (parseFloat(amount) <= 0) {
       return res
         .status(405)
-        .json({ message: "Invalid Amount the value should be greter than 0." });
+        .json({
+          message: "Invalid Amount the value should be greater than 0.",
+        });
     }
 
     // Check if the withdrawal would violate the minimum balance requirement
@@ -131,18 +156,32 @@ exports.requestForWithdrawal = async (req, res, next) => {
       }
     );
 
-    // Step 6: Get the last `requestId` and increment it
+    // Step 6: Add a new TransactionHistory entry for the withdrawal
+    const newBalance = parseFloat(piggyBox.piggyBalance) - parseFloat(amount);
+    await TransactionHistory.create(
+      {
+        transactionType: "withdrawal",
+        remark: "User Withdrawal requested",
+        credit: 0,
+        debit: amount,
+        balance: newBalance,
+        UserId: userId,
+      },
+      { transaction }
+    );
+
+    // Step 7: Get the last `requestId` and increment it
     const lastRequest = await RequestWithdrawal.findOne({
       order: [["requestId", "DESC"]], // Get the latest request ID
       transaction,
     });
 
-    let newRequestId = 2000000; // Start from 2000000 if there are no records
-    if (lastRequest) {
-      newRequestId = parseInt(lastRequest.requestId) + 1; // Increment from the last requestId
-    }
+    let newRequestId = generateRandomRequestId() // Start from 2000000 if there are no records
+    // if (lastRequest) {
+    //   newRequestId = parseInt(lastRequest.requestId) + 1; // Increment from the last requestId
+    // }
 
-    // Step 7: Create the withdrawal request with the new requestId
+    // Step 8: Create the withdrawal request with the new requestId
     const withdrawalRequest = await RequestWithdrawal.create(
       {
         requestId: newRequestId, // Assign the new requestId
@@ -157,7 +196,7 @@ exports.requestForWithdrawal = async (req, res, next) => {
       { transaction }
     );
 
-    // Step 8: Commit the transaction (everything successful)
+    // Step 9: Commit the transaction (everything successful)
     await transaction.commit();
 
     // Return success response

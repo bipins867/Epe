@@ -33,19 +33,22 @@
         >
           <div class="logo">
             <a href="/"
-              ><img src="/img/epeLogo.gif" width="auto" height="80px" alt=""
+              ><img src="/img/epeLogo.png" width="auto" height="80px" alt=""
             /></a>
           </div>
           <div class="admin massage text-white">
             <marquee><span>Welcome to E PE India.</span></marquee>
           </div>
           <div class="logout-reset">
-            <a href="#" class="text-white btn-responsive"
-              ><i class="fas fa-sign-out"></i> LOGOUT</a
+            <button id="userLogoutButton" class="text-white btn-responsive">
+              <i class="fas fa-sign-out"></i> LOGOUT
+            </button>
+            <button
+              id="userResetPasswordButton"
+              class="text-white btn-responsive"
             >
-            <a href="#" class="text-white btn-responsive"
-              ><i class="fas fa-undo"></i> RESET PASSWORD</a
-            >
+              <i class="fas fa-undo"></i> RESET PASSWORD
+            </button>
           </div>
         </div>
       </div>
@@ -144,12 +147,14 @@
                 </div>
                 <button type="button" class="btn-copy">Copy</button>
               </form>
-              <div class="info-section" style="background-color: aqua;">
+              <div class="info-section" style="background-color: aqua">
                 <div>
-                  <strong>Total No of Referrals :- </strong><span id="totalNoOfReferrals"></span>
+                  <strong>Total No of Referrals :- </strong
+                  ><span id="totalNoOfReferrals"></span>
                 </div>
                 <div>
-                  <strong>Total No of Pending Referrals :- </strong><span id="totalNoOfPendingReferrals"></span>
+                  <strong>Total No of Pending Referrals :- </strong
+                  ><span id="totalNoOfPendingReferrals"></span>
                 </div>
               </div>
               <div id="referHistory" class="mt-4">

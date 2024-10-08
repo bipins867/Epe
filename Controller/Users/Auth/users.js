@@ -14,6 +14,27 @@ const ReferredUser = require("../../../Models/PiggyBox/referredUsers");
 const Piggybox = require("../../../Models/PiggyBox/piggyBox");
 const sequelize = require("../../../database");
 
+function generateRandomCandidateId() {
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Only letters
+  const numbers = '0123456789'; // Only digits
+
+  let letterPart = '';
+  let numberPart = '';
+
+  // Generate the 5-letter part
+  for (let i = 0; i < 5; i++) {
+    letterPart += letters.charAt(Math.floor(Math.random() * letters.length));
+  }
+
+  // Generate the 5-digit part
+  for (let i = 0; i < 5; i++) {
+    numberPart += numbers.charAt(Math.floor(Math.random() * numbers.length));
+  }
+
+  // Combine both parts
+  return letterPart + numberPart;
+}
+
 exports.userSignUp = async (req, res, next) => {
   const { userPhoneOtp, signUpToken } = req.body;
 
@@ -41,10 +62,8 @@ exports.userSignUp = async (req, res, next) => {
     }
 
     // Find the last candidateId and increment by 1
-    const lastUser = await User.findOne({ order: [["candidateId", "DESC"]] });
-    const newCandidateId = lastUser
-      ? parseInt(lastUser.candidateId) + 1
-      : 2000000; // Starting candidateId from 2000000
+    
+    const newCandidateId = generateRandomCandidateId();
 
     // Check if byReferallId exists and is valid
     if (byReferallId && byReferallId.trim() !== "") {

@@ -126,3 +126,23 @@ async function postRequestWithChatToken(url, obj) {
 
   return result;
 }
+
+function logOut() {
+  localStorage.removeItem("token");
+  window.location.replace("/");
+}
+
+function resetPasswordRedirect() {
+  localStorage.removeItem("token");
+  window.location.replace("/user/auth/forgetPassword");
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+  document.getElementById("userLogoutButton").onclick = function () {
+    logOut();
+  };
+
+  document.getElementById("userResetPasswordButton").onclick = function () {
+    resetPasswordRedirect();
+  };
+});
