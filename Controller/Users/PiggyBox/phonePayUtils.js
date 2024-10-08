@@ -116,10 +116,12 @@ exports.verifyPaymentRequest = async function verifyPaymentRequest(
     saltKey = process.env.PHONE_PAY_TEST_SALT_KEY;
     merchantId = process.env.PHONE_PAY_TEST_MERCHANT_ID;
     saltIndex = process.env.PHONE_PAY_TEST_SALT_INDEX;
+    url=`https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${merchantId}/${merchantTransactionId}`
   } else {
     saltKey = process.env.PHONE_PAY_PRODUCTION_SALT_KEY;
     merchantId = process.env.PHONE_PAY_PRODUCTION_MERCHANT_ID;
     saltIndex = process.env.PHONE_PAY_PRODUCTION_SALT_INDEX;
+    url=`https://api.phonepe.com/apis/hermes/pg/v1/status/${merchantId}/${merchantTransactionId}`
   }
 
   const string =
@@ -129,8 +131,8 @@ exports.verifyPaymentRequest = async function verifyPaymentRequest(
 
   const options = {
     method: "GET",
-    //url: `https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/status/${merchantId}/${merchantTransactionId}`,
-    url: `https://api.phonepe.com/apis/hermes/pg/v1/status/${merchantId}/${merchantTransactionId}`,
+    //url: ,
+    url: url,
     
     headers: {
       accept: "application/json",
