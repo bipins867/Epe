@@ -138,11 +138,14 @@ function resetPasswordRedirect() {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
-  document.getElementById("userLogoutButton").onclick = function () {
-    logOut();
-  };
-
-  document.getElementById("userResetPasswordButton").onclick = function () {
-    resetPasswordRedirect();
-  };
+  if (document.getElementById("userLogoutButton")) {
+    document.getElementById("userLogoutButton").onclick = function () {
+      logOut();
+    };
+  }
+  if (document.getElementById("userResetPasswordButton")) {
+    document.getElementById("userResetPasswordButton").onclick = function () {
+      resetPasswordRedirect();
+    };
+  }
 });
