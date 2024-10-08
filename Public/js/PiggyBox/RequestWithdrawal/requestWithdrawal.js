@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const piggyBoxBalance=withdrawalData.data.piggyBoxBalance;
     if (!kycAccepted){
         toggleWarning(true)
-        setWarningContent('KYC is not Completed or Accepted by you')
+        setWarningContent('KYC is not Verified.')
         return;
     }
     if(!bankDetails){
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if(piggyBoxBalance<=2000){
         toggleWarning(true)
-        setWarningContent('Insufficient Funds!. Minimum balance should be maintained 2000.')
+        setWarningContent('Insufficient Funds!. Minimum balance should be maintained ₹2000.00.')
         return;
     }
   } catch (error) {

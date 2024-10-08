@@ -315,7 +315,8 @@ exports.getPiggyBoxInfo = async (req, res, next) => {
     // Fetch transaction history for the user
     const transactionHistory = await TransactionHistory.findAll({
       where: { UserId: userId },
-      order: [["createdAt", "DESC"]], // Assuming merchantUserId corresponds to the user's ID
+      order: [["createdAt", "DESC"]],
+      limit:10 // Assuming merchantUserId corresponds to the user's ID
     });
 
     // Prepare the response data

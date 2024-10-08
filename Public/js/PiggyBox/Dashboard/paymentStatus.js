@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to extract the merchantTransactionId from the URL
   function getMerchantTransactionIdFromUrl() {
     const url = window.location.href;
-    const parts = url.split('/');
+    const parts = url.split("/");
     return parts[parts.length - 1]; // Assuming the merchantTransactionId is the last part of the URL
   }
 
@@ -14,8 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Make the API request with the extracted merchantTransactionId
     postRequestWithToken(apiUrl, { merchantTransactionId })
       .then((response) => {
-        
-        response=response.data;
+        response = response.data;
         // Assuming the response contains these fields
         document.getElementById("merchantTransactionId").textContent =
           response.merchantTransactionId || "N/A";
@@ -30,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // e.g., displaying success or error messages based on the status
       })
       .catch((error) => {
-        console.error("Error fetching payment status:", error);
+        handleErrors(error);
         // Optionally, display an error message to the user
       });
   }

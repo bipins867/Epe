@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       disableFormFields();
       const label = document.createElement("label");
       label.classList.add("text-danger");
-      label.textContent = "KYC pending or agreement not accepted";
+      label.textContent = "KYC is not Verified.";
       submitBtn.insertAdjacentElement("afterend", label);
     } else {
       enableFormFields();
@@ -136,9 +136,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                       ).toLocaleTimeString()}</td>
                       <td>${transaction.transactionType}</td>
                       <td>${transaction.remark}</td>
-                      <td>${transaction.credit || ""}</td>
-                      <td>${transaction.debit || ""}</td>
-                      <td>${transaction.balance.toFixed(2)}</td>
+                      <td>₹${transaction.credit}</td>
+                      <td>₹${transaction.debit }</td>
+                      <td>₹${transaction.balance.toFixed(2)}</td>
                   `;
         tbody.appendChild(row);
       });

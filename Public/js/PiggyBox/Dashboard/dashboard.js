@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function updatePiggyBoxInfo(data) {
     document.getElementById("customer-name").textContent = data.name;
     document.getElementById("customer-id").textContent = data.customerId;
-    document.getElementById("kyc-status").textContent = data.kycStatus;
+    document.getElementById("kyc-status").textContent = data.kycStatus==='Completed'?'Verified':data.kycStatus;
     document.getElementById("piggybox-balance").textContent = data.piggyboxBalance;
     document.getElementById("piggybox-uncleared-balance").textContent = data.unclearedBalance;
   }
