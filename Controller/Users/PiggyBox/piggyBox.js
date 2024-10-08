@@ -124,7 +124,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
 
     // Find the transaction by merchantTransactionId
     const transaction = await Transaction.findOne({
-      where: { merchantTransactionId, userId: req.user.id },
+      where: { merchantTransactionId, UserId: req.user.id },
       transaction: t,
     });
 
