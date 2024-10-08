@@ -35,7 +35,7 @@ exports.addFunds = async (req, res, next) => {
     }
 
     if (!userPiggybox.isFundedFirst) {
-      if (amount < 2) {
+      if (amount < 1) {
         return res.status(403).json({
           message: "First time payment must be greater than or equal to 2000.",
         });
