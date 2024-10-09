@@ -259,7 +259,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
       await t.commit();
       await sendCreditMessage(
         req.user.phone,
-        transaction.amount,
+        transaction.amount.toFixed(2),
         req.user.candidateId,
         `REF-35${thistory.id}`,
         piggyBox.piggyBalance.toFixed(2)

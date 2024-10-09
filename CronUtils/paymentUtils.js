@@ -151,7 +151,7 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
 
       await sendCreditMessage(
         user.phone,
-        transaction.amount,
+        transaction.amount.toFixed(2),
         user.candidateId,
         `REF-35${thistory.id}`,
         piggyBox.piggyBalance.toFixed(2)

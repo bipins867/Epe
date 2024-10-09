@@ -166,7 +166,7 @@ exports.transferMoney = async (req, res, next) => {
     );
     await sendCreditMessage(
       receiver.phone,
-      amount,
+      parseFloat(amount).toFixed(2),
       receiver.candidateId,
       `REF-35${reciverTransactionHistory.id}`,
       receiverPiggybox.piggyBalance.toFixed(2)
@@ -174,7 +174,7 @@ exports.transferMoney = async (req, res, next) => {
 
     await sendDebitMessage(
       req.user.phone,
-      amount,
+      parseFloat(amount).toFixed(2),
       req.user.candidateId,
       `REF-35${senderTransactionHistory.id}`,
       senderPiggybox.piggyBalance.toFixed(2)

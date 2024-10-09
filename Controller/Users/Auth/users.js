@@ -188,6 +188,7 @@ exports.userLogin = async (req, res, next) => {
       }
     });
   } catch (err) {
+    console.log(err);
     return res
       .status(500)
       .json({ error: "Internal server error. Please try again later." });
