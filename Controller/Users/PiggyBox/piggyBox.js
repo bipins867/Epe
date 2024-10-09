@@ -9,8 +9,6 @@ const User = require("../../../Models/User/users");
 const Referrals = require("../../../Models/PiggyBox/referrals");
 const ReferredUser = require("../../../Models/PiggyBox/referredUsers");
 
-
-
 exports.addFunds = async (req, res, next) => {
   const { amount } = req.body; // Get amount from request body
   const { candidateId, phone, id: userId } = req.user; // Get candidate ID, mobile, and userId from req.user
@@ -37,7 +35,8 @@ exports.addFunds = async (req, res, next) => {
     if (!userPiggybox.isFundedFirst) {
       if (amount < 1) {
         return res.status(403).json({
-          message: "First time payment must be greater than or equal to ₹2000.00",
+          message:
+            "First time payment must be greater than or equal to ₹2000.00",
         });
       }
     }
@@ -145,7 +144,17 @@ exports.checkPaymentStatus = async (req, res, next) => {
     // Proceed to check payment status from PhonePay API
     let response = await verifyPaymentRequest(merchantTransactionId);
     response = response.data;
-    
+
+    // Get the user's Piggybox and update the balance
+    const piggyBox = await Piggybox.findOne({
+      where: { UserId: req.user.id },
+      transaction: t,
+    });
+
+    if (!piggyBox) {
+      throw new Error("User's Piggybox not found.");
+    }
+
     // Handle COMPLETED payment
     if (response.data && response.data.state === "COMPLETED") {
       // Mark the transaction as successful and verified
@@ -153,17 +162,8 @@ exports.checkPaymentStatus = async (req, res, next) => {
       transaction.status = "Successful";
       await transaction.save({ transaction: t });
 
-      // Get the user's Piggybox and update the balance
-      const piggyBox = await Piggybox.findOne({
-        where: { UserId: req.user.id },
-        transaction: t,
-      });
-
-      if (!piggyBox) {
-        throw new Error("User's Piggybox not found.");
-      }
-
-      const newBalance = parseFloat(piggyBox.piggyBalance) + parseFloat(transaction.amount);
+      const newBalance =
+        parseFloat(piggyBox.piggyBalance) + parseFloat(transaction.amount);
       piggyBox.piggyBalance = newBalance;
       await piggyBox.save({ transaction: t });
 
@@ -181,14 +181,17 @@ exports.checkPaymentStatus = async (req, res, next) => {
           });
 
           if (referral) {
-            const referringUser = await User.findByPk(referral.UserId, { transaction: t });
+            const referringUser = await User.findByPk(referral.UserId, {
+              transaction: t,
+            });
             const referringPiggyBox = await Piggybox.findOne({
               where: { UserId: referringUser.id },
               transaction: t,
             });
 
             if (referringPiggyBox) {
-              const updatedBalance = parseFloat(referringPiggyBox.piggyBalance) + 800;
+              const updatedBalance =
+                parseFloat(referringPiggyBox.piggyBalance) + 800;
               referringPiggyBox.piggyBalance = updatedBalance;
               await referringPiggyBox.save({ transaction: t });
 
@@ -256,8 +259,8 @@ exports.checkPaymentStatus = async (req, res, next) => {
         amount: transaction.amount,
         time: transaction.time,
       });
-    } 
-    
+    }
+
     // Handle PENDING payment status
     else if (response.data && response.data.state === "PENDING") {
       console.log(response);
@@ -336,7 +339,7 @@ exports.getPiggyBoxInfo = async (req, res, next) => {
     const transactionHistory = await TransactionHistory.findAll({
       where: { UserId: userId },
       order: [["createdAt", "DESC"]],
-      limit:10 // Assuming merchantUserId corresponds to the user's ID
+      limit: 10, // Assuming merchantUserId corresponds to the user's ID
     });
 
     // Prepare the response data
