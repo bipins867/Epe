@@ -17,8 +17,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         response.data.savedAddress.pinCode || "";
     }
   } catch (error) {
-    console.error("Error fetching saved address:", error);
-    // Handle error if necessary
+    handleErrors(error,mapFunction);
   }
 });
 
@@ -50,7 +49,6 @@ document
         alert(response.data.message); // Show success message
       }
     } catch (error) {
-      console.error("Error updating saved address:", error);
-      // Handle error if necessary
+      handleErrors(error,mapFunction);
     }
   });

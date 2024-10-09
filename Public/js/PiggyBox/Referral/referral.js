@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         populateReferralHistory(response.data.referredUsers);
       })
       .catch((error) => {
-        console.error("Error fetching referral info:", error);
+        handleErrors(error,mapFunction);
       });
   }
 

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       updatePiggyBoxInfo(piggyBoxData.data);
       updateTransactionHistory(piggyBoxData.data.transactionHistory);
     } catch (error) {
-      console.error("Error loading PiggyBox Info:", error);
+      handleErrors(error,mapFunction);
     }
   });
   
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const transactions = await postRequestWithToken("user/piggyBox/post/getTransactionHistory", { fromDate, toDate });
       updateTransactionHistory(transactions.data);
     } catch (error) {
-      console.error("Error fetching transactions:", error);
+      handleErrors(error,mapFunction);
     }
   });
   

@@ -269,6 +269,9 @@ exports.changeUserPassword = async (req, res, next) => {
       return res.status(400).send({ message: "Invalid OTP." });
     }
 
+    if(!password){
+      return res.status(400).send({message:"Invalid Password!"})
+    }
     // Hash the new password
     const hashedPassword = await bcrypt.hash(password, 10);
 

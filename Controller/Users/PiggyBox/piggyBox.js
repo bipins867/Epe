@@ -37,7 +37,7 @@ exports.addFunds = async (req, res, next) => {
     if (!userPiggybox.isFundedFirst) {
       if (amount < 1) {
         return res.status(403).json({
-          message: "First time payment must be greater than or equal to 2000.",
+          message: "First time payment must be greater than or equal to ₹2000.00",
         });
       }
     }
@@ -145,7 +145,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
     // Proceed to check payment status from PhonePay API
     let response = await verifyPaymentRequest(merchantTransactionId);
     response = response.data;
-
+    console.log(response);
     if (response.data && response.data.state === "COMPLETED") {
       // Update transaction to mark as verified and successful
       transaction.isVerified = true;

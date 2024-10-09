@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("ifscCode").value = ifscCode || "";
       }
     } catch (error) {
-      console.error("Error fetching bank details:", error);
+      handleErrors(error,mapFunction);
     }
   });
   
@@ -45,8 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert(updateResponse.data.message || "Bank details updated successfully.");
       }
     } catch (error) {
-      console.error("Error updating bank details:", error);
-      alert("Failed to update bank details. Please try again later.");
+      handleErrors(error,mapFunction);
     }
   });
   

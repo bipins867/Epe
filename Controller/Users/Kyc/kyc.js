@@ -89,6 +89,8 @@ exports.postFormSubmit = async (req, res, next) => {
         id: { [Op.ne]: userKyc ? userKyc.id : null }, // Exclude the current user's record
       },
     });
+    
+    await user.update({email:req.body.email})
 
     if (duplicateKyc) {
       return res

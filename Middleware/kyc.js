@@ -1,14 +1,14 @@
 const { check, validationResult } = require("express-validator");
 const multer = require("multer");
 // Manual file size validation middleware
-const fileSizeLimit = 2 * 1024 * 1024; // 2MB in bytes
+const fileSizeLimit = 20* 1024 * 1024; // 2MB in bytes
 
 exports.checkFileSize = (req, res, next) => {
   // Check if Content-Length header exists and is within the limit
   const contentLength = parseInt(req.headers["content-length"], 10);
 
   if (contentLength > fileSizeLimit) {
-    return res.status(400).json({ error: "File size exceeds the 2MB limit." });
+    return res.status(400).json({ error: "File size exceeds the 20MB limit." });
   }
 
   next();

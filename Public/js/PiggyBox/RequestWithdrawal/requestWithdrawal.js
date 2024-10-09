@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
   } catch (error) {
-    handleErrors(error);
+    handleErrors(error,mapFunction);
   }
 });
 
@@ -134,7 +134,7 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
     location.reload(); // Reload the page to reflect updated balances and history
   } catch (error) {
     
-    handleErrors(error);
+    handleErrors(error,mapFunction);
   }
 });
 

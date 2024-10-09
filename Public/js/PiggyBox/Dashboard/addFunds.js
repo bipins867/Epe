@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.replace(redirectUrl) // Change to your desired URL
       })
       .catch((error) => {
-        handleErrors(error);
+        handleErrors(error,mapFunction);
       });
   });
 });

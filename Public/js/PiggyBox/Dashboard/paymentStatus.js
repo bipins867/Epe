@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // e.g., displaying success or error messages based on the status
       })
       .catch((error) => {
-        handleErrors(error);
+        handleErrors(error,mapFunction);
         // Optionally, display an error message to the user
       });
   }

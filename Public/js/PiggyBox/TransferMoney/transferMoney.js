@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
       customerNameInput.value = response.data.name;
     } catch (error) {
-      handleErrors(error);
+      handleErrors(error,mapFunction);
     }
   });
 
@@ -144,6 +144,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
   } catch (error) {
-    handleErrors(error);
+    handleErrors(error,mapFunction);
   }
 });
