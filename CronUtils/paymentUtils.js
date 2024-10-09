@@ -9,22 +9,23 @@ const sequelize = require("../database");
 const User = require("../Models/User/users");
 const Referrals = require("../Models/PiggyBox/referrals");
 const ReferredUser = require("../Models/PiggyBox/referredUsers");
-const { sendRewardMessage, sendCreditMessage } = require("../Utils/MailService");
+const {
+  sendRewardMessage,
+  sendCreditMessage,
+} = require("../Utils/MailService");
 
 exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
-  
-  const t = await sequelize.transaction(); // Start a Sequelize transaction
+  let t; // Start a Sequelize transaction
   try {
     // Find the transaction by merchantTransactionId
-    
-    const user=await User.findByPk(userId);
-    if(!user){
+
+    const user = await User.findByPk(userId);
+    if (!user) {
       return;
     }
 
     const transaction = await Transaction.findOne({
       where: { merchantTransactionId, UserId: userId },
-      transaction: t,
     });
 
     if (!transaction) {
@@ -43,7 +44,6 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
     // Get the user's Piggybox and update the balance
     const piggyBox = await Piggybox.findOne({
       where: { UserId: userId },
-      transaction: t,
     });
 
     if (!piggyBox) {
@@ -52,6 +52,7 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
 
     // Handle COMPLETED payment
     if (response.data && response.data.state === "COMPLETED") {
+      t = await sequelize.transaction();
       // Mark the transaction as successful and verified
       transaction.isVerified = true;
       transaction.status = "Successful";
@@ -68,22 +69,18 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
         await piggyBox.save({ transaction: t });
 
         // Referral processing
-        const user = await User.findByPk(userId, { transaction: t });
+        const user = await User.findByPk(userId);
         if (user.byReferallId) {
           const referral = await Referrals.findOne({
             where: { referralId: user.byReferallId },
-            transaction: t,
           });
 
           if (referral) {
-            const referringUser = await User.findByPk(referral.UserId, {
-              transaction: t,
-            });
+            const referringUser = await User.findByPk(referral.UserId);
             const referringPiggyBox = await Piggybox.findOne({
               where: { UserId: referringUser.id },
-              transaction: t,
             });
-            const rewardAmount=800;
+            const rewardAmount = 800;
             if (referringPiggyBox) {
               const updatedBalance =
                 parseFloat(referringPiggyBox.piggyBalance) + rewardAmount;
@@ -119,7 +116,7 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
                 { transaction: t }
               );
 
-              await sendRewardMessage(referringUser.phone, rewardAmount);
+              sendRewardMessage(referringUser.phone, rewardAmount);
             }
           }
         }
@@ -132,7 +129,7 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
       });
 
       // Create a new transaction history for the user
-      const thistory=await TransactionHistory.create(
+      const thistory = await TransactionHistory.create(
         {
           transactionType: "paymentGateway",
           merchantUserId: transaction.merchantUserId,
@@ -149,7 +146,7 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
       // Commit the transaction
       await t.commit();
 
-      await sendCreditMessage(
+      sendCreditMessage(
         user.phone,
         transaction.amount.toFixed(2),
         user.candidateId,
@@ -167,6 +164,7 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
 
     // Handle FAILED payment case
     else {
+      t = await sequelize.transaction();
       transaction.isVerified = true;
       transaction.status = "Failed";
       await transaction.save({ transaction: t });
@@ -201,6 +199,9 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
     console.log(
       "Cron Error Reported for payment veify Status \n***********************\n"
     );
+    if (t) {
+      t.rollback();
+    }
     console.log(err);
     return;
   }

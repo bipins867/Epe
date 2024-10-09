@@ -7,11 +7,11 @@ const sequelize = require("../../../database");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
 
 function generateRandomRequestId() {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Only letters
-  const numbers = '0123456789'; // Only digits
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Only letters
+  const numbers = "0123456789"; // Only digits
 
-  let letterPart = '';
-  let numberPart = '';
+  let letterPart = "";
+  let numberPart = "";
 
   // Generate the 5-letter part
   for (let i = 0; i < 5; i++) {
@@ -26,7 +26,6 @@ function generateRandomRequestId() {
   // Combine both parts
   return letterPart + numberPart;
 }
-
 
 exports.requestWithdrawalInfo = async (req, res, next) => {
   try {
@@ -78,17 +77,17 @@ exports.requestForWithdrawal = async (req, res, next) => {
   const userId = req.user.id; // Get the user ID from the request
 
   // Start a Sequelize transaction
-  const transaction = await sequelize.transaction();
+  let transaction;
 
   try {
     // Step 1: Check if KYC agreement is accepted
     const userKyc = await UserKyc.findOne({
       where: { customerId: req.user.candidateId }, // Use candidateId to find user KYC
-      transaction,
+     // transaction,
     });
 
     if (!userKyc || !userKyc.userAggreementAccepted) {
-      await transaction.rollback();
+      //await transaction.rollback();
       return res
         .status(403)
         .json({ message: "KYC agreement not accepted or KYC not Completed!." });
@@ -97,11 +96,11 @@ exports.requestForWithdrawal = async (req, res, next) => {
     // Step 2: Check if bank details exist
     const bankDetails = await BankDetails.findOne({
       where: { UserId: userId }, // Check for bank details associated with the user
-      transaction,
+      //transaction,
     });
 
     if (!bankDetails) {
-      await transaction.rollback();
+      //await transaction.rollback();
       return res.status(400).json({
         message: "Bank details not found. Please provide bank information.",
       });
@@ -110,20 +109,18 @@ exports.requestForWithdrawal = async (req, res, next) => {
     // Step 3: Check the user's piggybox balance
     const piggyBox = await Piggybox.findOne({
       where: { UserId: userId }, // Fetch the user's piggybox
-      transaction,
+     // transaction,
     });
 
     if (!piggyBox) {
-      await transaction.rollback();
+     // await transaction.rollback();
       return res.status(400).json({ message: "PiggyBox not found." });
     }
 
     if (parseFloat(amount) <= 0) {
-      return res
-        .status(405)
-        .json({
-          message: "Invalid Amount the value should be greater than 0.",
-        });
+      return res.status(405).json({
+        message: "Invalid Amount the value should be greater than 0.",
+      });
     }
 
     // Check if the withdrawal would violate the minimum balance requirement
@@ -131,7 +128,7 @@ exports.requestForWithdrawal = async (req, res, next) => {
       parseFloat(piggyBox.piggyBalance) - parseFloat(amount); // Calculate remaining balance after withdrawal
 
     if (remainingBalance < 2000) {
-      await transaction.rollback();
+      //await transaction.rollback();
       return res.status(400).json({
         message:
           "Insufficient funds. Minimum balance of 2000 must be maintained after withdrawal.",
@@ -140,10 +137,10 @@ exports.requestForWithdrawal = async (req, res, next) => {
 
     // Step 4: Validate withdrawal amount
     if (!amount || amount <= 0) {
-      await transaction.rollback();
+      //await transaction.rollback();
       return res.status(400).json({ message: "Invalid withdrawal amount." });
     }
-
+    transaction = await sequelize.transaction();
     // Step 5: Deduct amount from piggyBox balance and add to unclearedBalance
     const updatedPiggyBox = await Piggybox.update(
       {
@@ -171,12 +168,12 @@ exports.requestForWithdrawal = async (req, res, next) => {
     );
 
     // Step 7: Get the last `requestId` and increment it
-    const lastRequest = await RequestWithdrawal.findOne({
-      order: [["requestId", "DESC"]], // Get the latest request ID
-      transaction,
-    });
+    // const lastRequest = await RequestWithdrawal.findOne({
+    //   order: [["requestId", "DESC"]], // Get the latest request ID
+    //   transaction,
+    // });
 
-    let newRequestId = generateRandomRequestId() // Start from 2000000 if there are no records
+    let newRequestId = generateRandomRequestId(); // Start from 2000000 if there are no records
     // if (lastRequest) {
     //   newRequestId = parseInt(lastRequest.requestId) + 1; // Increment from the last requestId
     // }
@@ -206,7 +203,9 @@ exports.requestForWithdrawal = async (req, res, next) => {
     });
   } catch (err) {
     // Rollback the transaction if any error occurs
-    if (transaction) await transaction.rollback();
+    if (transaction) {
+      await transaction.rollback();
+    }
 
     console.error(err);
     return res

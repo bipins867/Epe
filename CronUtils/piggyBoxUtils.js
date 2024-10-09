@@ -3,6 +3,7 @@ const TransactionHistory = require("../Models/PiggyBox/transactionHistory");
 const User = require("../Models/User/users");
 const { Sequelize } = require("sequelize");
 const sequelize = require("../database");
+const { sendCreditMessage } = require("../Utils/MailService");
 
 // Daily PiggyBox Interest Balance Update
 exports.dailyPiggyBoxInterestBalanceUpdate = async (userId) => {
@@ -42,7 +43,7 @@ exports.dailyPiggyBoxInterestBalanceUpdate = async (userId) => {
 
 // Add Monthly Interest Balance to Piggybox
 exports.addMonthlyInterestBalanceToPiggyBox = async (userId) => {
-  const transaction = await sequelize.transaction();
+  let transaction;
   try {
     // Fetch user
     const user = await User.findByPk(userId);
@@ -53,7 +54,6 @@ exports.addMonthlyInterestBalanceToPiggyBox = async (userId) => {
     // Fetch the user's Piggybox
     const piggybox = await Piggybox.findOne({
       where: { userId: user.id },
-      transaction,
     });
     if (!piggybox) {
       return; // Return if the Piggybox doesn't exist
@@ -70,7 +70,7 @@ exports.addMonthlyInterestBalanceToPiggyBox = async (userId) => {
     }
     // Add interest balance to piggy balance
     piggyBalance += interestBalance;
-
+    transaction = await sequelize.transaction();
     // Create Transaction History for monthly interest
     await TransactionHistory.create(
       {
@@ -90,9 +90,19 @@ exports.addMonthlyInterestBalanceToPiggyBox = async (userId) => {
 
     // Commit the transaction
     await transaction.commit();
+
+    sendCreditMessage(
+      user.phone,
+      interestBalance.toFixed(2),
+      user.candidateId,
+      "interest",
+      piggyBalance.toFixed(2)
+    );
   } catch (error) {
     // Rollback the transaction in case of error
-    await transaction.rollback();
+    if (transaction) {
+      await transaction.rollback();
+    }
     console.error("Error in addMonthlyInterestBalanceToPiggyBox:", error);
   }
 };

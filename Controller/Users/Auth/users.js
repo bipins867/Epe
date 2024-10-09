@@ -15,11 +15,11 @@ const Piggybox = require("../../../Models/PiggyBox/piggyBox");
 const sequelize = require("../../../database");
 
 function generateRandomCandidateId() {
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Only letters
-  const numbers = '0123456789'; // Only digits
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Only letters
+  const numbers = "0123456789"; // Only digits
 
-  let letterPart = '';
-  let numberPart = '';
+  let letterPart = "";
+  let numberPart = "";
 
   // Generate the 5-letter part
   for (let i = 0; i < 5; i++) {
@@ -38,7 +38,7 @@ function generateRandomCandidateId() {
 exports.userSignUp = async (req, res, next) => {
   const { userPhoneOtp, signUpToken } = req.body;
 
-  const transaction = await sequelize.transaction(); // Start the transaction
+  let transaction; // Start the transaction
 
   try {
     const token = signUpToken;
@@ -49,7 +49,7 @@ exports.userSignUp = async (req, res, next) => {
     const otpKey = phone;
 
     if (!otpStore[otpKey]) {
-      await transaction.rollback(); // Rollback transaction
+      // await transaction.rollback(); // Rollback transaction
       return res.status(400).send({ message: "OTP expired or invalid." });
     }
 
@@ -57,23 +57,23 @@ exports.userSignUp = async (req, res, next) => {
 
     // Validate OTP
     if (`${userPhoneOtp}` != `${phoneOtp}`) {
-      await transaction.rollback(); // Rollback transaction
+      // await transaction.rollback(); // Rollback transaction
       return res.status(400).send({ message: "Invalid OTP." });
     }
 
     // Find the last candidateId and increment by 1
-    
-    const newCandidateId = generateRandomCandidateId();
 
+    const newCandidateId = generateRandomCandidateId();
+    transaction = await sequelize.transaction();
     // Check if byReferallId exists and is valid
     if (byReferallId && byReferallId.trim() !== "") {
       const referral = await Referrals.findOne({
         where: { referralId: byReferallId },
-        transaction,
+        // transaction,
       });
 
       if (!referral) {
-        await transaction.rollback(); // Rollback transaction
+        // await transaction.rollback(); // Rollback transaction
         return res.status(400).send({ message: "Invalid referral ID." });
       }
 
@@ -136,7 +136,7 @@ exports.userSignUp = async (req, res, next) => {
     // If everything is successful, commit the transaction
     await transaction.commit();
 
-    await sendRegistrationTemplate(phone, newCandidateId);
+    sendRegistrationTemplate(phone, newCandidateId);
 
     return res.status(201).json({
       message: "SignUp Successful",
@@ -146,8 +146,10 @@ exports.userSignUp = async (req, res, next) => {
     });
   } catch (err) {
     // If any error occurs, rollback the transaction
-    await transaction.rollback();
-
+    console.log(err);
+    if (transaction) {
+      await transaction.rollback();
+    }
     return res
       .status(500)
       .json({ message: "Internal server error. Please try again later." });
@@ -270,8 +272,8 @@ exports.changeUserPassword = async (req, res, next) => {
       return res.status(400).send({ message: "Invalid OTP." });
     }
 
-    if(!password){
-      return res.status(400).send({message:"Invalid Password!"})
+    if (!password) {
+      return res.status(400).send({ message: "Invalid Password!" });
     }
     // Hash the new password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -332,13 +334,11 @@ exports.userOtpVerify = async (req, res, next) => {
       expiresIn: "5m",
     });
 
-    res
-      .status(200)
-      .send({
-        message: "OTP sent successfully.",
-        signUpToken: token,
-        type: "signUp",
-      });
+    res.status(200).send({
+      message: "OTP sent successfully.",
+      signUpToken: token,
+      type: "signUp",
+    });
   } catch (err) {
     console.log(err);
     return res
@@ -382,13 +382,11 @@ exports.userResetOrForgetPasswordOtpVerify = async (req, res, next) => {
       expiresIn: "5m",
     });
 
-    res
-      .status(200)
-      .send({
-        message: "OTP sent successfully.",
-        signUpToken: token,
-        type: "resetPassword",
-      });
+    res.status(200).send({
+      message: "OTP sent successfully.",
+      signUpToken: token,
+      type: "resetPassword",
+    });
   } catch (err) {
     console.log(err);
     return res
@@ -431,13 +429,11 @@ exports.userForgetCandidateIdOtpVerify = async (req, res, next) => {
       expiresIn: "5m",
     });
 
-    res
-      .status(200)
-      .send({
-        message: "OTP sent successfully.",
-        signUpToken: token,
-        type: "forgetCandidateId",
-      });
+    res.status(200).send({
+      message: "OTP sent successfully.",
+      signUpToken: token,
+      type: "forgetCandidateId",
+    });
   } catch (err) {
     console.log(err);
     return res

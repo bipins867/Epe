@@ -18,7 +18,7 @@ exports.addFunds = async (req, res, next) => {
   const { candidateId, phone, id: userId } = req.user; // Get candidate ID, mobile, and userId from req.user
 
   // Start a Sequelize transaction
-  const t = await sequelize.transaction();
+  let t;
 
   try {
     // Validate amount
@@ -29,7 +29,7 @@ exports.addFunds = async (req, res, next) => {
     // Get the Piggybox of the user to fetch balance
     const userPiggybox = await Piggybox.findOne({
       where: { UserId: userId },
-      transaction: t, // Include transaction
+      // transaction: t, // Include transaction
     });
 
     if (!userPiggybox) {
@@ -58,7 +58,7 @@ exports.addFunds = async (req, res, next) => {
       paymentResult.data.instrumentResponse.redirectInfo
     ) {
       const redirectInfo = paymentResult.data.instrumentResponse.redirectInfo; // Get the redirect URL from response
-
+      t = await sequelize.transaction();
       // Create a new Transaction
       const transaction = await Transaction.create(
         {
@@ -95,7 +95,7 @@ exports.addFunds = async (req, res, next) => {
       return res.status(200).json({ redirectInfo });
     } else {
       // If savePaymentRequest fails, rollback the transaction
-      await t.rollback();
+      //await t.rollback();
       return res
         .status(500)
         .json({ message: "Failed to process payment. Please try again." });
@@ -103,7 +103,9 @@ exports.addFunds = async (req, res, next) => {
   } catch (error) {
     console.error("Error in addFunds:", error);
     // Rollback the transaction in case of error
-    await t.rollback();
+    if (t) {
+      await t.rollback();
+    }
     return res
       .status(500)
       .json({ message: "Internal server error. Please try again later." });
@@ -121,14 +123,13 @@ exports.callbackPaymentInfo = async (req, res, next) => {
 };
 
 exports.checkPaymentStatus = async (req, res, next) => {
-  const t = await sequelize.transaction(); // Start a Sequelize transaction
+  let t; // Start a Sequelize transaction
   try {
     const { merchantTransactionId } = req.body;
 
     // Find the transaction by merchantTransactionId
     const transaction = await Transaction.findOne({
       where: { merchantTransactionId, UserId: req.user.id },
-      transaction: t,
     });
 
     if (!transaction) {
@@ -152,7 +153,6 @@ exports.checkPaymentStatus = async (req, res, next) => {
     // Get the user's Piggybox and update the balance
     const piggyBox = await Piggybox.findOne({
       where: { UserId: req.user.id },
-      transaction: t,
     });
 
     if (!piggyBox) {
@@ -161,6 +161,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
 
     // Handle COMPLETED payment
     if (response.data && response.data.state === "COMPLETED") {
+      t = await sequelize.transaction();
       // Mark the transaction as successful and verified
       transaction.isVerified = true;
       transaction.status = "Successful";
@@ -177,20 +178,20 @@ exports.checkPaymentStatus = async (req, res, next) => {
         await piggyBox.save({ transaction: t });
 
         // Referral processing
-        const user = await User.findByPk(req.user.id, { transaction: t });
+        const user = await User.findByPk(req.user.id);
         if (user.byReferallId) {
           const referral = await Referrals.findOne({
             where: { referralId: user.byReferallId },
-            transaction: t,
+            // transaction: t,
           });
 
           if (referral) {
             const referringUser = await User.findByPk(referral.UserId, {
-              transaction: t,
+              // transaction: t,
             });
             const referringPiggyBox = await Piggybox.findOne({
               where: { UserId: referringUser.id },
-              transaction: t,
+              // transaction: t,
             });
             const rewardAmount = 800;
             if (referringPiggyBox) {
@@ -228,7 +229,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
                 { transaction: t }
               );
 
-              await sendRewardMessage(referringUser.phone, rewardAmount);
+              sendRewardMessage(referringUser.phone, rewardAmount);
             }
           }
         }
@@ -257,7 +258,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
 
       // Commit the transaction
       await t.commit();
-      await sendCreditMessage(
+      sendCreditMessage(
         req.user.phone,
         transaction.amount.toFixed(2),
         req.user.candidateId,
@@ -275,7 +276,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
 
     // Handle PENDING payment status
     else if (response.data && response.data.state === "PENDING") {
-      console.log(response);
+      //console.log(response);
       // No database changes, just return the pending status
       return res.status(200).json({
         merchantTransactionId: transaction.merchantTransactionId,
@@ -288,6 +289,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
 
     // Handle FAILED payment case
     else {
+      t = await sequelize.transaction();
       transaction.isVerified = true;
       transaction.status = "Failed";
       await transaction.save({ transaction: t });
@@ -325,7 +327,9 @@ exports.checkPaymentStatus = async (req, res, next) => {
     }
   } catch (err) {
     // Rollback transaction in case of error
-    await t.rollback();
+    if (t) {
+      await t.rollback();
+    }
     console.error("Error in checkPaymentStatus:", err);
     return res.status(500).json({ message: "Internal server error." });
   }

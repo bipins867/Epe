@@ -2,7 +2,10 @@ const UserKyc = require("../../../Models/Kyc/userKyc");
 const Piggybox = require("../../../Models/PiggyBox/piggyBox");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
 const User = require("../../../Models/User/users");
-const { sendDebitMessage, sendCreditMessage } = require("../../../Utils/MailService");
+const {
+  sendDebitMessage,
+  sendCreditMessage,
+} = require("../../../Utils/MailService");
 const sequelize = require("../../../database");
 
 const { Op } = require("sequelize"); // For using comparison operators like Op.between
@@ -76,17 +79,17 @@ exports.transferMoney = async (req, res, next) => {
   const { amount, candidateId, name, userRemark } = req.body; // Extract transfer details from the request body
 
   // Start a transaction
-  const t = await sequelize.transaction();
+  let t;
 
   try {
     // Fetch sender's piggybox and KYC status
     const senderPiggybox = await Piggybox.findOne({
       where: { UserId: userId },
-      transaction: t,
+      // transaction: t,
     });
     const senderKyc = await UserKyc.findOne({
       where: { UserId: userId },
-      transaction: t,
+      //  transaction: t,
     });
 
     // Validate KYC agreement
@@ -95,8 +98,10 @@ exports.transferMoney = async (req, res, next) => {
         .status(403)
         .json({ message: "User KYC agreement not accepted." });
     }
-    if (parseFloat(amount)<=0 ){
-      return res.status(405).json({message:"Invalid Amount the value should be greter than 0."})
+    if (parseFloat(amount) <= 0) {
+      return res
+        .status(405)
+        .json({ message: "Invalid Amount the value should be greter than 0." });
     }
     // Check if the piggybox balance is sufficient after the transfer
     const newSenderBalance =
@@ -122,7 +127,7 @@ exports.transferMoney = async (req, res, next) => {
     // Start updating balances and creating transaction records
     const senderRemark = `Transferred to ${receiver.candidateId}`;
     const receiverRemark = `Received from ${req.user.candidateId}`;
-
+    t = await sequelize.transaction();
     // Update sender's piggybox balance
     await senderPiggybox.update(
       { piggyBalance: newSenderBalance },
@@ -130,7 +135,7 @@ exports.transferMoney = async (req, res, next) => {
     );
 
     // Create transaction history for sender
-    const senderTransactionHistory=await TransactionHistory.create(
+    const senderTransactionHistory = await TransactionHistory.create(
       {
         UserId: userId,
         transactionType: "customerTransfer",
@@ -144,7 +149,7 @@ exports.transferMoney = async (req, res, next) => {
     // Update receiver's piggybox balance
     const receiverPiggybox = await Piggybox.findOne({
       where: { UserId: receiver.id },
-      transaction: t,
+      //    transaction: t,
     });
     const newReceiverBalance =
       parseFloat(receiverPiggybox.piggyBalance) + parseFloat(amount);
@@ -154,7 +159,7 @@ exports.transferMoney = async (req, res, next) => {
     );
 
     // Create transaction history for receiver
-    const reciverTransactionHistory=await TransactionHistory.create(
+    const reciverTransactionHistory = await TransactionHistory.create(
       {
         UserId: receiver.id,
         transactionType: "customerTransfer",
@@ -164,7 +169,10 @@ exports.transferMoney = async (req, res, next) => {
       },
       { transaction: t }
     );
-    await sendCreditMessage(
+
+    // Commit the transaction
+    await t.commit();
+    sendCreditMessage(
       receiver.phone,
       parseFloat(amount).toFixed(2),
       receiver.candidateId,
@@ -172,20 +180,19 @@ exports.transferMoney = async (req, res, next) => {
       receiverPiggybox.piggyBalance.toFixed(2)
     );
 
-    await sendDebitMessage(
+    sendDebitMessage(
       req.user.phone,
       parseFloat(amount).toFixed(2),
       req.user.candidateId,
       `REF-35${senderTransactionHistory.id}`,
       senderPiggybox.piggyBalance.toFixed(2)
-    )
-    // Commit the transaction
-    await t.commit();
-
+    );
     return res.status(200).json({ message: "Transfer successful." });
   } catch (err) {
     // Rollback the transaction in case of error
-    await t.rollback();
+    if (t) {
+      await t.rollback();
+    }
     console.error(err);
     return res
       .status(500)
@@ -198,7 +205,7 @@ exports.getTopTransactions = async (req, res, next) => {
   try {
     // Fetch the top 10 transactions for the user
     const transactions = await TransactionHistory.findAll({
-      where: { UserId: userId ,transactionType: "customerTransfer",}, // Ensure we only get transactions for this user
+      where: { UserId: userId, transactionType: "customerTransfer" }, // Ensure we only get transactions for this user
       limit: 10, // Limit to the top 10 transactions
       order: [
         ["createdAt", "DESC"],
@@ -231,7 +238,8 @@ exports.getTransactionHistoryWithDate = async (req, res, next) => {
     // Fetch the transaction history for the user within the specified date range
     const transactions = await TransactionHistory.findAll({
       where: {
-        UserId: userId,transactionType: "customerTransfer", // Ensure we only get transactions for this user
+        UserId: userId,
+        transactionType: "customerTransfer", // Ensure we only get transactions for this user
         createdAt: {
           // Filter based on the createdAt timestamp
           [Op.between]: [new Date(fromDate), new Date(toDate)],
