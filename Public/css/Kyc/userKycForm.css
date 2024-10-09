@@ -79,147 +79,86 @@
   pointer-events: auto;
 }
 
+/* General Styles for the Form */
 .form_container {
-  position: fixed;
-  max-width: 800px;
-  width: 90%;
-  max-height: 90%;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 101;
-  background: #fff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: rgba(0, 0, 0, 0.1);
-  overflow-y: auto; /* Make the container scrollable */
+  max-width: 800px; /* Maximum width of the form container */
+  margin: auto; /* Center the form */
+  padding: 25px; /* Padding around the form */
+  background-color: #fff; /* Background color of the form */
+  border-radius: 10px; /* Rounded corners for the form */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle effect */
 }
 
-.form_close {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  color: #0b0217;
-  font-size: 22px;
-  opacity: 0.7;
-  cursor: pointer;
-}
-
+/* Header Styles */
 .form_container h2 {
-  font-size: 22px;
-  color: #0b0217;
-  text-align: center;
+  text-align: center; /* Center align the heading */
+  color: #0b0217; /* Heading color */
+  margin-bottom: 20px; /* Space below the heading */
 }
 
-.form_row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 20px;
+/* Input Box Styles */
+.input-box {
+  position: relative; /* Position relative for absolute positioning of icons */
+  margin-top: 20px; /* Space above each input */
 }
 
-.input_box,
+.input-box i {
+  position: absolute; /* Absolute positioning for icons */
+  left: 20px; /* Distance from the left */
+  top: 50%; /* Center vertically */
+  width: 20px;
+  border: none;
+  font-size: 18px; /* Icon size */
+  color: #333; /* Icon color */
+}
+
+/* Input Field Styles */
+.input-box input {
+  height: 45px; /* Height of input fields */
+  width: 100%; /* Full width */
+  border: 1px solid #aaaaaa; /* Border color */
+  outline: none; /* Remove outline on focus */
+  padding-left: 40px; /* Space for the icon */
+  padding-right: 10px; /* Padding on the right */
+  color: #333; /* Input text color */
+  transition: all 0.2s ease; /* Smooth transition for focus */
+  border-radius: 5px; /* Rounded corners for inputs */
+}
+
+/* Input Field Focus Styles */
+.input-box input:focus {
+  border-color: #00056B; /* Change border color on focus */
+}
+
+/* File Input Styles */
 .file_input_box {
-  position: relative;
-  margin-top: 20px;
-  width: 100%;
+  margin-top: 20px; /* Space above file input boxes */
 }
 
-.input_box i.user,
-.input_box i.phone,
-.input_box i.email,
-.input_box i.calendar,
-.input_box i.map-marker,
-.input_box i.id-card,
-.input_box i.briefcase,
-.input_box i.card-atm,
-.input_box i.credit-card {
-  left: 0;
+/* Button Styles */
+.btn {
+  background-color: #00056B; /* Button background color */
+  color: white; /* Button text color */
+  border: none; /* No border */
+  padding: 10px; /* Padding around the button */
+  border-radius: 5px; /* Rounded corners for the button */
+  cursor: pointer; /* Pointer cursor on hover */
 }
 
+/* Button Hover Styles */
+.btn:hover {
+  background-color: #0056b3; /* Darker color on hover */
+}
+
+/* Responsive Design */
 @media (min-width: 768px) {
-  .input_box,
-  .file_input_box {
+  .input-box {
     width: calc(50% - 10px); /* Two fields per row on larger screens */
   }
 }
 
-.input_box input,
-.file_input_box input {
-  height: 40px;
-  width: 100%;
-  border: none;
-  outline: none;
-  padding: 0 30px;
-  color: #333;
-  transition: all 0.2s ease;
-  border-bottom: 1.5px solid #aaaaaa;
-}
-
-.file_input_box label {
-  font-size: 14px;
-  color: #707070;
-}
-
-.input_box input:focus,
-.file_input_box input:focus {
-  border-color: #00056B;
-}
-
-.input_box i {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 20px;
-  color: #707070;
-}
-
-.form_container .button {
-  background: #00056B;
-  margin-top: 30px;
-  width: 100%;
-  padding: 10px 0;
-  border-radius: 10px;
-}
-
-.kyc_form {
-  text-align: center;
-}
-
-/* Responsive Adjustments */
 @media (max-width: 768px) {
-  .header {
-    padding: 0 10px;
-  }
-
-  .form_container {
-    width: 95%;
-    max-height: 85%;
-    padding: 15px;
-  }
-
-  .form_container h2 {
-    font-size: 18px;
-  }
-
-  .input_box,
-  .file_input_box {
-    width: 100%;
-  }
-
-  .input_box input,
-  .file_input_box input {
-    padding: 0 20px;
-  }
-
-  .button {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
-
-  .form_close {
-    top: 5px;
-    right: 10px;
-    font-size: 18px;
+  .input-box {
+    width: 100%; /* Full width on smaller screens */
   }
 }

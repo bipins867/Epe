@@ -27,6 +27,11 @@
     transform: scale(1.02);
 }
 
+
+.admin{
+    width: 600px;
+}
+
 .dashboard-body {
     background: #EEEEEE;
     padding-top: 20px;
@@ -56,6 +61,24 @@ a {
     background: linear-gradient(#0e38f1, #021581);
     border-radius: 13px 13px 0 0;
     margin-bottom: 7px;
+    
+}
+
+.print-icon {
+    right: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #00056B; /* Change to your preferred color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.print-icon:hover {
+    background-color: #0056b3; /* Darker shade on hover */
 }
 
 .footer-content {

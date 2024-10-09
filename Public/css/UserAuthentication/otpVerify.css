@@ -2,7 +2,7 @@
 
 /* Header Styles */
 .header {
-  position: fixed;
+  position: absolute;
   height: 80px; /* Keep the same height as in login.css */
   width: auto;
   z-index: 100;
@@ -68,7 +68,7 @@
 }
 
 .form_container {
-  position: fixed;
+  position: absolute;
   max-width: 320px;
   width: 90%;
   top: 50%;
@@ -89,3 +89,32 @@
   pointer-events: auto;
   transform: translate(-50%, -50%) scale(1);
 }
+
+.input_box {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.input_box input {
+  width: 100%;
+  padding-left: 35px; /* Adjust padding to make space for the icon */
+  padding-right: 15px; /* Optional for better right spacing */
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.input_box i {
+  position: absolute;
+  left: 10px; /* Adjust to move the icon to the left of the input */
+  top: 50%;
+  transform: translateY(-50%);
+  color: #333; /* Optional: color of the icon */
+  font-size: 18px; /* Icon size */
+}
+/* 
+.input_box i.phone {
+}
+
+.input_box i.password {
+} */
