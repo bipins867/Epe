@@ -12,6 +12,7 @@ const ReferredUser = require("../Models/PiggyBox/referredUsers");
 const { sendRewardMessage, sendCreditMessage } = require("../Utils/MailService");
 
 exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
+  
   const t = await sequelize.transaction(); // Start a Sequelize transaction
   try {
     // Find the transaction by merchantTransactionId

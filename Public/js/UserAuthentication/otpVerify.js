@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const data = response.data;
         console.log("What happend just now!");
         if (response.status === 200) {
-          const message = `Candidate Id:-${data.candidateId}\nName :- ${data.name}`;
+          const message = `Customer Id:-${data.candidateId}\nName :- ${data.name}`;
           alert(message);
           window.location.replace("/user/auth/login");
         }

@@ -23,3 +23,4 @@ cron.schedule('0 1 1 * *', () => {
 
 //dailyInterestAdder();
 //monthlyInterestBalanceUpdater()
+//paymentVerifier();

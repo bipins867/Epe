@@ -21,12 +21,11 @@ exports.paymentVerifier = async () => {
         time: { [Sequelize.Op.lt]: oneHourAgo },
       },
     });
-
     // For each pending transaction, verify payment status
     for (const transaction of pendingTransactions) {
       await verifyPaymentStatus(
         transaction.merchantTransactionId,
-        transaction.merchantUserId
+        transaction.UserId
       );
     }
   } catch (err) {
