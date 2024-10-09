@@ -112,7 +112,7 @@
   width: 100%;
   border: none;
   outline: none;
-  padding: 0 30px;
+  padding: 20 30px;
   color: #333;
   transition: all 0.2s ease;
   border-bottom: 1.5px solid #aaaaaa;
@@ -125,7 +125,7 @@
 .input_box i {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  left: 20px;
   font-size: 20px;
   color: #707070;
 }
