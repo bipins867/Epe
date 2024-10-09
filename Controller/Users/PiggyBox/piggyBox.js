@@ -145,9 +145,10 @@ exports.checkPaymentStatus = async (req, res, next) => {
     // Proceed to check payment status from PhonePay API
     let response = await verifyPaymentRequest(merchantTransactionId);
     response = response.data;
-    console.log(response);
+
+    // Handle COMPLETED payment
     if (response.data && response.data.state === "COMPLETED") {
-      // Update transaction to mark as verified and successful
+      // Mark the transaction as successful and verified
       transaction.isVerified = true;
       transaction.status = "Successful";
       await transaction.save({ transaction: t });
@@ -162,16 +163,16 @@ exports.checkPaymentStatus = async (req, res, next) => {
         throw new Error("User's Piggybox not found.");
       }
 
-      const newBalance =
-        parseFloat(piggyBox.piggyBalance) + parseFloat(transaction.amount);
+      const newBalance = parseFloat(piggyBox.piggyBalance) + parseFloat(transaction.amount);
       piggyBox.piggyBalance = newBalance;
       await piggyBox.save({ transaction: t });
 
-      // If it's the first time the piggyBox is funded, check referral logic
+      // Handle referral logic if first-time funding
       if (!piggyBox.isFundedFirst) {
         piggyBox.isFundedFirst = true;
         await piggyBox.save({ transaction: t });
 
+        // Referral processing
         const user = await User.findByPk(req.user.id, { transaction: t });
         if (user.byReferallId) {
           const referral = await Referrals.findOne({
@@ -180,25 +181,20 @@ exports.checkPaymentStatus = async (req, res, next) => {
           });
 
           if (referral) {
-            const referringUser = await User.findByPk(referral.UserId, {
-              transaction: t,
-            });
+            const referringUser = await User.findByPk(referral.UserId, { transaction: t });
             const referringPiggyBox = await Piggybox.findOne({
               where: { UserId: referringUser.id },
               transaction: t,
             });
 
             if (referringPiggyBox) {
-              const updatedBalance =
-                parseFloat(referringPiggyBox.piggyBalance) + 800;
+              const updatedBalance = parseFloat(referringPiggyBox.piggyBalance) + 800;
               referringPiggyBox.piggyBalance = updatedBalance;
               await referringPiggyBox.save({ transaction: t });
 
-              // Decrease pendingReferrals for the referring user
-              referral.pendingReferrals = referral.pendingReferrals - 1;
+              referral.pendingReferrals -= 1;
               await referral.save({ transaction: t });
 
-              // Update ReferredUser status and date of completion
               await ReferredUser.update(
                 {
                   status: "completed",
@@ -210,7 +206,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
                 }
               );
 
-              // Create a new transaction history record for the referring user
+              // Create a transaction history for the referring user
               await TransactionHistory.create(
                 {
                   transactionType: "referral",
@@ -229,13 +225,19 @@ exports.checkPaymentStatus = async (req, res, next) => {
         }
       }
 
-      // Create a new transaction history record for the user
+      // Delete old TransactionHistory before creating a new one
+      await TransactionHistory.destroy({
+        where: { merchantTransactionId: transaction.merchantTransactionId },
+        transaction: t,
+      });
+
+      // Create a new transaction history for the user
       await TransactionHistory.create(
         {
           transactionType: "paymentGateway",
           merchantUserId: transaction.merchantUserId,
           merchantTransactionId: transaction.merchantTransactionId,
-          remark: `Payment Successful of amount ${transaction.amount}`,
+          remark: `Payment Successful of amount ₹${transaction.amount}`,
           credit: transaction.amount,
           debit: 0,
           balance: newBalance,
@@ -254,13 +256,33 @@ exports.checkPaymentStatus = async (req, res, next) => {
         amount: transaction.amount,
         time: transaction.time,
       });
-    } else {
-      // Handle failed payment case
+    } 
+    
+    // Handle PENDING payment status
+    else if (response.data && response.data.state === "PENDING") {
+      // No database changes, just return the pending status
+      return res.status(200).json({
+        merchantTransactionId: transaction.merchantTransactionId,
+        status: "Pending",
+        message: "Your request is in pending state.",
+        amount: transaction.amount,
+        time: transaction.time,
+      });
+    }
+
+    // Handle FAILED payment case
+    else {
       transaction.isVerified = true;
       transaction.status = "Failed";
       await transaction.save({ transaction: t });
 
-      // Create a new transaction history record for failed payment
+      // Delete old TransactionHistory before creating a new one
+      await TransactionHistory.destroy({
+        where: { merchantTransactionId: transaction.merchantTransactionId },
+        transaction: t,
+      });
+
+      // Create a new transaction history for failed payment
       await TransactionHistory.create(
         {
           transactionType: "paymentGateway",
@@ -270,10 +292,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
           credit: 0,
           debit: 0,
           UserId: req.user.id,
-          balance: await Piggybox.findOne({
-            where: { UserId: req.user.id },
-            transaction: t,
-          }).then((piggyBox) => piggyBox.piggyBalance), // Get current balance without modifying it
+          balance: piggyBox.piggyBalance, // Get the current balance without modifying it
         },
         { transaction: t }
       );
