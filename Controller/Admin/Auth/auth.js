@@ -27,7 +27,7 @@ exports.adminLogin = async (req, res, next) => {
       if (isMatch) {
         // Generate a JWT token
         const token = jwt.sign({ id: admin.id }, process.env.JWT_SECRET_KEY, {
-          expiresIn: "2h", // Optional: specify token expiration time
+          expiresIn: "5m", // Optional: specify token expiration time
         });
 
         return res
