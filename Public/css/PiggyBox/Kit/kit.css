@@ -57,6 +57,14 @@ a {
     text-decoration: none;
 }
 
+
+.identity-info{
+    display: flex;
+    width: 100%;
+    padding-right: 20px;
+    justify-content: space-between;
+}
+
 .welcome-heading {
     background: linear-gradient(#0e38f1, #021581);
     border-radius: 13px 13px 0 0;

@@ -49,11 +49,14 @@
 
     <!-- OTP Form -->
     <section class="home show">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6">
       <div class="form_container">
         <div class="form otp_form">
           <form action="#">
             <h2>OTP Verification</h2>
-            <div class="input_box">
+            <div class="input_box mb-3">
               <input
                 type="text"
                 placeholder="Enter Phone OTP"
@@ -63,9 +66,9 @@
               />
               <i class="uil uil-phone-alt phone"></i>
             </div>
-            <div id="password-section" style="display: none">
-              <div class="input_box">
-                <input
+            <div id="password-section-1" style="display:none">
+              <div class="input_box mb-3">
+                 <input
                   type="password"
                   id="password"
                   name="password"
@@ -73,11 +76,13 @@
                   required
                 />
                 <i class="uil uil-lock password"></i>
-                <i class="uil uil-eye-slash-alt pw_hide"></i>
-              </div>
+                <i class="uil uil-eye-slash-alt pw_hide"></i>              
+             </div>
+             </div>
               <!-- Confirm Password -->
-              <div class="input_box">
-                <input
+              <div id="password-section-2" style="display:none">
+              <div class="input_box mb-3">
+                 <input
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
@@ -87,12 +92,16 @@
                 <i class="uil uil-lock password"></i>
                 <i class="uil uil-eye-slash-alt pw_hide"></i>
               </div>
+              </div>  
             </div>
             <button class="button" id="otp-submit">Submit OTP</button>
             <button class="button" id="resendOtp" disabled>
               Resend OTP <span id="timer">10</span>
             </button>
           </form>
+        </div>
+      </div>
+          </div>
         </div>
       </div>
     </section>

@@ -102,8 +102,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function togglePasswordSectionView(cond) {
   if (cond) {
-    document.getElementById("password-section").style.display = "flex";
+    document.getElementById("password-section-1").style.display = "flex";
+    document.getElementById("password-section-2").style.display = "flex";
   } else {
-    document.getElementById("password-section").style.display = "none";
+    document.getElementById("password-section-1").style.display = "none";
+    document.getElementById("password-section-2").style.display = "none";
   }
 }

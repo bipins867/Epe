@@ -61,47 +61,47 @@
           <!-- Sidebar -->
           <div class="sidebar" id="toggle-bar">
             <!-- Sidebar Menu Items -->
-            <a href="/user/piggyBox/kit"
+            <a class="menu-item" href="/user/piggyBox/kit"
               ><div class="sidebar-menu text-center">
                 <i class="fa-solid fa-box"></i> KIT
               </div></a
             >
-            <a href="/user/piggyBox/"
+            <a class="menu-item" href="/user/piggyBox/"
               ><div class="sidebar-menu text-center">
                 <i class="fa-solid fa-piggy-bank"></i> PIGGYBOX
               </div></a
             >
-            <a href="/user/piggyBox/referral"
+            <a class="menu-item" href="/user/piggyBox/referral"
               ><div class="sidebar-menu text-center">
                 <i class="fas fa-user-friends"></i> EPE REFERRAL PROGRAM
               </div></a
             >
-            <a href="/user/piggyBox/loans"
+            <a class="menu-item" href="/user/piggyBox/loans"
               ><div class="sidebar-menu text-center">
                 <i class="fas fa-hand-holding-usd"></i> LOANS
               </div></a
             >
-            <a href="/user/piggyBox/requestWithdrawal"
+            <a class="menu-item" href="/user/piggyBox/requestWithdrawal"
               ><div class="sidebar-menu text-center">
                 <i class="fa-solid fa-wallet"></i> REQUEST WITHDRAWAL
               </div></a
             >
-            <a href="/user/piggyBox/transferMoney"
+            <a class="menu-item"  href="/user/piggyBox/transferMoney"
               ><div class="sidebar-menu text-center">
                 <i class="fa-solid fa-money-bill-transfer"></i> TRANSFER MONEY
               </div></a
             >
-            <a href="/user/piggyBox/settlement"
+            <a class="menu-item" href="/user/piggyBox/settlement"
               ><div class="sidebar-menu text-center">
                 <i class="fa-solid fa-handshake"></i> SETTLEMENT
               </div></a
             >
-            <a href="/user/piggyBox/savedAddress"
+            <a class="menu-item" href="/user/piggyBox/savedAddress"
               ><div class="sidebar-menu text-center">
                 <i class="fas fa-address-card"></i> SAVED ADDRESS
               </div></a
             >
-            <a href="/user/dashboard"
+            <a class="menu-item" href="/user/dashboard"
               ><div class="sidebar-menu text-center">
                 <i class="fa-solid fa-user-check"></i> KYC
               </div></a
@@ -140,5 +140,20 @@
     ></script>
     <script src="/js/Utils/utils.js"></script>
     <script src="/js/PiggyBox/Loans/loans.js"></script>
+    <script>
+       const anchors = document.querySelectorAll("a.menu-item"); // Select all anchor tags with class 'abc'
+      const currentUrl = window.location.href; // Get the current window URL
+
+      anchors.forEach((anchor) => {
+        if (anchor.href === currentUrl) {
+          // Check if anchor's href matches the current URL
+          // anchor.style.color = "red"; // Change the color to red (or any color you want)
+          const childDiv = anchor.querySelector('div');  // Find the div inside the anchor
+            if (childDiv) {                                   // If the div exists, change its background color
+                childDiv.style.background = '#0a0a7d';    // Change to yellow or any color you like
+            }
+        }
+      });
+    </script>
   </body>
 </html>
