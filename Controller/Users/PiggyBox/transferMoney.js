@@ -132,7 +132,7 @@ exports.transferMoney = async (req, res, next) => {
     await TransactionHistory.create(
       {
         UserId: userId,
-        transactionType: "candidateTransfer",
+        transactionType: "customerTransfer",
         remark: senderRemark,
         debit: amount,
         balance: newSenderBalance,
@@ -183,7 +183,7 @@ exports.getTopTransactions = async (req, res, next) => {
   try {
     // Fetch the top 10 transactions for the user
     const transactions = await TransactionHistory.findAll({
-      where: { UserId: userId }, // Ensure we only get transactions for this user
+      where: { UserId: userId ,transactionType: "customerTransfer",}, // Ensure we only get transactions for this user
       limit: 10, // Limit to the top 10 transactions
       order: [
         ["createdAt", "DESC"],
@@ -216,7 +216,7 @@ exports.getTransactionHistoryWithDate = async (req, res, next) => {
     // Fetch the transaction history for the user within the specified date range
     const transactions = await TransactionHistory.findAll({
       where: {
-        UserId: userId, // Ensure we only get transactions for this user
+        UserId: userId,transactionType: "customerTransfer", // Ensure we only get transactions for this user
         createdAt: {
           // Filter based on the createdAt timestamp
           [Op.between]: [new Date(fromDate), new Date(toDate)],

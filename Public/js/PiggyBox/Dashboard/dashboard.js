@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function updateTransactionHistory(transactions) {
     const transactionTable = document.getElementById("transaction-table");
     transactionTable.innerHTML = ""; // Clear existing transactions
-  
+    
     transactions.forEach(transaction => {
       // Extract date and time from the createdAt field
       const createdAt = new Date(transaction.createdAt);
@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       row.innerHTML = `
         <td>${date}</td>
         <td>${time}</td>
+        <td>${transaction.merchantTransactionId ||'N/A'}</td>
         <td>${transaction.transactionType || 'N/A'}</td> <!-- Show transaction type -->
         <td>${transaction.remark || 'No description'}</td> <!-- Show remark as description -->
         <td>${transaction.credit ? `₹${transaction.credit}` : '₹0'}</td> <!-- Show credit -->
