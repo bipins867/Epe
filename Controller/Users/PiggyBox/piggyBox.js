@@ -145,7 +145,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
     // Proceed to check payment status from PhonePay API
     let response = await verifyPaymentRequest(merchantTransactionId);
     response = response.data;
-
+    
     // Handle COMPLETED payment
     if (response.data && response.data.state === "COMPLETED") {
       // Mark the transaction as successful and verified
@@ -260,6 +260,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
     
     // Handle PENDING payment status
     else if (response.data && response.data.state === "PENDING") {
+      console.log(response);
       // No database changes, just return the pending status
       return res.status(200).json({
         merchantTransactionId: transaction.merchantTransactionId,
