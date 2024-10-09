@@ -58,6 +58,12 @@ a {
     margin-bottom: 7px;
 }
 
+.container{
+    margin-top: 30px;
+    text-align: center;
+    border: #525253;
+}
+
 .footer-content {
     text-align: center;
     padding: 10px 0;
