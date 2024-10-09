@@ -44,37 +44,67 @@ exports.generateOtp = (min, max) => {
   return parseInt(data);
 };
 
-exports.sendOtp = async (mobileNumber, otp) => {
+async function sendSms(mobileNumber, message) {
   const apikey = process.env.SMS_API_KEY;
   const senderid = process.env.SMS_SENDER_ID;
-  let message = process.env.SMS_OTP_TEMPLETE;
-  const number = mobileNumber;
-  
-  message = message.replace("{otp}", otp);
-  
-  const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${number}&message=${message}&format=json`;
-  const response= await axios.get(url);
- 
-  //console.log(response.data);
-  return response;
-};
-
-
-
-exports.sendRegistrationTemplate=async (mobileNumber, candidateId) => {
-  const apikey = process.env.SMS_API_KEY;
-  const senderid = process.env.SMS_SENDER_ID;
-  let message = process.env.SMS_REGISTER_TEMPLATE;
-  const number = mobileNumber;
-  
-  message = message.replace("{candidate_id}", candidateId);
-  //message = message.replace("{password}", '*********');
-  
-  
-  const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${number}&message=${message}&format=json`;
-  const response= await axios.get(url);
+  const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${mobileNumber}&message=${message}&format=json`;
+  const response = await axios.get(url);
   // console.log(url)
   // console.log("*************")
   // console.log(response.data);
   return response;
+}
+
+exports.sendOtp = async (mobileNumber, otp) => {
+  let message = process.env.SMS_OTP_TEMPLETE;
+  
+  message = message.replace("{otp}", otp);
+
+  return await sendSms(mobileNumber, message);
 };
+
+exports.sendRegistrationTemplate = async (mobileNumber, candidateId) => {
+  let message = process.env.SMS_REGISTER_TEMPLATE;
+  
+  message = message.replace("{candidate_id}", candidateId);
+
+  return await sendSms(mobileNumber, message);
+};
+
+exports.sendKycSuccessfullMessage = async (mobileNumber) => {
+  let message = process.env.SMS_KYC_SUCCESSFULL;
+
+  return await sendSms(mobileNumber, message);
+};
+
+exports.sendRewardMessage=async(mobileNumber,reward)=>{
+  let message=process.env.SMS_REWARD;
+  
+  message = message.replace("{reward}", reward);
+
+  return await sendSms(mobileNumber,message);
+}
+
+exports.sendCreditMessage=async(mobileNumber,amount,customer_id,reference,available_balance)=>{
+  let message=process.env.SMS_CREDIT;
+  
+  message = message.replace("{amount}", amount);
+  message = message.replace("{customer_id}", customer_id);
+  message = message.replace("{reference}", reference);
+  message = message.replace("{available_balance}", available_balance);
+  
+
+  return await sendSms(mobileNumber,message);
+}
+
+exports.sendDebitMessage=async(mobileNumber,amount,customer_id,reference,available_balance)=>{
+  let message=process.env.SMS_DEBIT;
+  
+  message = message.replace("{amount}", amount);
+  message = message.replace("{customer_id}", customer_id);
+  message = message.replace("{reference}", reference);
+  message = message.replace("{available_balance}", available_balance);
+  
+
+  return await sendSms(mobileNumber,message);
+}

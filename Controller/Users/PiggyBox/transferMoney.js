@@ -2,6 +2,7 @@ const UserKyc = require("../../../Models/Kyc/userKyc");
 const Piggybox = require("../../../Models/PiggyBox/piggyBox");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
 const User = require("../../../Models/User/users");
+const { sendDebitMessage, sendCreditMessage } = require("../../../Utils/MailService");
 const sequelize = require("../../../database");
 
 const { Op } = require("sequelize"); // For using comparison operators like Op.between
@@ -129,7 +130,7 @@ exports.transferMoney = async (req, res, next) => {
     );
 
     // Create transaction history for sender
-    await TransactionHistory.create(
+    const senderTransactionHistory=await TransactionHistory.create(
       {
         UserId: userId,
         transactionType: "customerTransfer",
@@ -153,7 +154,7 @@ exports.transferMoney = async (req, res, next) => {
     );
 
     // Create transaction history for receiver
-    await TransactionHistory.create(
+    const reciverTransactionHistory=await TransactionHistory.create(
       {
         UserId: receiver.id,
         transactionType: "customerTransfer",
@@ -163,7 +164,21 @@ exports.transferMoney = async (req, res, next) => {
       },
       { transaction: t }
     );
+    await sendCreditMessage(
+      receiver.phone,
+      amount,
+      receiver.candidateId,
+      `REF-35${reciverTransactionHistory.id}`,
+      receiverPiggybox.piggyBalance.toFixed(2)
+    );
 
+    await sendDebitMessage(
+      req.user.phone,
+      amount,
+      req.user.candidateId,
+      `REF-35${senderTransactionHistory.id}`,
+      senderPiggybox.piggyBalance.toFixed(2)
+    )
     // Commit the transaction
     await t.commit();
 

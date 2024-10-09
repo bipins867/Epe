@@ -8,6 +8,10 @@ const { Sequelize } = require("sequelize");
 const User = require("../../../Models/User/users");
 const Referrals = require("../../../Models/PiggyBox/referrals");
 const ReferredUser = require("../../../Models/PiggyBox/referredUsers");
+const {
+  sendRewardMessage,
+  sendCreditMessage,
+} = require("../../../Utils/MailService");
 
 exports.addFunds = async (req, res, next) => {
   const { amount } = req.body; // Get amount from request body
@@ -33,7 +37,7 @@ exports.addFunds = async (req, res, next) => {
     }
 
     if (!userPiggybox.isFundedFirst) {
-      if (amount < 1) {
+      if (amount < 2000) {
         return res.status(403).json({
           message:
             "First time payment must be greater than or equal to ₹2000.00",
@@ -188,10 +192,10 @@ exports.checkPaymentStatus = async (req, res, next) => {
               where: { UserId: referringUser.id },
               transaction: t,
             });
-
+            const rewardAmount = 800;
             if (referringPiggyBox) {
               const updatedBalance =
-                parseFloat(referringPiggyBox.piggyBalance) + 800;
+                parseFloat(referringPiggyBox.piggyBalance) + rewardAmount;
               referringPiggyBox.piggyBalance = updatedBalance;
               await referringPiggyBox.save({ transaction: t });
 
@@ -223,6 +227,8 @@ exports.checkPaymentStatus = async (req, res, next) => {
                 },
                 { transaction: t }
               );
+
+              await sendRewardMessage(referringUser.phone, rewardAmount);
             }
           }
         }
@@ -235,7 +241,7 @@ exports.checkPaymentStatus = async (req, res, next) => {
       });
 
       // Create a new transaction history for the user
-      await TransactionHistory.create(
+      const thistory = await TransactionHistory.create(
         {
           transactionType: "paymentGateway",
           merchantUserId: transaction.merchantUserId,
@@ -251,7 +257,13 @@ exports.checkPaymentStatus = async (req, res, next) => {
 
       // Commit the transaction
       await t.commit();
-
+      await sendCreditMessage(
+        req.user.phone,
+        transaction.amount,
+        req.user.candidateId,
+        `REF-35${thistory.id}`,
+        piggyBox.piggyBalance.toFixed(2)
+      );
       // Respond with success
       return res.status(200).json({
         merchantTransactionId: transaction.merchantTransactionId,

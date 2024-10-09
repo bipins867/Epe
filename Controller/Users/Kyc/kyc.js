@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const UserKyc = require("../../../Models/Kyc/userKyc");
 const { Op } = require("sequelize");
+const { sendKycSuccessfullMessage } = require("../../../Utils/MailService");
 
 exports.postFormSubmit = async (req, res, next) => {
   try {
@@ -188,6 +189,8 @@ exports.acceptUserAgreement = async (req, res, next) => {
     userKyc.userAggreementAccepted = true;
     userKyc.timeOfUserAggreementAccept = formattedDateTime;
     await userKyc.save();
+
+    await sendKycSuccessfullMessage(req.user.phone)
 
     // Respond with a success message
     return res.status(200).json({
