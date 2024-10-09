@@ -11,7 +11,7 @@ const db = require("./database");
 
 require("./Models/setModels");
 require("./Server-Socket/server");
-require("./cronTimerFunctionController");
+//require("./cronTimerFunctionController");
 
 
 
