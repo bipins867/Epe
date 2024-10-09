@@ -12,6 +12,9 @@ exports.userAuthentication = async (req, res, next) => {
     const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const user = await User.findByPk(payload.id);
 
+    if(!user){
+      res.status(404).json({error:"User not found!"})
+    }
     req.user = user;
 
     next();

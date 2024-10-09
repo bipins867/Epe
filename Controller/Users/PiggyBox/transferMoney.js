@@ -156,7 +156,7 @@ exports.transferMoney = async (req, res, next) => {
     await TransactionHistory.create(
       {
         UserId: receiver.id,
-        transactionType: "candidateTransfer",
+        transactionType: "customerTransfer",
         remark: receiverRemark,
         credit: amount,
         balance: newReceiverBalance,
