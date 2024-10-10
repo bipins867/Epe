@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const cron = require('node-cron');
 const { paymentVerifier, dailyInterestAdder, monthlyInterestBalanceUpdater } = require('./CronUtils/cronFunctions');
 
@@ -21,6 +23,10 @@ cron.schedule('0 1 1 * *', () => {
 });
 
 
+// cron.schedule('* * * * *',()=>{
+//   console.log("Working the scheduler")
+//   paymentVerifier();
+// })
 //dailyInterestAdder();
 //monthlyInterestBalanceUpdater()
 //paymentVerifier();
