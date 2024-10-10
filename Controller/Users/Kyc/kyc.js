@@ -18,7 +18,7 @@ exports.postFormSubmit = async (req, res, next) => {
 
     // Extracting and formatting the phone
     const phone = req.body.phone;
-
+    const candidateId=req.user.candidateId;
     // Base directory for storing files
     const baseDir = path.join(
       __dirname,
@@ -26,9 +26,9 @@ exports.postFormSubmit = async (req, res, next) => {
       "..",
       "..",
       "CustomerFiles",
-      phone
+      candidateId
     );
-    const baseUrl = "/files/" + phone;
+    const baseUrl = "/files/" + candidateId;
 
     // Create directories if they don't exist
     const adharDir = path.join(baseDir, "Adhar");
@@ -67,11 +67,11 @@ exports.postFormSubmit = async (req, res, next) => {
 
     // Saving files with appropriate names
     const aadharFrontUrl =
-      adharDirUrl + saveFile(aadharFront, adharDir, `${phone}_front`);
+      adharDirUrl + saveFile(aadharFront, adharDir, `${candidateId}_front`);
     const aadharBackUrl =
-      adharDirUrl + saveFile(aadharBack, adharDir, `${phone}_back`);
-    const panUrl = panDirUrl + saveFile(panFile, panDir, `${phone}_pan`);
-    const userUrl = userDirUrl + saveFile(userImage, userDir, `${phone}_user`);
+      adharDirUrl + saveFile(aadharBack, adharDir, `${candidateId}_back`);
+    const panUrl = panDirUrl + saveFile(panFile, panDir, `${candidateId}_pan`);
+    const userUrl = userDirUrl + saveFile(userImage, userDir, `${candidateId}_user`);
 
     const obj = { ...req.body, aadharFrontUrl, aadharBackUrl, panUrl, userUrl };
 

@@ -5,6 +5,7 @@ const {
   checkValidationErrors,
   validateLogin,
   validateSignUp,
+  validateChangePassword,
 } = require("../../../Middleware/validator");
 
 const router = express.Router();
@@ -30,7 +31,7 @@ router.post(
   userAuthenticationController.userResetOrForgetPasswordOtpVerify
 );
 router.post(
-  "/changeUserPassword",
+  "/changeUserPassword",validateChangePassword,checkValidationErrors,
   userAuthenticationController.changeUserPassword
 );
 

@@ -12,9 +12,21 @@ exports.userAuthentication = async (req, res, next) => {
     const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
     const user = await User.findByPk(payload.id);
 
-    if(!user){
-      res.status(404).json({error:"User not found!"})
+    if (!user) {
+      return res.status(404).json({ error: "User not found!" });
     }
+
+    if (user.isBlocked) {
+      return res.status(402).json({
+        error:
+          "User Account is blocked. Please contact customer support for any query!",
+      });
+    }
+
+    if (!user.isActive) {
+      return res.status(402).json({ error: "User account is not Active!" });
+    }
+
     req.user = user;
 
     next();
@@ -54,7 +66,6 @@ exports.adminAuthentication = async (req, res, next) => {
     // Proceed to the next middleware
     next();
   } catch (err) {
-    
     return res.status(503).json({ error: "Invalid Signature!" });
   }
 };
@@ -114,7 +125,7 @@ exports.roleAuthentication = async (req, res, next) => {
   try {
     const admin = req.admin; // The admin object from the request
     const roleId = req.roleId; // The role ID to check against
-    
+
     // If the admin type is SSA or SA, bypass verification
     if (admin.adminType === "SSA" || admin.adminType === "SA") {
       return next(); // Directly proceed to the next middleware

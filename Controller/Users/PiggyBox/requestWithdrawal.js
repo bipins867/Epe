@@ -26,7 +26,7 @@ function generateRandomRequestId() {
   // Combine both parts
   return letterPart + numberPart;
 }
-
+exports.generateRandomRequestId=generateRandomRequestId;
 exports.requestWithdrawalInfo = async (req, res, next) => {
   try {
     const userId = req.user.id; // Get the user ID from the request

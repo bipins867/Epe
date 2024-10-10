@@ -9,10 +9,33 @@ const User = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    adminId:{
+      type:Sequelize.STRING,
+      allowNull:true,
+    },
+    adminRemark:{
+      type:Sequelize.STRING,
+      allowNull:true
+    },
+    isBlocked: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
     isActive: {
       type: Sequelize.BOOLEAN,
       allowNull: true,
       defaultValue: true,
+    },
+    isRequestedClouser: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
+    isByReferralUsed: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
     },
     candidateId: {
       type: Sequelize.STRING,

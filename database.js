@@ -1,6 +1,14 @@
 const Sequelize = require("sequelize");
 
+// Custom logging function for errors only
+const logErrors = (msg) => {
+  if (msg instanceof Error) {
+    console.error("Sequelize Error: ", msg);
+  }
+};
+
 console.log(`Database connected : ${process.env.DATABASE_NAME}`);
+
 module.exports = new Sequelize(
   process.env.DATABASE_NAME,
   process.env.DATABASE_USER,
@@ -8,6 +16,6 @@ module.exports = new Sequelize(
   {
     dialect: "mysql",
     host: process.env.DATABASE_HOST,
-    logging: console.log,
+    logging: logErrors, // Log errors only in production
   }
 );
