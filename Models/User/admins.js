@@ -9,6 +9,11 @@ const Admin = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    isDeactivated: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: false,
+    },
     userName: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -25,13 +30,12 @@ const Admin = sequelize.define(
       type: Sequelize.BOOLEAN,
       allowNull: false,
     },
-    email:{
-      type:Sequelize.STRING,
-      
+    email: {
+      type: Sequelize.STRING,
     },
-    name:{
-      type:Sequelize.STRING
-    }
+    name: {
+      type: Sequelize.STRING,
+    },
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

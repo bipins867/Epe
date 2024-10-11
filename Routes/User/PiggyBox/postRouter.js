@@ -2,7 +2,7 @@ const express = require("express");
 
 const blockUnblockUserController = require("../../../Controller/Users/PiggyBox/blockUnblockUser");
 const piggyBoxController = require("../../../Controller/Users/PiggyBox/piggyBox");
-const { userAuthentication } = require("../../../Middleware/auth");
+const { userAuthentication, userInfoVerification } = require("../../../Middleware/auth");
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ router.post(
   userAuthentication,
   piggyBoxController.checkPaymentStatus
 );
-router.post("/addFunds", userAuthentication, piggyBoxController.addFunds);
+router.post("/addFunds", userAuthentication,userInfoVerification, piggyBoxController.addFunds);
 router.post(
   "/getPiggyBoxInfo",
   userAuthentication,

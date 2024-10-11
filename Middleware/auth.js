@@ -6,8 +6,6 @@ const CaseUser = require("../Models/CustomerSupport/caseUser");
 const CustomerCase = require("../Models/CustomerSupport/customerCase");
 const Role = require("../Models/User/role");
 
-
-
 // Middleware for login user authentication
 exports.initialLoginUserAuthentication = async (req, res, next) => {
   const { phone, otpAuthenticationToken } = req.body;
@@ -85,6 +83,21 @@ exports.initialSignuUserAuthentication = async (req, res, next) => {
   }
 };
 
+exports.userInfoVerification = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    if (user.isRequestedClouser) {
+      return res
+        .status(403)
+        .json({ message: "Access Denied! User requested for clouser" });
+    }
+
+    next();
+  } catch (err) {
+    return res.status(503).json({ error: "Invalid Signature!" });
+  }
+};
 exports.userAuthentication = async (req, res, next) => {
   try {
     const token = req.headers.authorization;

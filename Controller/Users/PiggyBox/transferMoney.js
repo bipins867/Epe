@@ -77,11 +77,12 @@ exports.getTransferUserInfo = async (req, res, next) => {
 exports.transferMoney = async (req, res, next) => {
   const userId = req.user.id; // Get the sender's user ID from the request
   const { amount, candidateId, name, userRemark } = req.body; // Extract transfer details from the request body
-
+  const user=req.user;
   // Start a transaction
   let t;
 
   try {
+    
     // Fetch sender's piggybox and KYC status
     const senderPiggybox = await Piggybox.findOne({
       where: { UserId: userId },

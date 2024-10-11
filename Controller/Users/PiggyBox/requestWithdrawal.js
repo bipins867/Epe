@@ -27,6 +27,7 @@ function generateRandomRequestId() {
   return letterPart + numberPart;
 }
 exports.generateRandomRequestId=generateRandomRequestId;
+
 exports.requestWithdrawalInfo = async (req, res, next) => {
   try {
     const userId = req.user.id; // Get the user ID from the request
@@ -75,11 +76,13 @@ exports.requestWithdrawalInfo = async (req, res, next) => {
 exports.requestForWithdrawal = async (req, res, next) => {
   const { amount, userRemark } = req.body; // Extract amount and user remark from the request body
   const userId = req.user.id; // Get the user ID from the request
-
+  const user=req.user;
   // Start a Sequelize transaction
   let transaction;
 
   try {
+
+    
     // Step 1: Check if KYC agreement is accepted
     const userKyc = await UserKyc.findOne({
       where: { customerId: req.user.candidateId }, // Use candidateId to find user KYC
@@ -115,6 +118,18 @@ exports.requestForWithdrawal = async (req, res, next) => {
     if (!piggyBox) {
      // await transaction.rollback();
       return res.status(400).json({ message: "PiggyBox not found." });
+    }
+
+    const pendingWithdrawals = await RequestWithdrawal.findOne({
+      where: { UserId: user.id, status: "pending" },
+      //   transaction,
+    });
+
+    if (pendingWithdrawals) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already a pending withdrawal request.",
+      });
     }
 
     if (parseFloat(amount) <= 0) {
@@ -211,5 +226,101 @@ exports.requestForWithdrawal = async (req, res, next) => {
     return res
       .status(500)
       .json({ message: "Internal server error. Please try again later." });
+  }
+};
+
+// Controller to handle the cancellation of a pending withdrawal request
+exports.requestForCancelWithdrawal = async (req, res, next) => {
+  const userId = req.user.id; // Get the user ID from the request
+  const user=req.user;
+  // Start a Sequelize transaction
+  let transaction;
+
+  try {
+
+    
+    // Step 1: Fetch the recent withdrawal request with a "pending" status
+    const recentWithdrawalRequest = await RequestWithdrawal.findOne({
+      where: { UserId: userId, status: 'pending' },
+    });
+
+    if (!recentWithdrawalRequest) {
+      // If no pending request is found, return an error response
+      return res.status(404).json({
+        success: false,
+        message: 'No pending withdrawal request found for cancellation.',
+      });
+    }
+
+    const { amount } = recentWithdrawalRequest; // Get the withdrawal amount from the recent request
+
+    // Step 2: Check and update the user's piggybox balances
+    const piggyBox = await Piggybox.findOne({ where: { UserId: userId } });
+
+    if (!piggyBox) {
+      return res.status(400).json({ message: 'PiggyBox not found.' });
+    }
+
+    // Use parseFloat to handle balance calculations
+    const updatedPiggyBalance = parseFloat(piggyBox.piggyBalance) + parseFloat(amount);
+    const updatedUnclearedBalance = parseFloat(piggyBox.unclearedBalance) - parseFloat(amount);
+
+    // Step 3: Start a transaction for atomic operations
+    transaction = await sequelize.transaction();
+
+    // Update the Piggybox balance and unclearedBalance
+    await Piggybox.update(
+      {
+        piggyBalance: updatedPiggyBalance,
+        unclearedBalance: updatedUnclearedBalance,
+      },
+      {
+        where: { UserId: userId },
+        transaction,
+      }
+    );
+
+    // Step 4: Create a new TransactionHistory entry for the cancellation
+    await TransactionHistory.create(
+      {
+        transactionType: 'withdrawal',
+        remark: 'User Withdrawal Cancelled',
+        credit: amount, // Refund the withdrawn amount
+        debit: 0,
+        balance: updatedPiggyBalance,
+        UserId: userId,
+      },
+      { transaction }
+    );
+
+    // Step 5: Update the withdrawal request status to "canceled"
+    await RequestWithdrawal.update(
+      { status: 'canceled' },
+      {
+        where: { id: recentWithdrawalRequest.id },
+        transaction,
+      }
+    );
+
+    // Step 6: Commit the transaction (all operations successful)
+    await transaction.commit();
+
+    // Return success response
+    return res.status(200).json({
+      success: true,
+      message: 'Withdrawal request has been successfully canceled.',
+      newBalance: updatedPiggyBalance,
+      requestId: recentWithdrawalRequest.requestId,
+    });
+  } catch (err) {
+    // Rollback the transaction if any error occurs
+    if (transaction) {
+      await transaction.rollback();
+    }
+
+    console.error('Error while cancelling withdrawal request:', err);
+    return res
+      .status(500)
+      .json({ success: false, message: 'Internal server error. Please try again later.' });
   }
 };
