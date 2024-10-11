@@ -7,6 +7,7 @@ const bodyParser = require("body-parser");
 
 const { setupRoutes } = require("./Routes/setupRoutes");
 const db = require("./database");
+const User = require("./Models/User/users");
 //const { sendOtp, sendKycSuccessfullMessage, sendRewardMessage, sendCreditMessage, sendDebitMessage } = require("./Utils/MailService");
 
 require("./Models/setModels");
@@ -46,6 +47,16 @@ app.use("/getServerInfo", (req, res, next) => {
     });
 });
 
+app.use('/testWebsite',async (req,res,next)=>{
+
+  try{
+    const user=await User.findAll({limit:1})
+    return res.json({message:`Current Time is :-  ${new Date()}`})
+  }
+  catch(err){
+    return res.json({error:"Internal Server Error!"})
+  }
+})
 setupRoutes(app);
 
 db.sync()
