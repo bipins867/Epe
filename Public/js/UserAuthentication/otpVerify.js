@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const otpType = localStorage.getItem("otpType");
 
     try {
-      const obj = { userPhoneOtp, otpAuthenticationToken };
+      const obj = { userPhoneOtp, otpAuthenticationToken,otpType };
       otpSubmitButton.disabled = true;
       let response;
       if (otpType === "signUp") {

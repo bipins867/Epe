@@ -37,17 +37,17 @@ exports.middlewareSendOtp = async (req, res, next) => {
       setTimeout(() => {
         delete otpStore[phone];
       }, 5 * 60 * 1000);
-      console.log(otpStore);
+      //console.log(otpStore);
 
-      // if (otpType === "forgetCandidateId" ||otpType === "resetPassword" ) {
-      //   sendOtpAccountVerifyMessage(phone, phoneOtp);
-      // } else if (otpType === "login") {
-      //   sendLoginOtpMessage(phone, phoneOtp);
-      // } else if (otpType === "signUp") {
-      //   sendSignUpOtpMessage(phone, phoneOtp);
-      // } else {
-      //   return res.status(404).json({ message: "Invalid Otp Type!" });
-      // }
+      if (otpType === "forgetCandidateId" ||otpType === "resetPassword" ) {
+        sendOtpAccountVerifyMessage(phone, phoneOtp);
+      } else if (otpType === "login") {
+        sendLoginOtpMessage(phone, phoneOtp);
+      } else if (otpType === "signUp") {
+        sendSignUpOtpMessage(phone, phoneOtp);
+      } else {
+        return res.status(404).json({ message: "Invalid Otp Type!" });
+      }
 
       const token = jwt.sign(
         { ...req.body, phone },

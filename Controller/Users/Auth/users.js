@@ -142,7 +142,7 @@ exports.userSignUp = async (req, res, next) => {
 
 exports.userLogin = async (req, res, next) => {
   const { phone, password } = req.payload;
-  console.log(req.payload);
+  //console.log(req.payload);
   try {
     // User will log in only with their phone number
     const user = await User.findOne({ where: { phone } });

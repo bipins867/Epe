@@ -54,7 +54,13 @@ const validateChangePassword = [
 // Function to check validation errors and format response
 const checkValidationErrors = (req, res, next) => {
   if (req.body.otpAuthenticationToken) {
-    return next();
+    //console.log(req.body.otpType);
+    if(!(req.body.otpType==='resetPassword')){
+      //console.log("I am proceeded")
+      return next();
+    }
+    
+    
   }
   const errors = validationResult(req);
   if (!errors.isEmpty()) {

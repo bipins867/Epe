@@ -1,4 +1,3 @@
-
 function toggleWarning(show) {
   const warningContainer = document.getElementById("warning-container");
   warningContainer.style.display = show ? "block" : "none";
@@ -11,8 +10,8 @@ function setWarningContent(message) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    toggleWarning(false)
-    //setWarningContent("HI there");
+  toggleWarning(false);
+  //setWarningContent("HI there");
   try {
     // Fetch withdrawal information upon page load
     const withdrawalData = await postRequestWithToken(
@@ -23,29 +22,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Update balance, bank details, and history
     updateWithdrawalInfo(withdrawalData.data);
     updateWithdrawalHistory(withdrawalData.data.withdrawalHistory);
-   
-    
-    const bankDetails=withdrawalData.data.bankDetails;
-    const kycAccepted=withdrawalData.data.kycAccepted;
-    const piggyBoxBalance=withdrawalData.data.piggyBoxBalance;
-    if (!kycAccepted){
-        toggleWarning(true)
-        setWarningContent('KYC is not Verified.')
-        return;
+
+    const bankDetails = withdrawalData.data.bankDetails;
+    const kycAccepted = withdrawalData.data.kycAccepted;
+    const piggyBoxBalance = withdrawalData.data.piggyBoxBalance;
+    if (!kycAccepted) {
+      toggleWarning(true);
+      setWarningContent("KYC is not Verified.");
+      return;
     }
-    if(!bankDetails){
-        toggleWarning(true)
-        setWarningContent('Please add settelment details first.')
-        return;
+    if (!bankDetails) {
+      toggleWarning(true);
+      setWarningContent("Please add settelment details first.");
+      return;
     }
 
-    if(piggyBoxBalance<=2000){
-        toggleWarning(true)
-        setWarningContent('Insufficient Funds!. Minimum balance should be maintained ₹2000.00.')
-        return;
+    if (piggyBoxBalance <= 2000) {
+      toggleWarning(true);
+      setWarningContent(
+        "Insufficient Funds!. Minimum balance should be maintained ₹2000.00."
+      );
+      return;
     }
   } catch (error) {
-    handleErrors(error,mapFunction);
+    handleErrors(error, mapFunction);
   }
 });
 
@@ -133,13 +133,20 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
     alert("Request Submitted Successfullly!"); // Show success message
     location.reload(); // Reload the page to reflect updated balances and history
   } catch (error) {
-    
-    handleErrors(error,mapFunction);
+    handleErrors(error, mapFunction);
   }
 });
 
 // Cancel button logic to clear form inputs
-document.getElementById("cancelBtn").addEventListener("click", () => {
-  document.getElementById("withdrawalAmount").value = "";
-  document.getElementById("narration").value = "";
-});
+document
+  .getElementById("cancelWithdrawalBtn")
+  .addEventListener("click", async () => {
+    try {
+      const response = await postRequestWithToken("user/piggyBox/requestWithdrawal/post/cancelWithdrawalRequest" );
+
+      alert("Request Cancelled Successfullly!"); // Show success message
+      location.reload(); // Reload the page to reflect updated balances and history
+    } catch (error) {
+      handleErrors(error, mapFunction);
+    }
+  });

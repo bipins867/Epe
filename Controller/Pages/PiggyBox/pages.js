@@ -1,5 +1,16 @@
 const path = require("path");
 
+exports.getCloseAccountPage=async (req, res, next) => {
+  res.sendFile(
+    path.resolve("views", "PiggyBox", "Dashboard", "closeAccount.html")
+  );
+};
+exports.getCloseAccountTermsAndConditionsPage=async (req, res, next) => {
+  res.sendFile(
+    path.resolve("views", "PiggyBox", "Dashboard", "closeAccountTermsAndConditions.html")
+  );
+};
+
 exports.getDashboardPage = async (req, res, next) => {
   res.sendFile(
     path.resolve("views", "PiggyBox", "Dashboard", "dashboard.html")

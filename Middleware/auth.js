@@ -47,6 +47,86 @@ exports.initialLoginUserAuthentication = async (req, res, next) => {
   }
 };
 
+exports.initialForgetCustomerIdUserAuthentication = async (req, res, next) => {
+  const { phone, otpAuthenticationToken } = req.body;
+
+  try {
+    if (otpAuthenticationToken) {
+      return next();
+    }
+
+    // Check if the user exists based on phone number
+    const user = await User.findOne({ where: { phone } });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // Check if the user is blocked
+    if (user.isBlocked) {
+      return res
+        .status(403)
+        .json({ success: false, message: "User account is blocked" });
+    }
+
+    // Check if the user account is active
+    if (!user.isActive) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User account is inactive" });
+    }
+
+    // Proceed to next middleware or controller if checks are passed
+    req.user = user; // Add user to request for further usage if necessary
+    next();
+  } catch (error) {
+    console.error("Error during Foget Customer Id authentication:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.initialResetPasswordUserAuthentication = async (req, res, next) => {
+  const { phone,candidateId, otpAuthenticationToken } = req.body;
+
+  try {
+    if (otpAuthenticationToken) {
+      return next();
+    }
+
+    // Check if the user exists based on phone number
+    const user = await User.findOne({ where: { phone,candidateId } });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // Check if the user is blocked
+    if (user.isBlocked) {
+      return res
+        .status(403)
+        .json({ success: false, message: "User account is blocked" });
+    }
+
+    // Check if the user account is active
+    if (!user.isActive) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User account is inactive" });
+    }
+
+    // Proceed to next middleware or controller if checks are passed
+    req.user = user; // Add user to request for further usage if necessary
+    next();
+  } catch (error) {
+    console.error("Error during Foget Customer Id authentication:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 // Middleware for signup user authentication
 exports.initialSignuUserAuthentication = async (req, res, next) => {
   const { phone, email, otpAuthenticationToken } = req.body;

@@ -4,6 +4,8 @@ const piggyBoxController=require('../../../Controller/Pages/PiggyBox/pages')
 
 const router = express.Router();
 
+router.get('/closeAccountTermsAndConditions',piggyBoxController.getCloseAccountTermsAndConditionsPage)
+router.get('/closeAccount',piggyBoxController.getCloseAccountPage)
 router.get('/savedAddress',piggyBoxController.getSavedAddressPage)
 router.get('/settlement',piggyBoxController.getSettlementPage)
 router.get('/transferMoney',piggyBoxController.getTransferMoneyPage)

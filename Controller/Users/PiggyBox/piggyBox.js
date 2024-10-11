@@ -247,7 +247,9 @@ exports.checkPaymentStatus = async (req, res, next) => {
           transactionType: "paymentGateway",
           merchantUserId: transaction.merchantUserId,
           merchantTransactionId: transaction.merchantTransactionId,
-          remark: `Payment Successful of amount ₹${parseFloat(transaction.amount).toFixed(2)}`,
+          remark: `Payment Successful of amount ₹${parseFloat(
+            transaction.amount
+          ).toFixed(2)}`,
           credit: transaction.amount,
           debit: 0,
           balance: newBalance,
@@ -306,7 +308,9 @@ exports.checkPaymentStatus = async (req, res, next) => {
           transactionType: "paymentGateway",
           merchantUserId: transaction.merchantUserId,
           merchantTransactionId: transaction.merchantTransactionId,
-          remark:  `Payment Failed of amount ₹${parseFloat(transaction.amount).toFixed(2)}`,
+          remark: `Payment Failed of amount ₹${parseFloat(
+            transaction.amount
+          ).toFixed(2)}`,
           credit: 0,
           debit: 0,
           UserId: req.user.id,
@@ -361,6 +365,8 @@ exports.getPiggyBoxInfo = async (req, res, next) => {
     // Prepare the response data
     const response = {
       name: req.user.name,
+      isActive: req.user.isActive,
+      isRequestedClouser: req.user.isRequestedClouser,
       customerId: candidateId,
       kycStatus: userKyc ? userKyc.status : "Pending.",
       piggyboxBalance: piggyBox ? piggyBox.piggyBalance : 0,

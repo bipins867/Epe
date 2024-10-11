@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
-    <title>Piggy Box</title>
+    <title>Close Account</title>
 
     <!-- Bootstrap and Font Awesome -->
     <link
@@ -19,7 +19,7 @@
     />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/PiggyBox/Dashboard/dashboard.css" />
+    <link rel="stylesheet" href="/css/PiggyBox/Dashboard/closeAccount.css" />
 
     <!-- jQuery (if necessary) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -110,99 +110,38 @@
 
           <!-- Main Body Content -->
           <div class="body-details w-100">
-            <div class="piggybox-heading text-white p-1 align-middle">
-              <h6>PIGGYBOX</h6>
-            </div>
-            <!-- Customer Details -->
-            <table class="table">
-              <tr>
-                <th>CUSTOMER NAME</th>
-                <td id="customer-name">John Doe</td>
-              </tr>
-              <tr>
-                <th>CUSTOMER ID</th>
-                <td id="customer-id">2177587</td>
-              </tr>
-              <tr>
-                <th>KYC STATUS</th>
-                <td id="kyc-status">Verified</td>
-              </tr>
-              <tr>
-                <th>PIGGYBOX BALANCE</th>
-                <td>₹<span id="piggybox-balance">5000</span></td>
-              </tr>
-              <tr>
-                <th>PIGGYBOX Uncleared BALANCE</th>
-                <td>₹<span id="piggybox-uncleared-balance">5000</span></td>
-              </tr>
-              <tr>
-                <th>ADD RESERVE</th>
-                <td>
-                  <a href="/user/piggyBox/addFunds"
-                    >CLICK HERE TO ADD RESERVE</a
-                  >
-                </td>
-              </tr>
-            </table>
-            <!-- Close Account Button -->
-            <div
-              class="text-center"
-              style="margin-bottom: 2%; display: none;"
-              id="close-button-div"
-            >
-              <button id="closeAccountButton" class="btn btn-danger">
-                <i class="fas fa-user-slash"></i> Close Account
-              </button>
+            <div class="welcome-heading text-white p-1 align-middle">
+              <h2>Close Account</h2>
             </div>
 
-            <div
-              class="text-center"
-              style="margin-bottom: 2%; display: none;"
-              id="cancel-button-div"
-            >
-              <button id="cancelCloseAccountButton" class="btn btn-secondary">
-                <i class="fas fa-times-circle"></i> Cancel Close Account
-              </button>
-            </div>
-            <!-- Last 10 Transactions -->
-            <div class="piggybox-heading text-white p-1 align-middle">
-              <h6>LAST 10 TRANSACTIONS</h6>
-            </div>
-
-            <div class="d-flex p-2" id="mobile-responsive">
-              <label for="fromDate">From:</label>
-              <input type="date" id="fromDate" />
-
-              <label for="toDate" class="ms-2">To:</label>
-              <input type="date" id="toDate" />
-
+            <div class="container">
+              <h5>
+                Note: Please note, once closed you may no longer be able to
+                access E PE services.
+              </h5>
+              <div class="form-check">
+                <label class="form-check-label" for="acceptTerms">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="acceptTerms"
+                  />
+                  I accept the
+                  <a
+                    href="/user/piggyBox/closeAccountTermsAndConditions"
+                    class="text-primary"
+                    target="_blank"
+                    >terms and conditions</a
+                  >.
+                </label>
+              </div>
               <button
-                type="button"
-                id="btnFetchTransactions"
-                class="btn btn-success ms-2"
+                id="initiateCloseAccount"
+                class="btn btn-danger mt-3"
+                disabled
               >
-                Get Transactions
+                Initiate Closing Account Request
               </button>
-            </div>
-
-            <div class="table-responsive">
-              <table class="table table-bordered table-hover mt-3">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Transaction ID</th>
-                    <th>Transaction Type</th>
-                    <th>Description</th>
-                    <th>Credit</th>
-                    <th>Debit</th>
-                    <th>Balance</th>
-                  </tr>
-                </thead>
-                <tbody id="transaction-table">
-                  <!-- JavaScript will populate the transactions here -->
-                </tbody>
-              </table>
             </div>
           </div>
         </div>
@@ -218,7 +157,6 @@
     </div>
 
     <!-- Custom JS -->
-    <script src="/js/PiggyBox/Dashboard/dashboard.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
       integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
@@ -226,21 +164,6 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="/js/Utils/utils.js"></script>
-    <script>
-      const anchors = document.querySelectorAll("a.menu-item"); // Select all anchor tags with class 'abc'
-      const currentUrl = window.location.href; // Get the current window URL
-
-      anchors.forEach((anchor) => {
-        if (anchor.href === currentUrl) {
-          // Check if anchor's href matches the current URL
-          // anchor.style.color = "red"; // Change the color to red (or any color you want)
-          const childDiv = anchor.querySelector("div"); // Find the div inside the anchor
-          if (childDiv) {
-            // If the div exists, change its background color
-            childDiv.style.background = "#0a0a7d"; // Change to yellow or any color you like
-          }
-        }
-      });
-    </script>
+    <script src="/js/PiggyBox/Dashboard/closeAccount.js"></script>
   </body>
 </html>

@@ -14,14 +14,14 @@ const {
 const {
   initialLoginUserAuthentication,
   initialSignuUserAuthentication,
+  initialForgetCustomerIdUserAuthentication,
+  initialResetPasswordUserAuthentication,
 } = require("../../../Middleware/auth");
 
 const router = express.Router();
 
 router.post(
   "/login",
-  validateLogin,
-  checkValidationErrors,
   initialLoginUserAuthentication,
   middlewareSendOtp,
   middlewareVerifyOtp,
@@ -39,7 +39,7 @@ router.post(
 
 router.post(
   "/changeUserPassword",
-
+  initialResetPasswordUserAuthentication,
   middlewareSendOtp,
   middlewareVerifyOtp,
   validateChangePassword,
@@ -49,6 +49,7 @@ router.post(
 
 router.post(
   "/getUserInfo",
+  initialForgetCustomerIdUserAuthentication,
   middlewareSendOtp,
   middlewareVerifyOtp,
   userAuthenticationController.getUserInfo
@@ -74,4 +75,5 @@ router.post(
   "/verifyUserForgetCandidateIdOtp",
   userAuthenticationController.userForgetCandidateIdOtpVerify
 );
+
 module.exports = router;
