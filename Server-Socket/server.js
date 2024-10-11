@@ -47,12 +47,12 @@ function sendCaseInfo(info) {
 }
 
 io.on("connection", (socket) => {
-    console.log(`User connected: ${socket.id}`);
+    //console.log(`User connected: ${socket.id}`);
 
     socket.on("join-case", (caseId) => {
         socket.join(caseId);
         socketUsers.set(socket.id, caseId);
-        console.log(`User ${socket.id} joined room: ${caseId}`);
+        //console.log(`User ${socket.id} joined room: ${caseId}`);
     });
 
     socket.on("leave-case", () => {
@@ -60,7 +60,7 @@ io.on("connection", (socket) => {
         if (caseId) {
             socket.leave(caseId);
             socketUsers.delete(socket.id);
-            console.log(`User ${socket.id} left room: ${caseId}`);
+            //console.log(`User ${socket.id} left room: ${caseId}`);
         }
     });
 
@@ -72,9 +72,9 @@ io.on("connection", (socket) => {
         const caseId = socketUsers.get(socket.id);
         if (caseId) {
             socketUsers.delete(socket.id);
-            console.log(`User ${socket.id} disconnected from room: ${caseId}`);
+            //console.log(`User ${socket.id} disconnected from room: ${caseId}`);
         } else {
-            console.log(`User disconnected: ${socket.id}`);
+            //console.log(`User disconnected: ${socket.id}`);
         }
     });
 });
