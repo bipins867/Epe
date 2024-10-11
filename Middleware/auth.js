@@ -6,6 +6,85 @@ const CaseUser = require("../Models/CustomerSupport/caseUser");
 const CustomerCase = require("../Models/CustomerSupport/customerCase");
 const Role = require("../Models/User/role");
 
+
+
+// Middleware for login user authentication
+exports.initialLoginUserAuthentication = async (req, res, next) => {
+  const { phone, otpAuthenticationToken } = req.body;
+
+  try {
+    if (otpAuthenticationToken) {
+      return next();
+    }
+
+    // Check if the user exists based on phone number
+    const user = await User.findOne({ where: { phone } });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // Check if the user is blocked
+    if (user.isBlocked) {
+      return res
+        .status(403)
+        .json({ success: false, message: "User account is blocked" });
+    }
+
+    // Check if the user account is active
+    if (!user.isActive) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User account is inactive" });
+    }
+
+    // Proceed to next middleware or controller if checks are passed
+    req.user = user; // Add user to request for further usage if necessary
+    next();
+  } catch (error) {
+    console.error("Error during login authentication:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// Middleware for signup user authentication
+exports.initialSignuUserAuthentication = async (req, res, next) => {
+  const { phone, email, otpAuthenticationToken } = req.body;
+
+  try {
+    if (otpAuthenticationToken) {
+      return next();
+    }
+    // Check if user already exists with the provided phone
+    const userByPhone = await User.findOne({ where: { phone } });
+
+    if (userByPhone) {
+      return res
+        .status(409)
+        .json({ success: false, message: "Phone number already registered" });
+    }
+
+    // If email is provided, check if email already exists
+    if (email) {
+      const userByEmail = await User.findOne({ where: { email } });
+
+      if (userByEmail) {
+        return res
+          .status(409)
+          .json({ success: false, message: "Email already registered" });
+      }
+    }
+
+    // Proceed to next middleware or controller if checks are passed
+    next();
+  } catch (error) {
+    console.error("Error during signup authentication:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 exports.userAuthentication = async (req, res, next) => {
   try {
     const token = req.headers.authorization;
@@ -69,6 +148,7 @@ exports.adminAuthentication = async (req, res, next) => {
     return res.status(503).json({ error: "Invalid Signature!" });
   }
 };
+
 exports.userChatSupportAuthentication = async (req, res, next) => {
   try {
     const token = req.headers.chattoken;

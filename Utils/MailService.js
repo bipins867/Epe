@@ -55,17 +55,9 @@ async function sendSms(mobileNumber, message) {
   return response;
 }
 
-exports.sendOtp = async (mobileNumber, otp) => {
-  let message = process.env.SMS_OTP_TEMPLETE;
-  
-  message = message.replace("{otp}", otp);
-
-  return await sendSms(mobileNumber, message);
-};
-
 exports.sendRegistrationTemplate = async (mobileNumber, candidateId) => {
   let message = process.env.SMS_REGISTER_TEMPLATE;
-  
+
   message = message.replace("{candidate_id}", candidateId);
 
   return await sendSms(mobileNumber, message);
@@ -77,34 +69,77 @@ exports.sendKycSuccessfullMessage = async (mobileNumber) => {
   return await sendSms(mobileNumber, message);
 };
 
-exports.sendRewardMessage=async(mobileNumber,reward)=>{
-  let message=process.env.SMS_REWARD;
-  
+exports.sendRewardMessage = async (mobileNumber, reward) => {
+  let message = process.env.SMS_REWARD;
+
   message = message.replace("{reward}", reward);
 
-  return await sendSms(mobileNumber,message);
-}
+  return await sendSms(mobileNumber, message);
+};
 
-exports.sendCreditMessage=async(mobileNumber,amount,customer_id,reference,available_balance)=>{
-  let message=process.env.SMS_CREDIT;
-  
+exports.sendCreditMessage = async (
+  mobileNumber,
+  amount,
+  customer_id,
+  reference,
+  available_balance
+) => {
+  let message = process.env.SMS_CREDIT;
+
   message = message.replace("{amount}", amount);
   message = message.replace("{customer_id}", customer_id);
   message = message.replace("{reference}", reference);
   message = message.replace("{available_balance}", available_balance);
-  
 
-  return await sendSms(mobileNumber,message);
-}
+  return await sendSms(mobileNumber, message);
+};
 
-exports.sendDebitMessage=async(mobileNumber,amount,customer_id,reference,available_balance)=>{
-  let message=process.env.SMS_DEBIT;
-  
+exports.sendDebitMessage = async (
+  mobileNumber,
+  amount,
+  customer_id,
+  reference,
+  available_balance
+) => {
+  let message = process.env.SMS_DEBIT;
+
   message = message.replace("{amount}", amount);
   message = message.replace("{customer_id}", customer_id);
   message = message.replace("{reference}", reference);
   message = message.replace("{available_balance}", available_balance);
-  
 
-  return await sendSms(mobileNumber,message);
-}
+  return await sendSms(mobileNumber, message);
+};
+
+exports.sendUserBlockMessage = async (mobileNumber) => {
+  let message = process.env.SMS_BLOCK;
+
+  return await sendSms(mobileNumber, message);
+};
+
+exports.sendUserUnblockMessage = async (mobileNumber) => {
+  let message = process.env.SMS_UNBLOCK;
+
+  return await sendSms(mobileNumber, message);
+};
+
+exports.sendSignUpOtpMessage = async (mobileNumber, otp) => {
+  let message = process.env.SMS_OTP_SIGNUP;
+  //console.log(message);
+  message = message.replace("{otp}", otp);
+
+  return await sendSms(mobileNumber, message);
+};
+
+exports.sendOtpAccountVerifyMessage = async (mobileNumber, otp) => {
+  let message = process.env.SMS_OTP_VERIFY;
+  message = message.replace("{otp}", otp);
+  return await sendSms(mobileNumber, message);
+};
+
+exports.sendLoginOtpMessage = async (mobileNumber, otp) => {
+  let message = process.env.SMS_OTP_LOGIN;
+  message = message.replace("{otp}", otp);
+  return await sendSms(mobileNumber, message);
+};
+

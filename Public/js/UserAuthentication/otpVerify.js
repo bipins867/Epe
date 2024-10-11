@@ -1,8 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const token = localStorage.getItem("token");
-  if (token) {
-    window.location.replace("/user/dashboard");
-  }
   if (localStorage.getItem("otpType") === "resetPassword") {
     togglePasswordSectionView(true);
   }
@@ -28,11 +24,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const userPhoneOtp = document.getElementById("phoneOtp").value;
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
-    const signUpToken = localStorage.getItem("signUpToken");
+    const otpAuthenticationToken = localStorage.getItem(
+      "otpAuthenticationToken"
+    );
     const otpType = localStorage.getItem("otpType");
 
     try {
-      const obj = { userPhoneOtp, signUpToken };
+      const obj = { userPhoneOtp, otpAuthenticationToken };
       otpSubmitButton.disabled = true;
       let response;
       if (otpType === "signUp") {
@@ -41,6 +39,12 @@ document.addEventListener("DOMContentLoaded", function () {
           alert(response.data.message);
           window.location.replace("/user/auth/login");
         }
+      } else if (otpType === "login") {
+        const result = await postRequest("user/auth/post/login", obj);
+        //console.log(result.data);
+        const data = result.data;
+        localStorage.setItem("token", data.token);
+        window.location.replace("/user/piggyBox");
       } else if (otpType === "resetPassword") {
         if (password !== confirmPassword) {
           return alert("Password Mismatch!");
@@ -57,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
       } else if (otpType === "forgetCandidateId") {
         response = await postRequest("user/auth/post/getUserInfo", obj);
         const data = response.data;
-        console.log("What happend just now!");
+        //console.log("What happend just now!");
         if (response.status === 200) {
           const message = `Customer Id:-${data.candidateId}\nName :- ${data.name}`;
           alert(message);
@@ -79,8 +83,13 @@ document.addEventListener("DOMContentLoaded", function () {
     timerSpan.textContent = resendTimer;
 
     try {
-      const signUpToken = localStorage.getItem("signUpToken");
-      const obj = { signUpToken, otpType: localStorage.getItem("otpType") };
+      const otpAuthenticationToken = localStorage.getItem(
+        "otpAuthenticationToken"
+      );
+      const obj = {
+        otpAuthenticationToken,
+        otpType: localStorage.getItem("otpType"),
+      };
       const response = await postRequest("user/auth/post/resendOtp", obj);
       alert(response.data.message);
     } catch (err) {

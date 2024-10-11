@@ -12,21 +12,23 @@ document
     event.preventDefault();
 
     const phone = document.getElementById("phone").value;
-
-    const obj = { phone };
+    
+    const apiUrl="user/auth/post/getUserInfo";
+    const obj = { phone, otpType: "forgetCandidateId" ,apiUrl};
 
     try {
       document.getElementById("send-otp-btn-id").disabled = true;
-      const result = await axios.post(
-        baseUrl + "user/auth/post/verifyUserForgetCandidateIdOtp",
-        obj
-      );
+      
+      const result = await postRequest(apiUrl, obj);
 
       // Handle OTP sent success
       alert(result.data.message);
 
-      localStorage.setItem("signUpToken", result.data.signUpToken);
-      localStorage.setItem("otpType", result.data.type);
+      localStorage.setItem(
+        "otpAuthenticationToken",
+        result.data.otpAuthenticationToken
+      );
+      localStorage.setItem("otpType", result.data.otpType);
       window.location.replace("/user/auth/otpVerify");
     } catch (err) {
       document.getElementById("send-otp-btn-id").disabled = false;

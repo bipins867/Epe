@@ -6,6 +6,9 @@ const { sendOtpToPhone } = require("../../../Utils/utils");
 const {
   otpStore,
   sendRegistrationTemplate,
+  sendOtpAccountVerifyMessage,
+  sendLoginOtpMessage,
+  sendSignUpOtpMessage,
 } = require("../../../Utils/MailService");
 const { Op } = require("sequelize");
 const { v4: uuidv4 } = require("uuid");
@@ -36,30 +39,11 @@ function generateRandomCandidateId() {
 }
 
 exports.userSignUp = async (req, res, next) => {
-  const { userPhoneOtp, signUpToken } = req.body;
-
   let transaction; // Start the transaction
 
   try {
-    const token = signUpToken;
-    const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    const { name, email, phone, password, employeeId, byReferallId } = payload;
-
-    // Use phone as the primary field for OTP validation
-    const otpKey = phone;
-
-    if (!otpStore[otpKey]) {
-      // await transaction.rollback(); // Rollback transaction
-      return res.status(400).send({ message: "OTP expired or invalid." });
-    }
-
-    const { phoneOtp } = otpStore[otpKey];
-
-    // Validate OTP
-    if (`${userPhoneOtp}` != `${phoneOtp}`) {
-      // await transaction.rollback(); // Rollback transaction
-      return res.status(400).send({ message: "Invalid OTP." });
-    }
+    const { name, email, phone, password, employeeId, byReferallId } =
+      req.payload;
 
     // Find the last candidateId and increment by 1
 
@@ -157,8 +141,8 @@ exports.userSignUp = async (req, res, next) => {
 };
 
 exports.userLogin = async (req, res, next) => {
-  const { phone, password } = req.body;
-
+  const { phone, password } = req.payload;
+  console.log(req.payload);
   try {
     // User will log in only with their phone number
     const user = await User.findOne({ where: { phone } });
@@ -198,25 +182,10 @@ exports.userLogin = async (req, res, next) => {
 };
 
 exports.getUserInfo = async (req, res, next) => {
-  const { signUpToken, userPhoneOtp } = req.body;
-
   try {
     // Verify the signUpToken
-    const payload = jwt.verify(signUpToken, process.env.JWT_SECRET_KEY);
-    const { phone } = payload;
 
-    const otpKey = phone;
-
-    if (!otpStore[otpKey]) {
-      return res.status(400).send({ message: "OTP expired or invalid." });
-    }
-
-    const { phoneOtp } = otpStore[otpKey];
-
-    // Validate OTP
-    if (`${userPhoneOtp}` != `${phoneOtp}`) {
-      return res.status(400).send({ message: "Invalid OTP." });
-    }
+    const { phone } = req.payload;
 
     const user = await User.findOne({
       where: {
@@ -243,13 +212,10 @@ exports.getUserInfo = async (req, res, next) => {
 };
 
 exports.changeUserPassword = async (req, res, next) => {
-  const { signUpToken, password, userPhoneOtp } = req.body;
+  const { phone } = req.payload;
+  const { password } = req.body;
 
   try {
-    // Verify the signUpToken
-    const payload = jwt.verify(signUpToken, process.env.JWT_SECRET_KEY);
-    const { phone } = payload;
-
     // Find the user by phone number
     const user = await User.findOne({
       where: { phone },
@@ -257,19 +223,6 @@ exports.changeUserPassword = async (req, res, next) => {
 
     if (!user) {
       return res.status(404).json({ message: "User not found!" });
-    }
-
-    const otpKey = phone;
-
-    if (!otpStore[otpKey]) {
-      return res.status(400).send({ message: "OTP expired or invalid." });
-    }
-
-    const { phoneOtp } = otpStore[otpKey];
-
-    // Validate OTP
-    if (`${userPhoneOtp}` != `${phoneOtp}`) {
-      return res.status(400).send({ message: "Invalid OTP." });
     }
 
     if (!password) {
@@ -443,11 +396,14 @@ exports.userForgetCandidateIdOtpVerify = async (req, res, next) => {
 };
 
 exports.userResendOtp = async (req, res, next) => {
-  const { signUpToken } = req.body;
+  const { otpAuthenticationToken, otpType } = req.body;
 
   try {
-    // Verify the signUpToken
-    const payload = jwt.verify(signUpToken, process.env.JWT_SECRET_KEY);
+    // Verify the otpAuthenticationToken
+    const payload = jwt.verify(
+      otpAuthenticationToken,
+      process.env.JWT_SECRET_KEY
+    );
     const { phone } = payload;
 
     // Check if the phone exists in the otpStore
@@ -459,8 +415,15 @@ exports.userResendOtp = async (req, res, next) => {
     const newOtp = crypto.randomInt(100000, 999999).toString();
     otpStore[phone].phoneOtp = newOtp;
 
-    // Send the new OTP to the user's phone
-    await sendOtpToPhone(phone, newOtp);
+    if (otpType === "forgetCandidateId" || otpType === "resetPassword") {
+      sendOtpAccountVerifyMessage(phone, newOtp);
+    } else if (otpType === "login") {
+      sendLoginOtpMessage(phone, newOtp);
+    } else if (otpType === "signUp") {
+      sendSignUpOtpMessage(phone, newOtp);
+    } else {
+      return res.status(404).json({ message: "Invalid Otp Type!" });
+    }
 
     // Refresh OTP expiration time to 5 more minutes
     setTimeout(() => {

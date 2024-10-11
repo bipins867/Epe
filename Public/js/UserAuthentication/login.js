@@ -12,15 +12,21 @@ document.getElementById("loginForm").addEventListener("submit", async function (
   const phone = document.getElementById("phone").value;
   const password = document.getElementById("password").value;
 
-  const obj = { phone, password };
+  const obj = { phone, password,otpType:'login' };
 
   try {
     document.getElementById('login-btn').disabled = true;
-    const result = await axios.post(baseUrl + "user/auth/post/login", obj);
+    const result = await postRequest("user/auth/post/login", obj);
 
-    const data = result.data;
-    localStorage.setItem("token", data.token);
-    window.location.replace("/user/piggyBox");
+    // Handle OTP sent success
+    alert(result.data.message);
+
+    localStorage.setItem(
+      "otpAuthenticationToken",
+      result.data.otpAuthenticationToken
+    );
+    localStorage.setItem("otpType", result.data.otpType);
+    window.location.replace("/user/auth/otpVerify");
   } catch (err) {
     document.getElementById('login-btn').disabled = false;
     handleErrors(err);

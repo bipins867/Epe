@@ -7,6 +7,14 @@ const {
   validateSignUp,
   validateChangePassword,
 } = require("../../../Middleware/validator");
+const {
+  middlewareSendOtp,
+  middlewareVerifyOtp,
+} = require("../../../Middleware/otpAuthentication");
+const {
+  initialLoginUserAuthentication,
+  initialSignuUserAuthentication,
+} = require("../../../Middleware/auth");
 
 const router = express.Router();
 
@@ -14,9 +22,42 @@ router.post(
   "/login",
   validateLogin,
   checkValidationErrors,
+  initialLoginUserAuthentication,
+  middlewareSendOtp,
+  middlewareVerifyOtp,
   userAuthenticationController.userLogin
 );
-router.post("/signUp", userAuthenticationController.userSignUp);
+router.post(
+  "/signUp",
+  validateSignUp,
+  checkValidationErrors,
+  initialSignuUserAuthentication,
+  middlewareSendOtp,
+  middlewareVerifyOtp,
+  userAuthenticationController.userSignUp
+);
+
+router.post(
+  "/changeUserPassword",
+
+  middlewareSendOtp,
+  middlewareVerifyOtp,
+  validateChangePassword,
+  checkValidationErrors,
+  userAuthenticationController.changeUserPassword
+);
+
+router.post(
+  "/getUserInfo",
+  middlewareSendOtp,
+  middlewareVerifyOtp,
+  userAuthenticationController.getUserInfo
+);
+
+router.post("/resendOtp", userAuthenticationController.userResendOtp);
+
+//Here changes are made to upside only ---
+
 router.post(
   "/verifyOtp",
   validateSignUp,
@@ -24,18 +65,10 @@ router.post(
   userAuthenticationController.userOtpVerify
 );
 
-router.post("/resendOtp", userAuthenticationController.userResendOtp);
-
 router.post(
   "/verifyUserResetOrForgetPasswordOtp",
   userAuthenticationController.userResetOrForgetPasswordOtpVerify
 );
-router.post(
-  "/changeUserPassword",validateChangePassword,checkValidationErrors,
-  userAuthenticationController.changeUserPassword
-);
-
-router.post("/getUserInfo", userAuthenticationController.getUserInfo);
 
 router.post(
   "/verifyUserForgetCandidateIdOtp",

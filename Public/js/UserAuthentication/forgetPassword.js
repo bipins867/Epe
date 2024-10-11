@@ -16,19 +16,21 @@ document
     const candidateId = document.getElementById("candidateId").value;
     const phone = document.getElementById("phone").value;
 
-    const obj = { candidateId, phone };
-
+    const obj = { candidateId, phone,otpType:'resetPassword' };
+    
     try {
       document.getElementById("send-otp-btn").disabled = true;
-      const result = await axios.post(
-        baseUrl + "user/auth/post/verifyUserResetOrForgetPasswordOtp",
+    
+      const result = await postRequest(
+        "user/auth/post/changeUserPassword",
         obj
       );
-
+    
+      //console.log(result.data);
       // Handle OTP sent success
       alert(result.data.message);
-      localStorage.setItem("signUpToken", result.data.signUpToken);
-      localStorage.setItem("otpType", result.data.type);
+      localStorage.setItem("otpAuthenticationToken", result.data.otpAuthenticationToken);
+      localStorage.setItem("otpType", result.data.otpType);
       window.location.replace("/user/auth/otpVerify");
     } catch (err) {
       document.getElementById("send-otp-btn").disabled = false;
