@@ -32,6 +32,10 @@ const AdminActivity = sequelize.define('AdminActivity', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  deviceType: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
