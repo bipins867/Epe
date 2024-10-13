@@ -12,3 +12,9 @@ exports.getDashboardInfo = async (req, res, next) => {
       .json({ error: "Internal server error. Please try again later." });
   }
 };
+
+
+
+exports.getRecentDaysCustomerJoinInfo=async(req,res,next)=>{}
+
+exports.getRecentMembersList=async(req,res,next)=>{}

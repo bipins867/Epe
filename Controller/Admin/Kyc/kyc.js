@@ -60,10 +60,10 @@ exports.updateKycStatus = async (req, res, next) => {
     const userKyc = await user.getUserKyc();
 
     if (status) {
-      const obj = { status: "Completed", adminMessage: "" };
+      const obj = { status: "Completed", adminMessage: "",adminId:req.admin.userName };
       await userKyc.update(obj);
     } else {
-      const obj = { status: "Rejected", adminMessage: message };
+      const obj = { status: "Rejected", adminMessage: message,adminId:req.admin.userName };
 
       await userKyc.update(obj);
     }

@@ -128,6 +128,8 @@ exports.createAdmin = async (req, res, next) => {
 
 exports.deleteAdmin = async (req, res, next) => {
   try {
+
+    return res.status(402).json({message:"Can't Delete any Admins. Because of secureity & privacy issues."})
     // Extract the userName from request parameters
     const { userName } = req.params;
     const admin = req.admin;

@@ -38,6 +38,42 @@ app.use(
 
 app.use(bodyParser.json({ extends: false }));
 
+
+
+// const useragent = require('express-useragent');
+// const geoip = require('geoip-lite');
+
+// const activityLogger = (req, res, next) => {
+//     // Extracting IP Address
+//     const ipAddress = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    
+//     // Extracting User-Agent
+//     const userAgent = req.headers['user-agent'];
+    
+//     // Device Type (Desktop/Mobile/Tablet)
+//     const ua = useragent.parse(userAgent);
+//     const deviceType = ua.isMobile ? 'Mobile' : 'Desktop'; // Can also check ua.isTablet, ua.isBot, etc.
+    
+//     // Geolocation based on IP Address
+//     const geo = geoip.lookup(ipAddress);
+//     const location = geo ? `${geo.city}, ${geo.country}` : 'Unknown';
+    
+//     // Logging or storing the information
+//     console.log({
+//         ipAddress,
+//         userAgent,
+//         deviceType,
+//         location
+//     });
+    
+//     // Continue with next middleware or response
+//     next();
+// };
+// app.use(activityLogger)
+
+
+
+
 app.use("/getServerInfo", (req, res, next) => {
   return res
     .status(200)
@@ -57,6 +93,15 @@ app.use('/testWebsite',async (req,res,next)=>{
     return res.json({error:"Internal Server Error!"})
   }
 })
+
+
+
+
+
+
+
+
+
 setupRoutes(app);
 
 db.sync()

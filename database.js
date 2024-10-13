@@ -3,7 +3,7 @@ const Sequelize = require("sequelize");
 // Custom logging function for errors only
 const logErrors = (msg) => {
   if (msg instanceof Error) {
-    console.error("Sequelize Error: ", msg);
+    console.error(`\nTime :- ${new Date()}\nSequelize Error: `, msg);
   }
 };
 
