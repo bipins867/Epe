@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Customer</title>
+    <title>Customer List</title>
 
     <!-- Bootstrap CSS -->
     <link
@@ -18,8 +18,10 @@
     />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/Admin/PiggyBox/Customer/customerList.css" />
-    
+    <link
+      rel="stylesheet"
+      href="/css/Admin/PiggyBox/Customer/customerList.css"
+    />
   </head>
   <body>
     <!-- Sidebar -->
@@ -104,7 +106,7 @@
             <div class="col-md-12">
               <div class="card mt-4 shadow">
                 <div class="card-header bg-danger text-white">
-                  <i class="fas fa-users"></i> Customer
+                  <i class="fas fa-users"></i> Customer List
                 </div>
                 <!-- <div class="announcement">
                                 <div class="announcement-wrapper">
@@ -124,8 +126,10 @@
             </div>
             <div class="section-body">
               <label for="customer-id">Customer Id</label>
-              <input type="text" id="customer-id" class="input-box" />
-              <button class="search-btn"><i class="fas fa-search"></i></button>
+              <input type="text" id="candidateId" class="input-box" />
+              <button class="search-btn" id="search-btn">
+                <i class="fas fa-search"></i>
+              </button>
             </div>
           </div>
 
@@ -134,47 +138,64 @@
               <i class="fas fa-wallet"></i> Search Result
             </div>
             <div class="section-body">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="fromDate">From Date:</label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="fromDate"
+                        placeholder="Select From Date"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="toDate">To Date:</label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="toDate"
+                        placeholder="Select To Date"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="limit">Limit:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="limit"
+                        placeholder="Enter Limit"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <button type="button" class="btn btn-primary">
+                      Get Result
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="section-body">
               <table class="table table-striped">
                 <thead>
                   <tr>
-                    <th scope="col">Sr No.</th>
+                    <th scope="col">#</th>
                     <th scope="col">Customer ID</th>
                     <th scope="col">Customer Name</th>
                     <th scope="col">Date Joining</th>
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="members-table-body">
                   <!-- Data will be dynamically inserted here -->
-                  <tr>
-                    <td>1</td>
-                    <td>2177587</td>
-                    <td>Alok Prajapati</td>
-                    <td>06-10-2024</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>7226503</td>
-                    <td>Bipin</td>
-                    <td>05-10-2024</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>1894005</td>
-                    <td>Sanjay</td>
-                    <td>02-10-2024</td>
-                  </tr>
-                  <tr>
-                    <td>4</td>
-                    <td>1602561</td>
-                    <td>Kundan</td>
-                    <td>30-09-2024</td>
-                  </tr>
-                  <tr>
-                    <td>5</td>
-                    <td>1126395</td>
-                    <td>Sanjay</td>
-                    <td>27-09-2024</td>
-                  </tr>
                 </tbody>
               </table>
             </div>

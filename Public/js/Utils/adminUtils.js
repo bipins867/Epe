@@ -71,11 +71,7 @@ function getAdminTokenHeaders() {
 }
 
 async function getRequest(url) {
-  //   const headers = getTokenHeaders();
-  //   if (!headers) {
-  //     return;
-  //   }
-
+  
   const result = await axios.get(baseUrl + url);
 
   return result;
