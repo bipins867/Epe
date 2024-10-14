@@ -4,7 +4,7 @@ const requestWithdrawalPageController = require("../../../../Controller/Pages/Ad
 
 const router = express.Router();
 
-router.get('/customerPanel',requestWithdrawalPageController.getCustomerPanelPage)
+router.get('/customerPanel/:candidateId',requestWithdrawalPageController.getCustomerPanelPage)
 router.get('/previousList',requestWithdrawalPageController.getPreviousRequestListPage)
 router.get('/pendingList',requestWithdrawalPageController.getPendingRequestListPage)
 router.get('/',requestWithdrawalPageController.getDashboardPage)

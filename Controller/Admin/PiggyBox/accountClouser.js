@@ -9,23 +9,34 @@ const User = require("../../../Models/User/users");
 const sequelize = require("../../../database");
 const Sequelize = require("sequelize");
 
-exports.getPendingClosoureRequestList = async (req, res, next) => {
+exports.getPendingClosureRequestList = async (req, res, next) => {
   try {
-    // Fetch all users where isRequestedClouser is true
-    const users = await User.findAll({
+    const { candidateId } = req.body; // Get candidateId from request body
+
+    // Build the query options
+    const queryOptions = {
       where: {
         isRequestedClouser: true,
       },
       attributes: { exclude: ["password"] }, // Exclude password field from the result
-    });
+    };
 
-    //   // Check if any users found
-    //   if (users.length === 0) {
-    //     return res.status(404).json({
-    //       success: false,
-    //       message: "No pending closure requests found.",
-    //     });
-    //   }
+    // If candidateId is provided, filter by it
+    if (candidateId) {
+      queryOptions.where.candidateId = candidateId;
+    }
+
+    // Fetch users based on query options
+    console.log(queryOptions);
+    const users = await User.findAll(queryOptions);
+
+    // Check if any users found
+    if (users.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No pending closure requests found.",
+      });
+    }
 
     // Send the response with the list of users
     res.status(200).json({
@@ -42,23 +53,33 @@ exports.getPendingClosoureRequestList = async (req, res, next) => {
   }
 };
 
-exports.getHistoryOfClouserRequestList = async (req, res, next) => {
+exports.getHistoryOfClosureRequestList = async (req, res, next) => {
   try {
-    // Fetch all users where isActive is false (account closure history)
-    const users = await User.findAll({
+    const { candidateId } = req.body; // Get candidateId from request body
+
+    // Build the query options
+    const queryOptions = {
       where: {
         isActive: false,
       },
       attributes: { exclude: ["password"] }, // Exclude password field from the result
-    });
+    };
 
-    //   // Check if any users found
-    //   if (users.length === 0) {
-    //     return res.status(404).json({
-    //       success: false,
-    //       message: "No history of closure requests found.",
-    //     });
-    //   }
+    // If candidateId is provided, filter by it
+    if (candidateId) {
+      queryOptions.where.candidateId = candidateId;
+    }
+
+    // Fetch users based on query options
+    const users = await User.findAll(queryOptions);
+
+    // Check if any users found
+    if (users.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No history of closure requests found.",
+      });
+    }
 
     // Send the response with the list of users
     res.status(200).json({
@@ -133,6 +154,7 @@ exports.getCustomerInformation = async (req, res, next) => {
     // Return the response with all the fetched information
     res.status(200).json({
       success: true,
+      kycStatus: userKyc ? userKyc.userAggrementAccepted : false,
       userInformation: user, // User's personal information
       piggyBoxInformation: piggyBox || {}, // PiggyBox info or empty if not found
       bankDetailsInformation: bankDetails || {}, // Bank details or empty if not found
@@ -218,13 +240,13 @@ exports.approveCustomerClouserRequest = async (req, res, next) => {
     transaction = await sequelize.transaction();
 
     // Update the user status
-    user.isActive = false; // Mark the user as inactive
-    user.isRequestedClouser = false; // Reset closure request
-
+    
     // Check if the user has a referral and hasn't used it yet
     if (!user.isFundedFirst && user.byReferralId) {
       user.isByReferralUsed = true; // Mark referral as used
     }
+    user.isActive = false; // Mark the user as inactive
+    user.isRequestedClouser = false; // Reset closure request
 
     await user.save({ transaction });
 
@@ -310,12 +332,10 @@ exports.rejectCustomerClouserRequest = async (req, res, next) => {
     }
     if (!user.isRequestedClouser) {
       //await transaction.rollback();
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "User has not requested account closure.",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "User has not requested account closure.",
+      });
     }
 
     // Fetch the user's PiggyBox
@@ -336,12 +356,10 @@ exports.rejectCustomerClouserRequest = async (req, res, next) => {
 
     if (!withdrawalRequest) {
       //await transaction.rollback();
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "No pending withdrawal request found.",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "No pending withdrawal request found.",
+      });
     }
 
     // Start a Sequelize transaction
@@ -370,6 +388,11 @@ exports.rejectCustomerClouserRequest = async (req, res, next) => {
       },
       { transaction }
     );
+
+    user.isActive = true; // Mark the user as inactive
+    user.isRequestedClouser = false; // Reset closure request
+
+    await user.save({ transaction });
 
     // Commit the transaction
     await transaction.commit();

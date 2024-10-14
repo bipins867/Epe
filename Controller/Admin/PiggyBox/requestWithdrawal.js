@@ -7,8 +7,6 @@ const User = require("../../../Models/User/users");
 const sequelize = require("../../../database");
 const Sequelize = require("sequelize");
 
-
-
 //Status will be passed based no the situation like -> pending /  non pendings
 exports.getWithdrawalRequestList = async (req, res, next) => {
   try {
@@ -55,8 +53,7 @@ exports.getWithdrawalRequestList = async (req, res, next) => {
     if (withdrawalRequests.length === 0) {
       return res.status(404).json({
         success: false,
-        message:
-          "No withdrawal requests found for users without closure requests.",
+        message: "No withdrawal requests found !",
       });
     }
 
@@ -110,7 +107,12 @@ exports.getCustomerInformation = async (req, res, next) => {
     // Fetch BankDetails for the user
     const bankDetails = await BankDetails.findOne({
       where: { UserId: user.id },
-      attributes: ["accountNumber", "ifscCode", "bankName", "branchName"], // Return relevant bankDetails fields
+      attributes: [
+        "accountNumber",
+        "ifscCode",
+        "bankName",
+        "accountHolderName",
+      ], // Return relevant bankDetails fields
     });
 
     // Initialize the list for non-pending withdrawal requests
@@ -123,22 +125,15 @@ exports.getCustomerInformation = async (req, res, next) => {
       const withdrawalRequests = await RequestWithdrawal.findAll({
         where: { UserId: user.id },
         order: [["createdAt", "DESC"]], // Order by the most recent requests
-        attributes: [
-          "id",
-          "requestId",
-          "amount",
-          "status",
-          "createdAt",
-          "updatedAt",
-        ], // Select the needed fields
+        // Select the needed fields
       });
 
       // Separate pending and non-pending requests
       pendingWithdrawals = withdrawalRequests.filter(
-        (req) => req.status === "pending"
+        (req) => req.status === "Pending"
       );
       nonPendingWithdrawals = withdrawalRequests.filter(
-        (req) => req.status !== "pending"
+        (req) => req.status !== "Pending"
       );
     }
     // If user requested closure, only return non-pending withdrawal requests
@@ -146,14 +141,6 @@ exports.getCustomerInformation = async (req, res, next) => {
       nonPendingWithdrawals = await RequestWithdrawal.findAll({
         where: { UserId: user.id, status: { [Sequelize.Op.ne]: "pending" } }, // Only non-pending requests
         order: [["createdAt", "DESC"]],
-        attributes: [
-          "id",
-          "requestId",
-          "amount",
-          "status",
-          "createdAt",
-          "updatedAt",
-        ],
       });
     }
 
@@ -187,7 +174,7 @@ exports.getCustomerInformation = async (req, res, next) => {
 
 //Status update --
 exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
-  const { candidateId, status, requestId } = req.body;
+  const { candidateId, status, adminRemark, requestId } = req.body;
 
   let transaction; // Start a new transaction
 
@@ -229,14 +216,12 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
 
     // Check if the withdrawal request exists and is pending
     if (!withdrawalRequest) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: "Pending Withdrawal request not found.",
-        });
+      return res.status(404).json({
+        success: false,
+        message: "Pending Withdrawal request not found.",
+      });
     }
-    if (withdrawalRequest.status !== "pending") {
+    if (withdrawalRequest.status !== "Pending") {
       return res.status(400).json({
         success: false,
         message: "Pending Withdrawal request not found.",
@@ -250,7 +235,7 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
     });
 
     transaction = await sequelize.transaction();
-
+    console.log("HI");
     // Proceed based on the request status (Approved or Rejected)
     if (status === "Approved") {
       // Deduct the amount from the unclearedBalance
@@ -275,17 +260,14 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
       }
 
       // Create a new TransactionHistory entry for the current withdrawal request
-      await TransactionHistory.create(
-        {
-          transactionType: "withdrawal",
-          remark: "User withdrawal request approved by Admin",
-          debit: amount,
-          credit: 0,
-          balance: piggyBox.piggyBalance - amount, // Update balance after deduction
-          UserId: user.id,
-        },
-        { transaction }
-      );
+
+      const transactionHistory = await TransactionHistory.findOne({
+        where: { UserId: user.id, transactionType: "withdrawal" },
+        order: [["createdAt", "DESC"]],
+      });
+      transactionHistory.remark = "	User withdrawal request approved by Admin";
+
+      await transactionHistory.update({ transaction });
     } else if (status === "Rejected") {
       // Add the amount back to the piggyBalance
       const amount = parseFloat(withdrawalRequest.amount);
@@ -304,9 +286,11 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
         },
         { transaction }
       );
-
+      console.log("HI THERE");
       // Update the withdrawal request status
       withdrawalRequest.status = "Rejected";
+      withdrawalRequest.adminRemark = adminRemark;
+      withdrawalRequest.userRemark = `Admin :- ${adminRemark}`;
     }
 
     // Save changes to the database

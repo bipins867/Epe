@@ -2,6 +2,7 @@ const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory"
 const User = require("../../../Models/User/users");
 const sequelize = require("../../../database");
 const Sequelize = require("sequelize");
+const { Op } = require("sequelize");
 
 exports.getTopTransactionHistories = async (req, res, next) => {
   try {
@@ -44,7 +45,7 @@ exports.getTopTransactionHistories = async (req, res, next) => {
 exports.getCustomDateTransactionHistories = async (req, res, next) => {
   try {
     // Extract fromDate and toDate from the request body
-    const { fromDate, toDate } = req.body;
+    const { fromDate, toDate, limit } = req.body;
 
     // Validate if both fromDate and toDate are provided
     if (!fromDate || !toDate) {
@@ -80,6 +81,7 @@ exports.getCustomDateTransactionHistories = async (req, res, next) => {
           attributes: ["candidateId", "email", "phone", "name"], // Include only the candidateId
         },
       ],
+      limit: parseInt(limit),
     });
 
     // If no transaction histories found
@@ -106,78 +108,78 @@ exports.getCustomDateTransactionHistories = async (req, res, next) => {
   }
 };
 
-exports.getCustomerInformation = async (req, res, next) => {
-  try {
-    // Extract candidateId from the request body
-    const { candidateId } = req.body;
+// exports.getCustomerInformation = async (req, res, next) => {
+//   try {
+//     // Extract candidateId from the request body
+//     const { candidateId } = req.body;
 
-    // Fetch the user based on candidateId, excluding the password field
-    const user = await User.findOne({
-      where: { candidateId },
-      attributes: { exclude: ["password"] }, // Exclude password from the results
-    });
+//     // Fetch the user based on candidateId, excluding the password field
+//     const user = await User.findOne({
+//       where: { candidateId },
+//       attributes: { exclude: ["password"] }, // Exclude password from the results
+//     });
 
-    // Check if the user exists
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found.",
-      });
-    }
+//     // Check if the user exists
+//     if (!user) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "User not found.",
+//       });
+//     }
 
-    // Return the user information
-    return res.status(200).json({
-      success: true,
-      message: "User information retrieved successfully.",
-      data: user,
-    });
-  } catch (error) {
-    // Log the error and return a 500 response
-    console.error("Error retrieving user information:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Server error while retrieving user information.",
-    });
-  }
-};
+//     // Return the user information
+//     return res.status(200).json({
+//       success: true,
+//       message: "User information retrieved successfully.",
+//       data: user,
+//     });
+//   } catch (error) {
+//     // Log the error and return a 500 response
+//     console.error("Error retrieving user information:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Server error while retrieving user information.",
+//     });
+//   }
+// };
 
-exports.getCustomerTransactionHistories = async (req, res, next) => {
-  try {
-    // Extract candidateId from the request body
-    const { candidateId } = req.body;
+// exports.getCustomerTransactionHistories = async (req, res, next) => {
+//   try {
+//     // Extract candidateId from the request body
+//     const { candidateId } = req.body;
 
-    // Fetch the user based on candidateId
-    const user = await User.findOne({
-      where: { candidateId },
-    });
+//     // Fetch the user based on candidateId
+//     const user = await User.findOne({
+//       where: { candidateId },
+//     });
 
-    // Check if the user exists
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found.",
-      });
-    }
+//     // Check if the user exists
+//     if (!user) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "User not found.",
+//       });
+//     }
 
-    // Fetch the top 20 recent transactions associated with the user
-    const transactionHistories = await TransactionHistory.findAll({
-      where: { UserId: user.id },
-      limit: 20,
-      order: [["createdAt", "DESC"]], // Order by most recent transactions
-    });
+//     // Fetch the top 20 recent transactions associated with the user
+//     const transactionHistories = await TransactionHistory.findAll({
+//       where: { UserId: user.id },
+//       limit: 20,
+//       order: [["createdAt", "DESC"]], // Order by most recent transactions
+//     });
 
-    // Return the transaction history
-    return res.status(200).json({
-      success: true,
-      message: "Transaction histories retrieved successfully.",
-      data: transactionHistories,
-    });
-  } catch (error) {
-    // Log the error and return a 500 response
-    console.error("Error retrieving transaction histories:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Server error while retrieving transaction histories.",
-    });
-  }
-};
+//     // Return the transaction history
+//     return res.status(200).json({
+//       success: true,
+//       message: "Transaction histories retrieved successfully.",
+//       data: transactionHistories,
+//     });
+//   } catch (error) {
+//     // Log the error and return a 500 response
+//     console.error("Error retrieving transaction histories:", error);
+//     return res.status(500).json({
+//       success: false,
+//       message: "Server error while retrieving transaction histories.",
+//     });
+//   }
+// };

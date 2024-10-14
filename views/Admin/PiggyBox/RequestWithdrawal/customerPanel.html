@@ -18,8 +18,10 @@
     />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/Admin/PiggyBox/RequestWithdrawal/customerPanel.css" />
-    
+    <link
+      rel="stylesheet"
+      href="/css/Admin/PiggyBox/RequestWithdrawal/customerPanel.css"
+    />
   </head>
   <body>
     <!-- Sidebar -->
@@ -167,9 +169,9 @@
 
                   <div class="form-group col-md-6 d-flex align-items-center">
                     <label for="joiningDate" class="col-form-label col-md-4"
-                      >KYC </label
-                    >
-                    <p id="joiningDate" class="col-md-8 readonly-field">
+                      >KYC
+                    </label>
+                    <p id="kyc" class="col-md-8 readonly-field">
                       Verified
                     </p>
                   </div>
@@ -185,16 +187,28 @@
             <div class="section-body">
               <div class="row">
                 <div class="col-md-6">
-                  <p><strong>Piggy Balance:</strong> ₹10,000</p>
+                  <p>
+                    <strong>Piggy Balance:</strong>
+                    <span id="piggyBalance">N/A</span>
+                  </p>
                 </div>
                 <div class="col-md-6">
-                  <p><strong>Uncleared Balance:</strong> ₹500</p>
+                  <p>
+                    <strong>Uncleared Balance:</strong>
+                    <span id="unclearedBalance">N/A</span>
+                  </p>
                 </div>
                 <div class="col-md-6">
-                  <p><strong>Interest Balance:</strong> ₹200</p>
+                  <p>
+                    <strong>Interest Balance:</strong
+                    ><span id="interestBalance">N/A</span>
+                  </p>
                 </div>
                 <div class="col-md-6">
-                  <p><strong>Is Funded First:</strong> Yes</p>
+                  <p>
+                    <strong>Is Funded First:</strong>
+                    <span id="isFundedFirst">N/A</span>
+                  </p>
                 </div>
               </div>
             </div>
@@ -207,38 +221,53 @@
             <div class="section-body">
               <div class="row">
                 <div class="col-md-6">
-                  <p><strong>Bank Name:</strong> XYZ Bank</p>
+                  <p>
+                    <strong>Bank Name:</strong><span id="bankName">N/A</span>
+                  </p>
                 </div>
                 <div class="col-md-6">
-                  <p><strong>Account Number:</strong> 123456789</p>
+                  <p>
+                    <strong>Account Number:</strong
+                    ><span id="accountNumber">N/A</span>
+                  </p>
                 </div>
                 <div class="col-md-6">
-                  <p><strong>User Name:</strong> John Doe</p>
+                  <p>
+                    <strong>Account Holder Name:</strong
+                    ><span id="accountHolderName">N/A</span>
+                  </p>
                 </div>
                 <div class="col-md-6">
-                  <p><strong>IFSC Code:</strong> XYZB0001234</p>
+                  <p>
+                    <strong>IFSC Code:</strong><span id="ifscCode">N/A</span>
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="deposit-balance">
+          <div class="deposit-balance" id="withdrawal-request">
             <div class="section-title">
               <i class="fas fa-wallet"></i> Withdrawal Request
             </div>
             <div class="section-body">
               <div class="row">
                 <div class="col-md-6">
-                  <p><strong>Request ID:</strong> XYZ Bank</p>
+                  <p>
+                    <strong>Request ID:</strong><span id="requestId">N/A</span>
+                  </p>
                 </div>
                 <div class="col-md-6">
-                  <p><strong>Request Date:</strong> 123456789</p>
+                  <p>
+                    <strong>Request Date:</strong
+                    ><span id="createdAt">N/A</span>
+                  </p>
                 </div>
                 <div class="col-md-6">
-                  <p><strong>Amount:</strong> John Doe</p>
+                  <p><strong>Amount:</strong><span id="amount">N/A</span></p>
                 </div>
                 <div class="col-md-6">
-                  <p><strong>Staus:</strong> XYZB0001234</p>
+                  <p><strong>Staus:</strong><span id="status">N/A</span></p>
                 </div>
               </div>
 
@@ -260,31 +289,15 @@
                 <thead>
                   <tr>
                     <th>#</th>
+                    <th>RequestId</th>
                     <th>Date</th>
-                    <th>Particulars</th>
-                    <th>Debit</th>
-                    <th>Credit</th>
-                    <th>Balance</th>
+                    <th>Amount</th>
+                    <th>User Remark</th>
+                    <th>Admin Remark</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>13/10/2024 12:24:52</td>
-                    <td>Deduct By Admin :</td>
-                    <td>2000.00</td>
-                    <td>0.00</td>
-                    <td>0.00</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>13/10/2024 08:23:59</td>
-                    <td>Deposit by Admin :</td>
-                    <td>0.00</td>
-                    <td>2000.00</td>
-                    <td>2000.00</td>
-                  </tr>
-                </tbody>
+                <tbody></tbody>
               </table>
             </div>
           </div>

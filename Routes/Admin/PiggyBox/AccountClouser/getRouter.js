@@ -4,7 +4,7 @@ const accountClouserPageController = require("../../../../Controller/Pages/Admin
 
 const router = express.Router();
 
-router.get("/customerPanel", accountClouserPageController.getCustomerPanelPage);
+router.get("/customerPanel/:customerId", accountClouserPageController.getCustomerPanelPage);
 router.get(
   "/previousList",
   accountClouserPageController.getPreviosRequestListPage

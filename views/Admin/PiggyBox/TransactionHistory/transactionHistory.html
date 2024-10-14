@@ -122,7 +122,53 @@
           <!-- Deposit Balance Section -->
           <div class="deposit-balance">
             <div class="section-title">
-              <i class="fas fa-wallet"></i>Search Result
+              <i class="fas fa-wallet"></i> Search Result
+            </div>
+            <div class="section-body">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="fromDate">From Date:</label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="fromDate"
+                        placeholder="Select From Date"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="toDate">To Date:</label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="toDate"
+                        placeholder="Select To Date"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="limit">Limit:</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="limit"
+                        placeholder="Enter Limit"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <button type="button" class="btn btn-primary" id="getDetails">
+                      Get Result
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="section-body">
               <table class="table table-striped">
@@ -130,33 +176,19 @@
                   <tr>
                     <th>#</th>
                     <th>Date</th>
-                    <th>Particulars</th>
+                    <th>Transaction Type</th>
+                    <th>Candidate Id</th>
+                    <th>Remark</th>
                     <th>Debit</th>
                     <th>Credit</th>
                     <th>Balance</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>13/10/2024 12:24:52</td>
-                    <td>Deduct By Admin :</td>
-                    <td>2000.00</td>
-                    <td>0.00</td>
-                    <td>0.00</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>13/10/2024 08:23:59</td>
-                    <td>Deposit by Admin :</td>
-                    <td>0.00</td>
-                    <td>2000.00</td>
-                    <td>2000.00</td>
-                  </tr>
-                </tbody>
+                <tbody id="transactionTable"></tbody>
               </table>
             </div>
           </div>
+          
         </div>
       </div>
       <footer class="bg-primary text-white text-center py-3 mt-4">
