@@ -4,7 +4,7 @@ const referralPageController = require("../../../../Controller/Pages/Admin/Piggy
 
 const router = express.Router();
 
-router.get('/customerPanel',referralPageController.getCustomerPanelPage)
+router.get('/customerPanel/:cutomerId',referralPageController.getCustomerPanelPage)
 router.get('/',referralPageController.getDashboardPage)
 
 module.exports = router;

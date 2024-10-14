@@ -49,7 +49,7 @@ exports.getSearchedCustomerInformation = async (req, res, next) => {
     }
 
     // Fetch the user based on candidateId
-    const user = await User.findOne({
+    const user = await User.findAll({
       where: { candidateId },
       attributes: { exclude: ["password"] }, // Exclude password from the result
     });
