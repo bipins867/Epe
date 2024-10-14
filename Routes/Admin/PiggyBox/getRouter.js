@@ -4,7 +4,7 @@ const piggyBoxPageController=require('../../../Controller/Pages/Admin/PiggyBox/P
 
 const router = express.Router();
 
-router.get('/manageFunds',piggyBoxPageController.getManageFundsPage)
+router.get('/manageFunds/:customerId',piggyBoxPageController.getManageFundsPage)
 router.get('/',piggyBoxPageController.getDashboardPage)
 
 module.exports = router;

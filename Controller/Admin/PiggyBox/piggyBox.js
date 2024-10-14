@@ -1,10 +1,102 @@
 const User = require("../../../Models/User/users");
-const TransactionHistory = require("../../../Models/Transaction/TransactionHistory");
 const Piggybox = require("../../../Models/PiggyBox/piggyBox");
-
 const sequelize = require("../../../database");
+const BankDetails = require("../../../Models/PiggyBox/bankDetails");
+const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
+const { Op } = require("sequelize"); // Sequelize operator for date filtering
 
-exports.getCustomerTopRecentTransactionHistory = async (req, res, next) => {
+
+exports.getSearchCustomerResult = async (req, res, next) => {
+  try {
+    // Extract candidateId from query parameters
+    const { candidateId } = req.body;
+
+    // Validate candidateId
+    if (!candidateId) {
+      return res.status(400).json({
+        success: false,
+        message: "Candidate ID is required",
+      });
+    }
+
+    // Fetch user information based on candidateId
+    const users = await User.findAll({
+      where: {
+        candidateId: candidateId, // Assuming candidateId is unique
+      },
+      attributes: ["id", "name", "candidateId", "createdAt"], // Specify the fields you want to return
+    });
+
+    // Check if user is found
+    if (!users) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Return the user information in the response
+    res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch user information",
+      error: error.message,
+    });
+  }
+};
+
+exports.getCustomersList = async (req, res, next) => {
+  try {
+    // Extract query parameters
+    const { fromDate, toDate, limit } = req.body;
+
+    // Default limit if none is provided
+    const resultsLimit = limit ? parseInt(limit) : 20;
+
+    // Initialize query options
+    let queryOptions = {
+      limit: resultsLimit,
+      order: [["createdAt", "DESC"]], // Order by creation date (newest first)
+      attributes: ["id", "name", "candidateId", "createdAt"], // Select fields to return
+    };
+
+    // If fromDate and toDate are provided, filter the users based on the date range
+    if (fromDate && toDate) {
+      queryOptions.where = {
+        createdAt: {
+          [Op.between]: [new Date(fromDate), new Date(toDate)], // Filter users by creation date range
+        },
+      };
+    }
+
+    // Fetch users based on the query options
+    const customers = await User.findAll(queryOptions);
+
+    // Return the customers in the response
+    res.status(200).json({
+      success: true,
+      customers,
+    });
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch customers",
+      error: error.message,
+    });
+  }
+};
+
+
+
+exports.getCustomerInformation = async (req, res, next) => {
   try {
     // Extract candidateId from the request body
     const { candidateId } = req.body;
@@ -12,6 +104,7 @@ exports.getCustomerTopRecentTransactionHistory = async (req, res, next) => {
     // Fetch the user based on candidateId
     const user = await User.findOne({
       where: { candidateId },
+      attributes: { exclude: ["password"] }, // Exclude password from the response
     });
 
     // Check if the user exists
@@ -21,12 +114,69 @@ exports.getCustomerTopRecentTransactionHistory = async (req, res, next) => {
         .json({ success: false, message: "User not found." });
     }
 
-    // Fetch the user's transaction history
-    const transactionHistories = await TransactionHistory.findAll({
-      where: { UserId: user.id }, // Assuming UserId is the foreign key in TransactionHistory
-      order: [["createdAt", "DESC"]], // Order by creation date (most recent first)
-      limit: 20, // Limit to the top 20 transactions
+    // Fetch the PiggyBox associated with the user
+    const piggyBox = await Piggybox.findOne({ where: { UserId: user.id } });
+
+    // Fetch the BankDetails associated with the user
+    const bankDetails = await BankDetails.findOne({
+      where: { UserId: user.id },
     });
+
+    // Prepare the response data
+    const responseData = {
+      user,
+      piggyBox,
+      bankDetails,
+    };
+
+    // Send the customer information in the response
+    res.status(200).json({
+      success: true,
+      data: responseData,
+    });
+  } catch (error) {
+    console.error("Error fetching customer information:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching customer information.",
+    });
+  }
+};
+
+exports.getCustomerTopRecentTransactionHistory = async (req, res, next) => {
+  try {
+    // Extract candidateId, fromDate, toDate, and limit from the request body
+    const { candidateId, fromDate, toDate, limit } = req.body;
+
+    // Fetch the user based on candidateId
+    const user = await User.findOne({
+      where: { candidateId },
+    });
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found." });
+    }
+
+    // Prepare the query for transaction history
+    const query = {
+      where: { UserId: user.id }, // Assuming UserId is the foreign key in TransactionHistory
+      order: [["createdAt", "DESC"], ["id", "DESC"]], // Order by creation date (most recent first)
+    };
+
+    // Add date filters if provided
+    if (fromDate) {
+      query.where.createdAt = { [Op.gte]: new Date(fromDate) };
+    }
+    if (toDate) {
+      query.where.createdAt = { [Op.lte]: new Date(toDate) };
+    }
+
+    // Set the limit if provided, otherwise use the default of 20
+    query.limit = limit ? parseInt(limit, 10) : 20;
+
+    // Fetch the user's transaction history
+    const transactionHistories = await TransactionHistory.findAll(query);
 
     // Send the list of transaction histories in the response
     res.status(200).json({
@@ -46,7 +196,7 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
   let transaction;
   try {
     // Extract candidateId and amount from the request body
-    const { candidateId, amount } = req.body;
+    const { candidateId, amount,remark } = req.body;
 
     // Validate amount
     if (!amount || isNaN(amount) || amount <= 0) {
@@ -134,11 +284,12 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
 };
 
 exports.deductFundsFromCustomerWallet = async (req, res, next) => {
+  
   let transaction;
   try {
     // Extract candidateId and amount from the request body
-    const { candidateId, amount } = req.body;
-
+    const { candidateId, amount,remark } = req.body;
+    
     // Validate amount
     if (!amount || isNaN(amount) || amount <= 0) {
       return res
@@ -185,7 +336,7 @@ exports.deductFundsFromCustomerWallet = async (req, res, next) => {
         message: "Insufficient funds in the piggy box.",
       });
     }
-    
+
     // Start a Sequelize transaction
     transaction = await sequelize.transaction();
 

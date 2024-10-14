@@ -124,7 +124,7 @@
             <div class="section-body">
               <label for="customer-id">Customer Id</label>
               <input type="text" id="customer-id" class="input-box" />
-              <button class="search-btn"><i class="fas fa-search"></i></button>
+              <button class="search-btn" id="search-btn"><i class="fas fa-search"></i></button>
             </div>
           </div>
 
@@ -171,7 +171,7 @@
                     </div>
                   </div>
                   <div class="col-md-6">
-                    <button type="button" class="btn btn-primary">
+                    <button type="button" class="btn btn-primary" id="get-result-btn">
                       Get Result
                     </button>
                   </div>
@@ -186,6 +186,7 @@
                     <th scope="col">Customer ID</th>
                     <th scope="col">Customer Name</th>
                     <th scope="col">Date Joining</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody id="members-table-body">
