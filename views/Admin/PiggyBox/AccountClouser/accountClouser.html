@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Clouser</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome for Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/Admin/PiggyBox/AccountClouser/accountClouser.css" />
+    
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="container-fluid" id="wrapper">
+      <div
+        class="bg-primary border-right sidebar sticky-sidebar"
+        id="sidebar-wrapper"
+      >
+        <div class="sidebar-heading text-center">
+          <img
+            src="/img/epeLogo.png"
+            alt="EPE Logo"
+            class="img-fluid"
+            style="height: 60px"
+          />
+        </div>
+        <div class="list-group list-group-flush">
+          <div class="sidebar">
+            <a href="/admin/dashboard" class="sidebar-btn">
+              <i class="fas fa-tachometer-alt"></i>
+              Dashboard
+            </a>
+
+            <a href="#customers" class="sidebar-btn">
+              <i class="fas fa-users"></i>
+              Customers
+            </a>
+            <a href="#piggybox" class="sidebar-btn">
+              <i class="fas fa-lock"></i>
+              PiggyBox
+            </a>
+            <a href="#customers" class="sidebar-btn">
+              <i class="fas fa-users"></i>
+              Account Clouser Requests
+            </a>
+            <a href="#withdrawal" class="sidebar-btn">
+              <i class="fas fa-file-invoice-dollar"></i>
+              Withdrawal Request
+            </a>
+            <a href="#withdrawal" class="sidebar-btn">
+              <i class="fas fa-file-invoice-dollar"></i>
+              Transaction History
+            </a>
+            <a href="#referral" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              EPE Referral Program
+            </a>
+            <a href="/admin/kyc/dashboard" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              KYC Module
+            </a>
+            <a href="/admin/customerSupport/dashboard" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              Customer Support
+            </a>
+            <a href="/admin/basic/applyLoan" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              Apply Loan
+            </a>
+            <a href="/admin/basic/contactUs" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              Contact Us
+            </a>
+            <a href="#" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              User Activity
+            </a>
+
+            <a href="/admin/editAdmin" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              Edit Admin
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page Content -->
+      <div id="page-content-wrapper">
+        <!-- Main Content -->
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mt-4 shadow">
+                <div class="card-header bg-danger text-white">
+                  <i class="fas fa-users"></i> Account Clouser
+                </div>
+                <!-- <div class="announcement">
+                                <div class="announcement-wrapper">
+                                    <p class="announcement-message">This is your sliding announcement message!</p>
+                                </div>
+                            </div> -->
+              </div>
+            </div>
+          </div>
+    
+          <!-- Dashboard Info Cards -->
+          <div class="row mt-4">
+            <div class="col-md-3">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">
+                        Pending Account Clouser List
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">
+                        Recent Account Clouser List
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-user-plus fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="bg-primary text-white text-center py-3 mt-4">
+        <div class="container">
+          <p class="mb-0">
+            &copy; 2024 EPE. All Rights Reserved. Create with ❤️ in India
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JS -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/js/Admin/PiggyBox/AccountClouser/accountClouser.js"></script>
+    <script src="/js/Utils/adminUtils.js"></script>
+  </body>
+</html>

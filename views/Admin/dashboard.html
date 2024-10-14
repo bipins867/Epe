@@ -3,78 +3,388 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard</title>
+    <title>Dashboard</title>
+
     <!-- Bootstrap CSS -->
     <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="icon" href="/Favicon/ImageAI-522x425.ico" type="image/x-icon">
+
+    <!-- Font Awesome for Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/Admin/Dashboard/dashboard.css" />
   </head>
   <body>
-    <a href="/admin/dashboard">Admin Home</a>
-    <div class="container-fluid">
-      <div class="row bg-primary text-white p-3">
-        <div class="col-md-8">
-          <h2>Admin Dashboard</h2>
-        </div>
-        <div class="col-md-4 text-right">
-          <span id="userId">UserID: admin123</span>
-          <button id="logoutBtn" class="btn btn-outline-light ml-3">
-            Logout
-          </button>
-        </div>
-      </div>
-
-      <div class="row mt-4">
-        <div class="col-md-4">
-          <div class="list-group" id="adminOptions">
-            <a
-              href="/admin/editAdmin"
-              class="list-group-item list-group-item-action"
-              >Edit Admins</a
-            >
-            <a
-              href="/admin/kyc/dashboard"
-              class="list-group-item list-group-item-action"
-              >KYC Module</a
-            > 
-            <a
-            href="/admin/customerSupport/dashboard"
-            class="list-group-item list-group-item-action"
-            >Customer Support</a
-          > <a
-          href="/admin/basic/applyLoan"
-          class="list-group-item list-group-item-action"
-          >Apply Loan</a
-        > <a
-        href="/admin/basic/contactUs"
-        class="list-group-item list-group-item-action"
-        >Contact Us</a
+    <!-- Sidebar -->
+    <div class="container-fluid" id="wrapper">
+      <div
+        class="bg-primary border-right sidebar sticky-sidebar"
+        id="sidebar-wrapper"
       >
-            <!-- More links can be added here -->
+        <div class="sidebar-heading text-center">
+          <img
+            src="/img/epeLogo.png"
+            alt="EPE Logo"
+            class="img-fluid"
+            style="height: 60px"
+          />
+        </div>
+        <div class="list-group list-group-flush">
+          <div class="sidebar">
+            <a href="/admin/dashboard" class="sidebar-btn">
+              <i class="fas fa-tachometer-alt"></i>
+              Dashboard
+            </a>
+
+            <a href="#customers" class="sidebar-btn">
+              <i class="fas fa-users"></i>
+              Customers
+            </a>
+            <a href="#piggybox" class="sidebar-btn">
+              <i class="fas fa-lock"></i>
+              PiggyBox
+            </a>
+            <a href="#customers" class="sidebar-btn">
+              <i class="fas fa-users"></i>
+              Account Clouser Requests
+            </a>
+            <a href="#withdrawal" class="sidebar-btn">
+              <i class="fas fa-file-invoice-dollar"></i>
+              Withdrawal Request
+            </a>
+            <a href="#withdrawal" class="sidebar-btn">
+              <i class="fas fa-file-invoice-dollar"></i>
+              Transaction History
+            </a>
+            <a href="#referral" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              EPE Referral Program
+            </a>
+            <a href="/admin/kyc/dashboard" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              KYC Module
+            </a>
+            <a href="/admin/customerSupport/dashboard" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              Customer Support
+            </a>
+            <a href="/admin/basic/applyLoan" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              Apply Loan
+            </a>
+            <a href="/admin/basic/contactUs" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              Contact Us
+            </a>
+            <a href="#" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              User Activity
+            </a>
+
+            <a href="/admin/editAdmin" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              Edit Admin
+            </a>
           </div>
         </div>
-        <div class="col-md-8" id="contentArea">
-          <h3>Welcome to the Admin Dashboard</h3>
-          <p>Select an option from the left to begin.</p>
+      </div>
+
+      <!-- Page Content -->
+      <div id="page-content-wrapper">
+        <nav
+          class="navbar navbar-expand-lg navbar-light bg-light border-bottom"
+        >
+          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fas fa-home"></i></a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="userDropdown"
+                role="button"
+                data-toggle="dropdown"
+              >
+                <i class="fas fa-user"></i> Admin
+              </a>
+              <div
+                class="dropdown-menu dropdown-menu-right"
+                aria-labelledby="userDropdown"
+              >
+                <a class="dropdown-item" href="#">Profile</a>
+                <div class="dropdown-divider"></div>
+                <button id="logoutBtn" class="dropdown-item">Logout</button>
+              </div>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mt-4 shadow">
+                <div class="card-header bg-danger text-white">
+                  <i class="fas fa-bullhorn"></i> ANNOUNCEMENT
+                </div>
+                <div class="announcement">
+                  <div class="announcement-wrapper">
+                    <p class="announcement-message">Welcome to EPE India!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dashboard Info Cards -->
+          <div class="row mt-4">
+            <div class="col-md-3">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">
+                        Total Customers
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold">37</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">
+                        Today's Join Customers
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold">0</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-user-plus fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">
+                        Wallet Recharge Today
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold">0.00</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-wallet fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">
+                        Total Wallet Balance
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold">3000.00</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-3">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">
+                        Total Customers
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold">37</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">
+                        Today's Join Customers
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold">0</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-user-plus fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">
+                        Wallet Recharge Today
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold">0.00</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-wallet fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">
+                        Total Wallet Balance
+                      </div>
+                      <div class="h5 mb-0 font-weight-bold">3000.00</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Member Analysis Section -->
+
+          <!-- <div class="row mt-4">
+            <div class="col-md-12">
+              <div class="card shadow">
+                <div
+                  class="card-header bg-danger text-white d-flex justify-content-between align-items-center"
+                  style="max-height: 20%"
+                >
+                  <span>Member Analysis</span>
+                  <button class="btn btn-dark btn-sm">Settings</button>
+                </div>
+                <div class="card-body chart">
+                  <canvas id="memberChart" height="80"></canvas>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+          <!-- Recent Joined Members-->
+          <div class="card mt-4">
+            <div class="card-header bg-#ff5722 text-white">
+              <h4>Recent Joined Members</h4>
+            </div>
+            <div class="card-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Sr No.</th>
+                    <th scope="col">Customer ID</th>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Date Joining</th>
+                  </tr>
+                </thead>
+                <tbody id="members-table-body">
+                  <!-- Data will be dynamically inserted here -->
+                  <tr>
+                    <td>1</td>
+                    <td>2177587</td>
+                    <td>Alok Prajapati</td>
+                    <td>06-10-2024</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>7226503</td>
+                    <td>Bipin</td>
+                    <td>05-10-2024</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>1894005</td>
+                    <td>Sanjay</td>
+                    <td>02-10-2024</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>1602561</td>
+                    <td>Kundan</td>
+                    <td>30-09-2024</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>1126395</td>
+                    <td>Sanjay</td>
+                    <td>27-09-2024</td>
+                  </tr>
+                </tbody>
+              </table>
+              <button id="more-members-btn" class="btn btn-primary">
+                More
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+      <footer class="bg-primary text-white text-center py-3 mt-4">
+        <div class="container">
+          <p class="mb-0">
+            &copy; 2024 EPE. All Rights Reserved. Create with ❤️ in India
+          </p>
+        </div>
+      </footer>
     </div>
 
-    <!-- Bootstrap JS and dependencies -->
+    <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom JS -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
       integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script src="/js/Utils/adminUtils.js"></script>
-
-    <!-- Custom JS -->
     <script src="/js/Admin/Dashboard/dashboard.js"></script>
+    <script src="/js/Utils/adminUtils.js"></script>
   </body>
 </html>

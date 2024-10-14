@@ -1,0 +1,226 @@
+/* General Body Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Make the sidebar sticky */
+.sticky-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* Full viewport height */
+    overflow-y: auto; /* Scrollable if content exceeds viewport */
+    z-index: 1000; /* Make sure it's above other elements */
+}
+
+/* Add padding to page content so it's not covered by the sidebar */
+#page-content-wrapper {
+    margin-left: 280px; /* Adjust according to your sidebar's width */
+   
+}
+
+/* Adjust sidebar's width */
+#sidebar-wrapper {
+    width: 250px; /* Set your desired width */
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    background-color: #3399ff; /* Background for the whole sidebar */
+    padding: 10px;
+    width: 230px; /* Fixed width */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+}
+
+.sidebar-btn {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #4da6ff; /* Default button background */
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-btn i {
+    margin-right: 10px; /* Space between icon and text */
+    font-size: 18px; /* Icon size */
+}
+
+.sidebar-btn:hover {
+    background-color: #0073e6; /* Darker blue on hover */
+}
+
+.sidebar-btn.active {
+    background-color: #ff5722; /* Orange for active state */
+    color: #fff;
+}
+
+.sidebar-btn.active i {
+    color: #fff; /* Icon color in active state */
+}
+
+.sidebar-btn:last-child {
+    margin-bottom: 0; /* Remove margin for the last button */
+}
+
+
+
+#page-content-wrapper {
+    width: 80%;
+}
+
+.card-header {
+    font-weight: bold;
+    padding: 1rem;
+}
+
+.card {
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+/* Cards Styling for Dashboard */
+.card-body {
+    padding: 20px;
+}
+
+.card .card-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Sidebar links styling */
+.list-group-item {
+    padding: 10px 20px;
+    background-origin: padding-box;
+    box-sizing: border-box;
+    border:#0062cc;
+}
+
+.list-group-item:hover {
+    background-color: #007bff;
+}
+
+.list-group-item.active {
+    background-color: #0062cc;
+    border-color: #0062cc;
+}
+
+/* Custom Button */
+.btn-dark {
+    background-color: #343a40;
+    border-color: #343a40;
+}
+
+/* Announcement Bar */
+.announcement-bar {
+    background-color: #ff5722;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 10px;
+}
+
+
+
+
+
+
+
+.content-header h2 {
+    background-color: #fff;
+    color: #ff6600;
+    padding: 10px;
+    border-bottom: 2px solid #ff6600;
+}
+
+.deposit-balance, .member-details, .deposit-account {
+    margin-top: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.member-details {
+    background-color: #faf9f7;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+.deposit-account{
+    background-color: #faf9f7;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+
+}
+.section-title {
+    background-color: #ff6600;
+    color: #fff;
+    padding: 10px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.section-body {
+    padding: 20px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.input-box {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 300px;
+    margin: 20px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 20px;
+}
+
+.search-btn {
+    background-color: #007bff;
+}
+
+.deposit-btn {
+    background-color: #28a745;
+}
+
+.cancel-btn {
+    background-color: #dc3545;
+}
+
+button i {
+    margin-right: 5px;
+}
+

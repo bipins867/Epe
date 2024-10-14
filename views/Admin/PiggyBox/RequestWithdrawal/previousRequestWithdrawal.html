@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pending Withdrawal List</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome for Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link
+      rel="stylesheet"
+      href="/css/Admin/PiggyBox/RequestWithdrawal/previousRequestWithdrawal.css"
+    />
+    
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="container-fluid" id="wrapper">
+      <div
+        class="bg-primary border-right sidebar sticky-sidebar"
+        id="sidebar-wrapper"
+      >
+        <div class="sidebar-heading text-center">
+          <img
+            src="/img/epeLogo.png"
+            alt="EPE Logo"
+            class="img-fluid"
+            style="height: 60px"
+          />
+        </div>
+        <div class="list-group list-group-flush">
+          <div class="sidebar">
+            <a href="/admin/dashboard" class="sidebar-btn">
+              <i class="fas fa-tachometer-alt"></i>
+              Dashboard
+            </a>
+
+            <a href="#customers" class="sidebar-btn">
+              <i class="fas fa-users"></i>
+              Customers
+            </a>
+            <a href="#piggybox" class="sidebar-btn">
+              <i class="fas fa-lock"></i>
+              PiggyBox
+            </a>
+            <a href="#customers" class="sidebar-btn">
+              <i class="fas fa-users"></i>
+              Account Clouser Requests
+            </a>
+            <a href="#withdrawal" class="sidebar-btn">
+              <i class="fas fa-file-invoice-dollar"></i>
+              Withdrawal Request
+            </a>
+            <a href="#withdrawal" class="sidebar-btn">
+              <i class="fas fa-file-invoice-dollar"></i>
+              Transaction History
+            </a>
+            <a href="#referral" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              EPE Referral Program
+            </a>
+            <a href="/admin/kyc/dashboard" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              KYC Module
+            </a>
+            <a href="/admin/customerSupport/dashboard" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              Customer Support
+            </a>
+            <a href="/admin/basic/applyLoan" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              Apply Loan
+            </a>
+            <a href="/admin/basic/contactUs" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              Contact Us
+            </a>
+            <a href="#" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              User Activity
+            </a>
+
+            <a href="/admin/editAdmin" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              Edit Admin
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page Content -->
+      <div id="page-content-wrapper">
+        <!-- Main Content -->
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mt-4 shadow">
+                <div class="card-header bg-danger text-white">
+                  <i class="fas fa-users"></i> Withdrawal Request
+                </div>
+                <!-- <div class="announcement">
+                                <div class="announcement-wrapper">
+                                    <p class="announcement-message">This is your sliding announcement message!</p>
+                                </div>
+                            </div> -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Dashboard Info Cards -->
+
+          <!-- Deposit Balance Section -->
+          <div class="deposit-balance">
+            <div class="section-title">
+              <i class="fas fa-wallet"></i> Search Customer
+            </div>
+            <div class="section-body">
+              <label for="customer-id">Customer Id</label>
+              <input type="text" id="customer-id" class="input-box" />
+              <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="section-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Sr No.</th>
+                    <th scope="col">Customer ID</th>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Date Joining</th>
+                  </tr>
+                </thead>
+                <tbody id="members-table-body">
+                  <!-- Data will be dynamically inserted here -->
+                  <tr>
+                    <td>1</td>
+                    <td>2177587</td>
+                    <td>Alok Prajapati</td>
+                    <td>06-10-2024</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>7226503</td>
+                    <td>Bipin</td>
+                    <td>05-10-2024</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>1894005</td>
+                    <td>Sanjay</td>
+                    <td>02-10-2024</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>1602561</td>
+                    <td>Kundan</td>
+                    <td>30-09-2024</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>1126395</td>
+                    <td>Sanjay</td>
+                    <td>27-09-2024</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="deposit-balance">
+            <div class="section-title">
+              <i class="fas fa-wallet"></i> Recent Withdrawal Request History
+            </div>
+            <div class="section-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Sr No.</th>
+                    <th scope="col">Customer ID</th>
+                    <th scope="col">Customer Name</th>
+                    <th scope="col">Date Joining</th>
+                  </tr>
+                </thead>
+                <tbody id="members-table-body">
+                  <!-- Data will be dynamically inserted here -->
+                  <tr>
+                    <td>1</td>
+                    <td>2177587</td>
+                    <td>Alok Prajapati</td>
+                    <td>06-10-2024</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>7226503</td>
+                    <td>Bipin</td>
+                    <td>05-10-2024</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>1894005</td>
+                    <td>Sanjay</td>
+                    <td>02-10-2024</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>1602561</td>
+                    <td>Kundan</td>
+                    <td>30-09-2024</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>1126395</td>
+                    <td>Sanjay</td>
+                    <td>27-09-2024</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="bg-primary text-white text-center py-3 mt-4">
+        <div class="container">
+          <p class="mb-0">
+            &copy; 2024 EPE. All Rights Reserved. Create with ❤️ in India
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Custom JS -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/js/Admin/PiggyBox/RequestWithdrawal/previousRequestWithdrawal.js"></script>
+    <script src="/js/Utils/adminUtils.js"></script>
+  </body>
+</html>
