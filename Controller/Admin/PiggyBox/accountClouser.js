@@ -6,7 +6,7 @@ const SavedAddress = require("../../../Models/PiggyBox/savedAddress");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
 const AdminActivity = require("../../../Models/User/adminActivity");
 const User = require("../../../Models/User/users");
-const { sendUserBlockMessage } = require("../../../Utils/MailService");
+const { sendUserBlockMessage, sendDebitMessage } = require("../../../Utils/MailService");
 const sequelize = require("../../../database");
 const Sequelize = require("sequelize");
 
@@ -280,6 +280,13 @@ exports.approveCustomerClouserRequest = async (req, res, next) => {
     // Commit the transaction
     await transaction.commit();
 
+    sendDebitMessage(
+      user.phone,
+      withdrawalAmount.toFixed(2),
+      user.candidateId,
+      `WID-35${recentTransactionHistory.id}`,
+      piggyBox.piggyBalance.toFixed(2)
+    );
     sendUserBlockMessage(user.phone);
     // Send a success response
     res.status(200).json({
@@ -287,12 +294,14 @@ exports.approveCustomerClouserRequest = async (req, res, next) => {
       message: "User account closure request approved successfully.",
     });
   } catch (error) {
+    console.error("Error approving account closure request:", error);
+
     // Rollback the transaction on error
     if (transaction) {
       await transaction.rollback();
     }
 
-    console.error("Error approving account closure request:", error);
+    
     res.status(500).json({
       success: false,
       message: "Server error while approving account closure request.",
@@ -409,10 +418,11 @@ exports.rejectCustomerClouserRequest = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.error("Error rejecting account closure request:", error);
     // Rollback the transaction on error
     if (transaction) await transaction.rollback();
 
-    console.error("Error rejecting account closure request:", error);
+    
     res.status(500).json({
       success: false,
       message: "Server error while rejecting account closure request.",

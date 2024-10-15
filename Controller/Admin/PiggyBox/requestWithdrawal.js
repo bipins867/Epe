@@ -5,6 +5,7 @@ const RequestWithdrawal = require("../../../Models/PiggyBox/requestWithdrawal");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
 const AdminActivity = require("../../../Models/User/adminActivity");
 const User = require("../../../Models/User/users");
+const { sendDebitMessage } = require("../../../Utils/MailService");
 const sequelize = require("../../../database");
 const Sequelize = require("sequelize");
 
@@ -272,6 +273,14 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
       transactionHistory.remark = "	User withdrawal request approved by Admin";
 
       await transactionHistory.update({ transaction });
+
+      sendDebitMessage(
+        user.phone,
+        amount.toFixed(2),
+        user.candidateId,
+        `WID-35${transactionHistory.id}`,
+        piggyBox.piggyBalance.toFixed(2)
+      );
     } else if (status === "Rejected") {
       // Add the amount back to the piggyBalance
       const amount = parseFloat(withdrawalRequest.amount);
