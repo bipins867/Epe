@@ -4,6 +4,7 @@ const PiggyBox = require("../../../Models/PiggyBox/piggyBox");
 const BankDetails = require("../../../Models/PiggyBox/bankDetails");
 const SavedAddress = require("../../../Models/PiggyBox/savedAddress");
 const sequelize = require("../../../database");
+const { sendUserUnblockMessage } = require("../../../Utils/MailService");
 
 exports.getSearchCustomerResult = async (req, res, next) => {
   try {
@@ -263,6 +264,10 @@ exports.updateActiveStatus = async (req, res) => {
     // Update the isActive status
     user.isActive = isActive;
     user.adminRemark = adminRemark;
+
+    if(isActive){
+      sendUserUnblockMessage(user.phone);
+    }
 
     // Find the user's Piggybox
     const piggybox = await PiggyBox.findOne({ where: { UserId: user.id } });

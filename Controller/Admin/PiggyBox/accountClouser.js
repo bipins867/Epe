@@ -6,6 +6,7 @@ const SavedAddress = require("../../../Models/PiggyBox/savedAddress");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
 const AdminActivity = require("../../../Models/User/adminActivity");
 const User = require("../../../Models/User/users");
+const { sendUserBlockMessage } = require("../../../Utils/MailService");
 const sequelize = require("../../../database");
 const Sequelize = require("sequelize");
 
@@ -27,7 +28,7 @@ exports.getPendingClosureRequestList = async (req, res, next) => {
     }
 
     // Fetch users based on query options
-    console.log(queryOptions);
+    //console.log(queryOptions);
     const users = await User.findAll(queryOptions);
 
     // Check if any users found
@@ -279,6 +280,7 @@ exports.approveCustomerClouserRequest = async (req, res, next) => {
     // Commit the transaction
     await transaction.commit();
 
+    sendUserBlockMessage(user.phone);
     // Send a success response
     res.status(200).json({
       success: true,

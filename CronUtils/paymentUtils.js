@@ -70,7 +70,7 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
 
         // Referral processing
         const user = await User.findByPk(userId);
-        if (user.byReferallId) {
+        if (user.byReferallId && !user.isByReferralUsed) {
           const referral = await Referrals.findOne({
             where: { referralId: user.byReferallId },
           });
@@ -105,8 +105,6 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
               await TransactionHistory.create(
                 {
                   transactionType: "referral",
-                  merchantUserId: referringUser.id,
-                  merchantTransactionId: transaction.merchantTransactionId,
                   remark: `Referral bonus for candidateId ${user.candidateId}`,
                   credit: 800,
                   debit: 0,

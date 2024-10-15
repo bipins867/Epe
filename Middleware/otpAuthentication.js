@@ -37,7 +37,7 @@ exports.middlewareSendOtp = async (req, res, next) => {
       setTimeout(() => {
         delete otpStore[phone];
       }, 5 * 60 * 1000);
-      console.log(otpStore);
+      //console.log(otpStore);
 
       if (otpType === "forgetCandidateId" ||otpType === "resetPassword" ) {
         sendOtpAccountVerifyMessage(phone, phoneOtp);
