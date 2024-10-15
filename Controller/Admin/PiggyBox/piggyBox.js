@@ -147,7 +147,7 @@ exports.getCustomerTopRecentTransactionHistory = async (req, res, next) => {
   try {
     // Extract candidateId, fromDate, toDate, and limit from the request body
     const { candidateId, fromDate, toDate, limit } = req.body;
-
+    //console.log(req.body);
     // Fetch the user based on candidateId
     const user = await User.findOne({
       where: { candidateId },

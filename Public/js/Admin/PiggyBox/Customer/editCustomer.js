@@ -19,6 +19,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         await updateBlockedStatus(candidateId);
       }
     });
+
+    document.getElementById('active-status-update-btn').addEventListener('click', async () => {
+      if (confirm("Are you sure you want to update the user active status?")) {
+        await updateActiveStatus(candidateId);
+      }
+    })
 });
 
 // Function to extract candidateId from URL
@@ -46,14 +52,21 @@ async function getCustomerInformation(candidateId) {
       document.getElementById("phone").value = user.phone || "";
       document.getElementById("employeeId").value = user.employeeId || "";
       document.getElementById("candidateId").value = user.candidateId || "";
-      document.getElementById("isRequestedClouser").value = user.isRequestedClouser ?"YES":"NO";
-      document.getElementById("isActive").value = user.isActive ?"YES":"NO";
+      document.getElementById("isRequestedClouser").value =
+        user.isRequestedClouser ? "YES" : "NO";
+      document.getElementById("isActive").value = user.isActive ? "YES" : "NO";
       document.getElementById("byReferralId").value = user.byReferralId || "";
-      document.getElementById("joiningDate").value = new Date(user.createdAt).toLocaleDateString() ;
-      
+      document.getElementById("joiningDate").value = new Date(
+        user.createdAt
+      ).toLocaleDateString();
+
       // Disable/Enable block toggle based on isBlocked status
       document.getElementById("blockToggle").checked = user.isBlocked;
+      document.getElementById('activeToggle').checked=user.isActive;
 
+      if(user.isActive){
+        document.getElementById('active-block-state').style.display='none'
+      }
       // Populate PiggyBox details
       document.getElementById("piggyBalance").innerText = `₹${
         piggyBox.piggyBalance || 0
@@ -138,14 +151,31 @@ async function updateBlockedStatus(candidateId) {
     );
 
     const data = await response.data;
-    if (data.success) {
-      alert(
-        `User has been ${isBlocked ? "blocked" : "unblocked"} successfully.`
-      );
-    } else {
-      alert("Failed to update user block status: " + data.message);
-    }
+
+    alert("Status updated Successfully!");
+    location.reload();
   } catch (error) {
-    handleErrors(error)
+    handleErrors(error);
+  }
+}
+// Function to update block status
+async function updateActiveStatus(candidateId) {
+  const isActive = document.getElementById("activeToggle").checked;
+  const adminRemark = isActive
+    ? "User active by admin"
+    : "User inActive by admin";
+
+  try {
+    const response = await postRequestWithToken(
+      "admin/piggyBox/customer/post/activeStatus",
+      { candidateId, isActive, adminRemark }
+    );
+
+    const data = await response.data;
+
+    alert("Status updated Successfully!");
+    location.reload();
+  } catch (error) {
+    handleErrors(error);
   }
 }

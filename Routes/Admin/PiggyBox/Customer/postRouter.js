@@ -10,5 +10,5 @@ router.post('/customerInfo',customerController.getCustomerInformation)
 
 router.post('/updateCustomer',customerController.updateCustomerInformation)
 router.post('/blockedStatus',customerController.updateBlockedStatus)
-
+router.post('/activeStatus',customerController.updateActiveStatus)
 module.exports = router;

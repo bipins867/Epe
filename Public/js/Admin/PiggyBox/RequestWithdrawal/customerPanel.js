@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const piggyBox = customerInfoResponse.data.piggyBox;
       const bankDetails = customerInfoResponse.data.bankDetails;
       const withdrawals = customerInfoResponse.data.withdrawals;
+      
       //console.log(customerInfoResponse);
       // Update customer profile details
       document.getElementById("name").textContent = customer.name || "N/A";
@@ -29,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         customer.employeeId || "N/A";
       document.getElementById("candidateId").textContent =
         customer.candidateId || "N/A";
-      document.getElementById("kyc").textContent = customer.kycStatus || "N/A";
+      document.getElementById("kyc").textContent = customer.kycStatus?'Verified':'Pending';
 
       // Update piggy box details
       document.getElementById("piggyBalance").textContent =

@@ -391,7 +391,8 @@ exports.rejectCustomerClouserRequest = async (req, res, next) => {
 
     user.isActive = true; // Mark the user as inactive
     user.isRequestedClouser = false; // Reset closure request
-
+    user.adminRemark=adminRemark;
+    
     await user.save({ transaction });
 
     // Commit the transaction

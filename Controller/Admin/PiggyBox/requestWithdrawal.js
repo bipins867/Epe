@@ -1,3 +1,4 @@
+const UserKyc = require("../../../Models/Kyc/userKyc");
 const BankDetails = require("../../../Models/PiggyBox/bankDetails");
 const Piggybox = require("../../../Models/PiggyBox/piggyBox");
 const RequestWithdrawal = require("../../../Models/PiggyBox/requestWithdrawal");
@@ -6,6 +7,7 @@ const AdminActivity = require("../../../Models/User/adminActivity");
 const User = require("../../../Models/User/users");
 const sequelize = require("../../../database");
 const Sequelize = require("sequelize");
+
 
 //Status will be passed based no the situation like -> pending /  non pendings
 exports.getWithdrawalRequestList = async (req, res, next) => {
@@ -104,6 +106,7 @@ exports.getCustomerInformation = async (req, res, next) => {
       attributes: ["piggyBalance", "unclearedBalance", "interestBalance"], // Return relevant piggyBox details
     });
 
+    const userKyc=await UserKyc.findOne({where:{UserId:user.id}})
     // Fetch BankDetails for the user
     const bankDetails = await BankDetails.findOne({
       where: { UserId: user.id },
@@ -152,6 +155,7 @@ exports.getCustomerInformation = async (req, res, next) => {
         name: user.name,
         email: user.email,
         phone: user.phone,
+        kycStatus:userKyc?userKyc.userAggreementAccepted:false,
       },
       piggyBox, // Return PiggyBox info
       bankDetails, // Return BankDetails info
@@ -235,7 +239,7 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
     });
 
     transaction = await sequelize.transaction();
-    console.log("HI");
+
     // Proceed based on the request status (Approved or Rejected)
     if (status === "Approved") {
       // Deduct the amount from the unclearedBalance
@@ -286,7 +290,7 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
         },
         { transaction }
       );
-      console.log("HI THERE");
+
       // Update the withdrawal request status
       withdrawalRequest.status = "Rejected";
       withdrawalRequest.adminRemark = adminRemark;

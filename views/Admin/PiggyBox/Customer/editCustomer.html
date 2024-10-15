@@ -240,7 +240,7 @@
 
           <div class="deposit-balance">
             <div class="section-title">
-              <i class="fas fa-wallet"></i> Block/Unblock
+              <i class="fas fa-wallet"></i> Block Status
             </div>
             <div class="section-body">
               <div class="form-check form-switch">
@@ -258,7 +258,27 @@
               </button>
             </div>
           </div>
-
+          
+          <div class="deposit-balance" id="active-block-state">
+            <div class="section-title">
+              <i class="fas fa-wallet"></i> Active Status
+            </div>
+            <div class="section-body">
+              <div class="form-check form-switch">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="activeToggle"
+                />
+                <label class="form-check-label" for="blockToggle"
+                  >Active</label
+                >
+              </div>
+              <button type="button" class="btn btn-secondary mt-2" id="active-status-update-btn">
+                Update Status
+              </button>
+            </div>
+          </div>
           <!-- Piggy Box Section -->
           <div class="deposit-balance">
             <div class="section-title">

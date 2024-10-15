@@ -98,11 +98,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const limit = document.getElementById("limit").value;
 
         try {
-            const response = await postRequestWithToken("admin/piggyBox/post/transctionHistor", { fromDate, toDate, limit });
-            if (response.success) {
+            const response = await postRequestWithToken("admin/piggyBox/post/transactionHistory", { fromDate, toDate, limit,candidateId });
+            if (response) {
                 const tbody = document.querySelector("table tbody");
                 tbody.innerHTML = ""; // Clear existing rows
-                response.transactionHistories.forEach((transaction, index) => {
+                response.data.transactionHistories.forEach((transaction, index) => {
                     const row = document.createElement("tr");
                     row.innerHTML = `
                         <td>${index + 1}</td>

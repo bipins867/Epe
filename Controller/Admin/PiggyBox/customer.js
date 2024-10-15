@@ -3,6 +3,7 @@ const User = require("../../../Models/User/users");
 const PiggyBox = require("../../../Models/PiggyBox/piggyBox");
 const BankDetails = require("../../../Models/PiggyBox/bankDetails");
 const SavedAddress = require("../../../Models/PiggyBox/savedAddress");
+const sequelize = require("../../../database");
 
 exports.getSearchCustomerResult = async (req, res, next) => {
   try {
@@ -149,7 +150,7 @@ exports.updateCustomerInformation = async (req, res, next) => {
   try {
     // Extract candidateId and updated fields from the request body
     const { candidateId, name, email, phone, employeeId } = req.body;
-    
+
     // Fetch the user based on candidateId
     const user = await User.findOne({
       where: { candidateId },
@@ -168,7 +169,7 @@ exports.updateCustomerInformation = async (req, res, next) => {
     user.phone = phone || user.phone; // Only update if a new value is provided
     user.employeeId = employeeId || user.employeeId; // Only update if a new value is provided
     //user.adminId=req.admin.userName;
-    user.adminRemark='Admin updated the user information.'
+    user.adminRemark = "Admin updated the user information.";
     // Save the updated user to the database
     await user.save();
 
@@ -188,7 +189,7 @@ exports.updateCustomerInformation = async (req, res, next) => {
 };
 
 exports.updateBlockedStatus = async (req, res) => {
-  const { candidateId, isBlocked,adminRemark } = req.body;
+  const { candidateId, isBlocked, adminRemark } = req.body;
 
   // Validate request input
   if (!candidateId || typeof isBlocked !== "boolean") {
@@ -212,8 +213,8 @@ exports.updateBlockedStatus = async (req, res) => {
 
     // Update the isBlocked status
     user.isBlocked = isBlocked;
-   // user.adminId=req.admin.userName;
-    user.adminRemark=adminRemark;
+    // user.adminId=req.admin.userName;
+    user.adminRemark = adminRemark;
     await user.save();
 
     return res.status(200).json({
@@ -226,6 +227,74 @@ exports.updateBlockedStatus = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating user blocked status:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error. Please try again later.",
+    });
+  }
+};
+
+exports.updateActiveStatus = async (req, res) => {
+  const { candidateId, isActive, adminRemark } = req.body;
+
+  // Validate request input
+  if (!candidateId || typeof isActive !== "boolean") {
+    return res.status(400).json({
+      success: false,
+      message:
+        "Invalid input: candidateId and isActive are required and must be valid.",
+    });
+  }
+
+  let transaction; // Start a transaction
+
+  try {
+    // Find the user by candidateId
+    const user = await User.findOne({ where: { candidateId } });
+
+    if (!user) {
+      //await transaction.rollback(); // Rollback if user is not found
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Update the isActive status
+    user.isActive = isActive;
+    user.adminRemark = adminRemark;
+
+    // Find the user's Piggybox
+    const piggybox = await PiggyBox.findOne({ where: { UserId: user.id } });
+
+    if (!piggybox) {
+      res.status(404).json({ success: false, message: "PiggyBox not found!" });
+    }
+
+    transaction = await sequelize.transaction();
+
+    // If the user is inactive, set isFundedFirst to false in Piggybox
+    piggybox.isFundedFirst = false;
+    await piggybox.save({ transaction });
+
+    await user.save({ transaction });
+
+    // Commit the transaction after successful updates
+    await transaction.commit();
+
+    return res.status(200).json({
+      success: true,
+      message: `User ${isActive ? "activated" : "deactivated"} successfully`,
+      user: {
+        candidateId: user.candidateId,
+        isActive: user.isActive,
+      },
+    });
+  } catch (error) {
+    if (transaction) {
+      await transaction.rollback(); // Rollback transaction in case of error
+    }
+    console.error("Error updating user Active status:", error);
     return res.status(500).json({
       success: false,
       message: "Internal server error. Please try again later.",

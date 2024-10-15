@@ -22,8 +22,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       userInformation.employeeId;
     document.getElementById("candidateId").innerText =
       userInformation.candidateId;
-    document.getElementById("joiningDate").innerText =
-      userInformation.createdAt;
+    document.getElementById("joiningDate").innerText = new Date(
+      userInformation.createdAt
+    ).toLocaleDateString();
 
     if (piggyBox) {
       document.getElementById("piggyBalance").innerText = piggyBox.piggyBalance;
@@ -58,8 +59,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       //console.log(withdrawalRequest)
       document.getElementById("requestId").innerText =
         withdrawalRequest.requestId;
-      document.getElementById("createdAt").innerText =
-        withdrawalRequest.createdAt;
+      document.getElementById("createdAt").innerText = new Date(
+        withdrawalRequest.createdAt
+      ).toLocaleDateString();
+
       document.getElementById("amount").innerText = withdrawalRequest.amount;
       document.getElementById("status").innerText = withdrawalRequest.status;
     } else {
@@ -104,7 +107,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               `admin/piggyBox/accountClouser/post/rejectRequest`,
               {
                 candidateId,
-                remark,
+                adminRemark:remark,
               }
             );
 
