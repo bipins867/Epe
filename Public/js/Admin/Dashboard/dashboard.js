@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const row = `
           <tr>
             <td>${index + 1}</td>
-            <td>${user.id}</td>
+            <td>${user.candidateId}</td>
             <td>${user.name}</td>
             <td>${new Date(user.createdAt).toLocaleDateString()}</td>
           </tr>
