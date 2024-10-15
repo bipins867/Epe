@@ -31,13 +31,9 @@ async function fetchCustomerList() {
       "admin/piggyBox/post/customerList"
     );
     response = response.data;
-    if (response.success) {
-      displayCustomerList(response.customers);
-    } else {
-      alert("Failed to fetch customers.");
-    }
+    displayCustomerList(response.customers);
   } catch (error) {
-   handleErrors(error)
+    handleErrors(error, mapFunction);
   }
 }
 
@@ -69,13 +65,9 @@ async function fetchCustomerSearch(customerId) {
       { candidateId: customerId }
     );
     response = response.data;
-    if (response.success) {
-      displayCustomerList(response.users); // Reusing display function
-    } else {
-      alert("No customer found with the provided ID.");
-    }
+    displayCustomerList(response.users); // Reusing display function
   } catch (error) {
-    handleErrors(error)
+    handleErrors(error, mapFunction);
   }
 }
 
@@ -87,13 +79,9 @@ async function fetchCustomerResults(fromDate, toDate, limit) {
       { fromDate, toDate, limit }
     );
     response = response.data;
-    console.log(response);
-    if (response.success) {
-      displayCustomerList(response.customers); // Reusing display function
-    } else {
-      alert("No results found for the given criteria.");
-    }
+
+    displayCustomerList(response.customers); // Reusing display function
   } catch (error) {
-    handleErrors(error);
+    handleErrors(error, mapFunction);
   }
 }

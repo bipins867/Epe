@@ -48,11 +48,9 @@ async function loadCustomerReferralInfo(candidateId) {
           `;
         membersTableBody.appendChild(row);
       }
-    } else {
-      alert(response.message);
     }
   } catch (error) {
-    handleErrors(error)
+    handleErrors(error, mapFunction);
   }
 }
 

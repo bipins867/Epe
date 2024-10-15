@@ -20,11 +20,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     });
 
-    document.getElementById('active-status-update-btn').addEventListener('click', async () => {
+  document
+    .getElementById("active-status-update-btn")
+    .addEventListener("click", async () => {
       if (confirm("Are you sure you want to update the user active status?")) {
         await updateActiveStatus(candidateId);
       }
-    })
+    });
 });
 
 // Function to extract candidateId from URL
@@ -62,10 +64,10 @@ async function getCustomerInformation(candidateId) {
 
       // Disable/Enable block toggle based on isBlocked status
       document.getElementById("blockToggle").checked = user.isBlocked;
-      document.getElementById('activeToggle').checked=user.isActive;
+      document.getElementById("activeToggle").checked = user.isActive;
 
-      if(user.isActive){
-        document.getElementById('active-block-state').style.display='none'
+      if (user.isActive) {
+        document.getElementById("active-block-state").style.display = "none";
       }
       // Populate PiggyBox details
       document.getElementById("piggyBalance").innerText = `₹${
@@ -109,7 +111,7 @@ async function getCustomerInformation(candidateId) {
         : "N/A";
     }
   } catch (error) {
-    handleErrors(error);
+    handleErrors(error, mapFunction);
   }
 }
 
@@ -127,13 +129,11 @@ async function updateCustomerInformation(candidateId) {
     );
 
     const data = await response.data;
-    if (data.success) {
-      alert("Customer profile updated successfully.");
-    } else {
-      alert("Failed to update customer profile: " + data.message);
-    }
+
+    alert("Customer profile updated successfully.");
+    location.reload();
   } catch (error) {
-    handleErrors(error);
+    handleErrors(error, mapFunction);
   }
 }
 
@@ -155,7 +155,7 @@ async function updateBlockedStatus(candidateId) {
     alert("Status updated Successfully!");
     location.reload();
   } catch (error) {
-    handleErrors(error);
+    handleErrors(error,mapFunction);
   }
 }
 // Function to update block status
@@ -176,6 +176,6 @@ async function updateActiveStatus(candidateId) {
     alert("Status updated Successfully!");
     location.reload();
   } catch (error) {
-    handleErrors(error);
+    handleErrors(error,mapFunction);
   }
 }

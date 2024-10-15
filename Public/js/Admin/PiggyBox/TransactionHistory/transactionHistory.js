@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const response = await postRequestWithToken("admin/piggyBox/transactionHistory/post/transactionHistories");
       populateTable(response.data.data);
     } catch (error) {
-      handleErrors(error)
+      handleErrors(error,mapFunction);
     }
   
     // Handle the click event for "Get Result" button
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
        
         
       } catch (error) {
-        handleErrors(error)
+        handleErrors(error,mapFunction);
       }
     });
   });

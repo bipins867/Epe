@@ -34,11 +34,9 @@ async function loadCustomerList() {
           `;
         membersTableBody.appendChild(row);
       });
-    } else {
-      alert(response.message);
     }
   } catch (error) {
-    handleErrors(error);
+    handleErrors(error, mapFunction);
   }
 }
 
@@ -76,11 +74,9 @@ async function searchCustomerList(candidateId) {
       } else {
         alert("No user found with that Customer ID.");
       }
-    } else {
-      alert(response.message);
     }
   } catch (error) {
-    handleErrors(error);
+    handleErrors(error, mapFunction);
   }
 }
 

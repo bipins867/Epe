@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       })
       .catch((error) => {
-        handleErrors(error);
+        handleErrors(error,mapFunction);
       });
   }
   
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       })
       .catch((error) => {
-        handleErrors(error);
+        handleErrors(error,mapFunction);
       });
   }
   

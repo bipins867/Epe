@@ -157,7 +157,7 @@ exports.userLogin = async (req, res, next) => {
           .status(500)
           .json({ error: "Internal server error. Please try again later." });
       }
-      const expiresIn=process.env.NODE_ENV==='testing'?'2d':'5m';
+      const expiresIn = process.env.NODE_ENV === "testing" ? "2d" : "5m";
       if (isMatch) {
         // Generate a JWT token
         const token = jwt.sign(
@@ -411,9 +411,13 @@ exports.userResendOtp = async (req, res, next) => {
       return res.status(400).json({ message: "OTP expired or invalid." });
     }
 
+    if (otpStore[phone].count <= 0) {
+      return res.status(402).json({ message: "Otp trying limit exceed!" });
+    }
+
     // Generate a new OTP for the phone
     const newOtp = crypto.randomInt(100000, 999999).toString();
-    otpStore[phone].phoneOtp = newOtp;
+    otpStore[phone] = { otp:newOtp, count: otpStore[phone].count-1 };
 
     if (otpType === "forgetCandidateId" || otpType === "resetPassword") {
       sendOtpAccountVerifyMessage(phone, newOtp);

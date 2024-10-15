@@ -110,7 +110,7 @@ document
       window.location.replace('/user/piggyBox')
     }
     catch(err){
-      handleErrors(err);
+      handleErrors(err,mapFunction);
     }
 
   });

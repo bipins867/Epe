@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       customerNameInput.value = "";
       location.reload();
     } catch (error) {
-      handleErrors(error);
+      handleErrors(error,mapFunction);
     }
   });
 

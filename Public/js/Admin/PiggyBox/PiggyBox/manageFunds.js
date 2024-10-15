@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
     }
   } catch (error) {
-    handleErrors(error);
+    handleErrors(error, mapFunction);
   }
 
   // Event listeners for deposit and deduct buttons
@@ -78,15 +78,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             "admin/piggyBox/post/addFunds",
             { amount, remark, candidateId }
           );
-          if (response.data.success) {
-            alert("Funds deposited successfully!");
-            window.location.reload();
-            // Optionally, refresh customer info or update UI here
-          } else {
-            alert(response.message);
-          }
+
+          alert("Funds deposited successfully!");
+          window.location.reload();
         } catch (error) {
-          handleErrors(error);
+          handleErrors(error, mapFunction);
         }
       }
     });
@@ -103,15 +99,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             "admin/piggyBox/post/deductFunds",
             { amount, remark, candidateId }
           );
-          if (response.data.success) {
-            alert("Funds deducted successfully!");
-            window.location.reload();
-            // Optionally, refresh customer info or update UI here
-          } else {
-            alert(response.message);
-          }
+
+          alert("Funds deducted successfully!");
+          window.location.reload();
         } catch (error) {
-          handleErrors(error);
+          handleErrors(error, mapFunction);
         }
       }
     });
@@ -145,11 +137,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     `;
           tbody.appendChild(row);
         });
-      } else {
-        alert(response.message);
       }
     } catch (error) {
-      handleErrors(error);
+      handleErrors(error, mapFunction);
     }
   });
 });

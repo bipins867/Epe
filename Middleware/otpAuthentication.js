@@ -32,14 +32,17 @@ exports.middlewareSendOtp = async (req, res, next) => {
 
       const phoneOtp = crypto.randomInt(100000, 999999).toString();
 
-      otpStore[phone] = { phoneOtp };
+      otpStore[phone] = { otp:phoneOtp,count:3 };
 
       setTimeout(() => {
         delete otpStore[phone];
       }, 5 * 60 * 1000);
-      //console.log(otpStore);
 
-      if (otpType === "forgetCandidateId" ||otpType === "resetPassword" ) {
+      if (process.env.NODE_ENV === "testing") {
+        console.log(otpStore);
+      }
+
+      if (otpType === "forgetCandidateId" || otpType === "resetPassword") {
         sendOtpAccountVerifyMessage(phone, phoneOtp);
       } else if (otpType === "login") {
         sendLoginOtpMessage(phone, phoneOtp);
@@ -50,7 +53,7 @@ exports.middlewareSendOtp = async (req, res, next) => {
       }
 
       const token = jwt.sign(
-        { ...req.body, phone },
+        { ...req.body, phone,body:req.body },
         process.env.JWT_SECRET_KEY,
         {
           expiresIn: "5m",
@@ -75,7 +78,7 @@ exports.middlewareSendOtp = async (req, res, next) => {
 exports.middlewareVerifyOtp = (req, res, next) => {
   try {
     const { otpAuthenticationToken, userPhoneOtp } = req.body;
-
+    
     if (otpAuthenticationToken) {
       try {
         const payload = jwt.verify(
@@ -92,20 +95,31 @@ exports.middlewareVerifyOtp = (req, res, next) => {
           return res.status(400).send({ message: "OTP expired or invalid." });
         }
 
-        const { phoneOtp } = otpStore[otpKey];
+        if(otpStore[otpKey].count<=0){
+          return res.status(402).json({message:"Otp trying limit exceed!"})
+        }
 
+        const phoneOtp = otpStore[otpKey].otp;
+        
+        
+        
         // Validate OTP
         if (`${userPhoneOtp}` != `${phoneOtp}`) {
           // await transaction.rollback(); // Rollback transaction
+          otpStore[otpKey].count-=1;
           return res.status(400).send({ message: "Invalid OTP." });
         }
         //console.log(payload);
         req.payload = payload;
+        const body=payload.body
+        req.body={...req.body,...body}
         return next();
       } catch (err) {
-        return res.status(503).json({ error: "Invalid Signature!" });
+        console.log(err);
+        return res.status(503).json({ error: "Invalid Otp Signature!" });
       }
     }
+    return res.status(404).json({error:"Otp Signatue Not Found!"})
   } catch (err) {
     console.log(err);
     return res

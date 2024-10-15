@@ -47,7 +47,7 @@ exports.addMonthlyInterestBalanceToPiggyBox = async (userId) => {
   try {
     // Fetch user
     const user = await User.findByPk(userId);
-    if (!user || !user.isActive) {
+    if (!user || !user.isActive || user.isBlocked) {
       return; // Return if the user doesn't exist || not active..
     }
 

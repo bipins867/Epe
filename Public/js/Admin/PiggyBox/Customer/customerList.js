@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     );
     updateCustomerTable(result.data.customers);
   } catch (error) {
-    handleErrors(error)
+    handleErrors(error,mapFunction);
   }
 });
 
@@ -28,7 +28,7 @@ document.getElementById("search-btn").addEventListener("click", async () => {
     );
     updateCustomerTable(result.data.users);
   } catch (error) {
-    handleErrors(error)
+    handleErrors(error,mapFunction);
   }
 });
 
@@ -55,7 +55,7 @@ document
 
       updateCustomerTable(result.data.customers);
     } catch (error) {
-     handleErrors(error)
+      handleErrors(error,mapFunction);
     }
   });
 

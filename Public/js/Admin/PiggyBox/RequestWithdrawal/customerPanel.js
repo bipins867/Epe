@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const piggyBox = customerInfoResponse.data.piggyBox;
       const bankDetails = customerInfoResponse.data.bankDetails;
       const withdrawals = customerInfoResponse.data.withdrawals;
-      
+
       //console.log(customerInfoResponse);
       // Update customer profile details
       document.getElementById("name").textContent = customer.name || "N/A";
@@ -30,7 +30,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         customer.employeeId || "N/A";
       document.getElementById("candidateId").textContent =
         customer.candidateId || "N/A";
-      document.getElementById("kyc").textContent = customer.kycStatus?'Verified':'Pending';
+      document.getElementById("kyc").textContent = customer.kycStatus
+        ? "Verified"
+        : "Pending";
 
       // Update piggy box details
       document.getElementById("piggyBalance").textContent =
@@ -57,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Update pending withdrawal request if available
       if (withdrawals.pending.length > 0) {
         const pendingRequest = withdrawals.pending[0]; // Assuming there's only one pending request
-
+        console.log(pendingRequest);
         document.getElementById("requestId").textContent =
           pendingRequest.requestId || "N/A";
         document.getElementById("createdAt").textContent =
@@ -66,6 +68,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           pendingRequest.amount || "N/A";
         document.getElementById("status").textContent =
           pendingRequest.status || "N/A";
+          document.getElementById('remark').textContent=pendingRequest.userRemark||"N/A";
 
         // Show withdrawal request section if pending requests exist
         document.querySelector(".deposit-balance").style.display = "block";
@@ -138,13 +141,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           `;
         withdrawalHistoryBody.appendChild(row);
       });
-    } else {
-      console.error(
-        "Failed to load customer info:",
-        customerInfoResponse.message
-      );
     }
   } catch (error) {
-    handleErrors(error);
+    handleErrors(error, mapFunction);
   }
 });

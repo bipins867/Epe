@@ -39,7 +39,7 @@ function fetchPendingList() {
       });
     })
     .catch((error) => {
-      handleErrors(error);
+      handleErrors(error,mapFunction);
     });
 }
 
@@ -69,6 +69,6 @@ function searchCustomerById(customerId) {
       });
     })
     .catch((error) => {
-      handleErrors(error);
+      handleErrors(error,mapFunction);
     });
 }
