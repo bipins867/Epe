@@ -37,8 +37,7 @@ async function fetchCustomerList() {
       alert("Failed to fetch customers.");
     }
   } catch (error) {
-    console.error("Error fetching customer list:", error);
-    alert("An error occurred while fetching the customer list.");
+   handleErrors(error)
   }
 }
 
@@ -76,8 +75,7 @@ async function fetchCustomerSearch(customerId) {
       alert("No customer found with the provided ID.");
     }
   } catch (error) {
-    console.error("Error searching for customer:", error);
-    alert("An error occurred while searching for the customer.");
+    handleErrors(error)
   }
 }
 
@@ -96,7 +94,6 @@ async function fetchCustomerResults(fromDate, toDate, limit) {
       alert("No results found for the given criteria.");
     }
   } catch (error) {
-    console.error("Error fetching customer results:", error);
-    alert("An error occurred while fetching the results.");
+    handleErrors(error);
   }
 }

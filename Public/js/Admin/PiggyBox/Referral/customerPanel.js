@@ -52,8 +52,7 @@ async function loadCustomerReferralInfo(candidateId) {
       alert(response.message);
     }
   } catch (error) {
-    console.error("Error loading customer referral info:", error);
-    alert("Failed to load customer referral information.");
+    handleErrors(error)
   }
 }
 
