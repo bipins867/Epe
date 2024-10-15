@@ -4,7 +4,7 @@ const sequelize = require("../../../database");
 const BankDetails = require("../../../Models/PiggyBox/bankDetails");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
 const { Op } = require("sequelize"); // Sequelize operator for date filtering
-
+const { sendDebitMessage, sendCreditMessage } = require("../../../Utils/MailService");
 
 exports.getSearchCustomerResult = async (req, res, next) => {
   try {
@@ -94,8 +94,6 @@ exports.getCustomersList = async (req, res, next) => {
   }
 };
 
-
-
 exports.getCustomerInformation = async (req, res, next) => {
   try {
     // Extract candidateId from the request body
@@ -155,13 +153,18 @@ exports.getCustomerTopRecentTransactionHistory = async (req, res, next) => {
 
     // Check if the user exists
     if (!user) {
-      return res.status(404).json({ success: false, message: "User not found." });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
     }
 
     // Prepare the query for transaction history
     const query = {
       where: { UserId: user.id }, // Assuming UserId is the foreign key in TransactionHistory
-      order: [["createdAt", "DESC"], ["id", "DESC"]], // Order by creation date (most recent first)
+      order: [
+        ["createdAt", "DESC"],
+        ["id", "DESC"],
+      ], // Order by creation date (most recent first)
     };
 
     // Add date filters if provided
@@ -196,7 +199,7 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
   let transaction;
   try {
     // Extract candidateId and amount from the request body
-    const { candidateId, amount,remark } = req.body;
+    const { candidateId, amount, remark } = req.body;
 
     // Validate amount
     if (!amount || isNaN(amount) || amount <= 0) {
@@ -246,7 +249,7 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
     await piggyBox.save({ transaction });
 
     // Create a TransactionHistory entry
-    await TransactionHistory.create(
+    const thistory = await TransactionHistory.create(
       {
         transactionType: "adminUpdate",
         remark: `Admin is adding funds of amount: ${parsedAmount}`,
@@ -258,8 +261,18 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
       { transaction }
     );
 
+    
+
     // Commit the transaction
     await transaction.commit();
+
+    sendCreditMessage(
+      user.phone,
+      parsedAmount.toFixed(2),
+      user.candidateId,
+      `ADM-35${thistory.id}`,
+      piggyBox.piggyBalance.toFixed(2)
+    );
 
     // Send a success response
     res.status(200).json({
@@ -272,10 +285,11 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
   } catch (error) {
     // Rollback the transaction on error
 
+    
+    console.error("Error adding funds to customer wallet:", error);
     if (transaction) {
       await transaction.rollback();
     }
-    console.error("Error adding funds to customer wallet:", error);
     res.status(500).json({
       success: false,
       message: "Server error while adding funds to the customer wallet.",
@@ -284,12 +298,11 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
 };
 
 exports.deductFundsFromCustomerWallet = async (req, res, next) => {
-  
   let transaction;
   try {
     // Extract candidateId and amount from the request body
-    const { candidateId, amount,remark } = req.body;
-    
+    const { candidateId, amount, remark } = req.body;
+
     // Validate amount
     if (!amount || isNaN(amount) || amount <= 0) {
       return res
@@ -347,7 +360,7 @@ exports.deductFundsFromCustomerWallet = async (req, res, next) => {
     await piggyBox.save({ transaction });
 
     // Create a TransactionHistory entry
-    await TransactionHistory.create(
+    const thistory=await TransactionHistory.create(
       {
         transactionType: "adminUpdate",
         remark: `Admin is deducting funds of amount: ${parsedAmount}`,
@@ -359,9 +372,17 @@ exports.deductFundsFromCustomerWallet = async (req, res, next) => {
       { transaction }
     );
 
+    
     // Commit the transaction
     await transaction.commit();
-
+    sendDebitMessage(
+      user.phone,
+      parsedAmount.toFixed(2),
+      user.candidateId,
+      `ADM-35${thistory.id}`,
+      piggyBox.piggyBalance.toFixed(2)
+    );
+    
     // Send a success response
     res.status(200).json({
       success: true,
@@ -372,10 +393,11 @@ exports.deductFundsFromCustomerWallet = async (req, res, next) => {
     });
   } catch (error) {
     // Rollback the transaction on error
+    
+    console.error("Error deducting funds from customer wallet:", error);
     if (transaction) {
       await transaction.rollback();
     }
-    console.error("Error deducting funds from customer wallet:", error);
     res.status(500).json({
       success: false,
       message: "Server error while deducting funds from the customer wallet.",
