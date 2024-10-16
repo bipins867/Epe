@@ -261,13 +261,16 @@ exports.updateActiveStatus = async (req, res) => {
       });
     }
 
+    if (!isActive) {
+      return res.status(403).json({
+        success: false,
+        message: "Admin can't deactivate user account!",
+      });
+    }
+
     // Update the isActive status
     user.isActive = isActive;
     user.adminRemark = adminRemark;
-
-    if(isActive){
-      sendUserUnblockMessage(user.phone);
-    }
 
     // Find the user's Piggybox
     const piggybox = await PiggyBox.findOne({ where: { UserId: user.id } });
@@ -286,6 +289,10 @@ exports.updateActiveStatus = async (req, res) => {
 
     // Commit the transaction after successful updates
     await transaction.commit();
+
+    if (isActive) {
+      sendUserUnblockMessage(user.phone);
+    }
 
     return res.status(200).json({
       success: true,

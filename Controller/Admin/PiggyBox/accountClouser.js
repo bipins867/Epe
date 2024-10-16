@@ -242,10 +242,10 @@ exports.approveCustomerClouserRequest = async (req, res, next) => {
 
     // Update the user status
     
-    // Check if the user has a referral and hasn't used it yet
-    if (!user.isFundedFirst && user.byReferralId) {
-      user.isByReferralUsed = true; // Mark referral as used
-    }
+    // // Check if the user has a referral and hasn't used it yet
+    // if (!user.isFundedFirst && user.byReferralId) {
+    //   user.isByReferralUsed = true; // Mark referral as used
+    // }
     user.isActive = false; // Mark the user as inactive
     user.isRequestedClouser = false; // Reset closure request
 

@@ -113,8 +113,8 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
                 },
                 { transaction: t }
               );
-
-              sendRewardMessage(referringUser.phone, rewardAmount);
+              await user.update({ isByReferralUsed: true }, { transaction: t });
+              sendRewardMessage(referringUser.phone, rewardAmount.toFixed(2));
             }
           }
         }
