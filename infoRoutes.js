@@ -1,6 +1,6 @@
 const express = require("express");
 const User = require("./Models/User/users");
-
+const geoip = require("geoip-lite");
 
 const router = express.Router();
 
@@ -10,7 +10,6 @@ router.use("/getServerInfo", (req, res, next) => {
     nodeEnv: process.env.NODE_ENV,
   });
 });
-
 
 
 // Route to display information in HTML
@@ -29,7 +28,7 @@ router.use('/testWebsite', async (req, res, next) => {
       timeZone: 'Asia/Kolkata',
     });
 
-    // Construct HTML response
+    // Constructing HTML response
     let htmlResponse = `
       <html>
       <head>
@@ -54,16 +53,38 @@ router.use('/testWebsite', async (req, res, next) => {
             font-size: 1.1em;
             color: #555;
           }
+          ul {
+            list-style-type: none;
+            padding: 0;
+          }
+          li {
+            padding: 5px 0;
+          }
         </style>
       </head>
       <body>
         <div class="container">
           <h2>Client Information and Current Date & Time</h2>
           <p><strong>Current Time in IST:</strong> ${formattedISTDate}</p>
-          <p><strong>IP Address:</strong> ${req.clientInfo.ipAddress}</p>
+          <p><strong>Primary IP Address:</strong> ${req.clientInfo.primaryIpAddress}</p>
+          <p><strong>Primary Location (Geolocation):</strong> ${req.clientInfo.location}</p>
+          
+          <h3>All IP Addresses and Locations:</h3>
+          <ul>
+    `;
+
+    // Loop through each IP and get their locations
+    for (const ip of req.clientInfo.ipAddresses) {
+      const geoData = geoip.lookup(ip);
+      const loc = geoData ? `${geoData.city}, ${geoData.country}` : "Unknown";
+      htmlResponse += `<li><strong>IP Address:</strong> ${ip} - <strong>Location:</strong> ${loc}</li>`;
+    }
+
+    // Closing the HTML response
+    htmlResponse += `
+          </ul>
           <p><strong>User-Agent:</strong> ${req.clientInfo.userAgent}</p>
           <p><strong>Device Type:</strong> ${req.clientInfo.deviceType}</p>
-          <p><strong>Location (Geolocation based on IP):</strong> ${req.clientInfo.location}</p>
         </div>
       </body>
       </html>

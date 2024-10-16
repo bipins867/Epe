@@ -57,9 +57,13 @@ app.use(bodyParser.json({ extends: false }));
 // app.use('/', apiLimiter);
 
 const activityLogger = (req, res, next) => {
-  // Extracting IP Address
-  const ipAddress =
-    req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  // Extracting IP Addresses (could be a list separated by commas)
+  const ipAddresses = req.headers["x-forwarded-for"]
+    ? req.headers["x-forwarded-for"].split(',').map(ip => ip.trim())
+    : [req.connection.remoteAddress];
+
+  // Extract the first IP as the primary client IP (most likely the original client IP)
+  const primaryIpAddress = ipAddresses[0];
 
   // Extracting User-Agent
   const userAgent = req.headers["user-agent"];
@@ -68,12 +72,13 @@ const activityLogger = (req, res, next) => {
   const ua = useragent.parse(userAgent);
   const deviceType = ua.isMobile ? "Mobile" : "Desktop"; // Can also check ua.isTablet, ua.isBot, etc.
 
-  // Geolocation based on IP Address
-  const geo = geoip.lookup(ipAddress);
+  // Geolocation based on the primary IP Address
+  const geo = geoip.lookup(primaryIpAddress);
   const location = geo ? `${geo.city}, ${geo.country}` : "Unknown";
 
   req.clientInfo = {
-    ipAddress,
+    ipAddresses, // Array of IPs
+    primaryIpAddress, // First IP as the primary one
     userAgent,
     deviceType,
     location,
@@ -82,6 +87,7 @@ const activityLogger = (req, res, next) => {
   // Continue with next middleware or response
   next();
 };
+
 app.use(activityLogger);
 
 
