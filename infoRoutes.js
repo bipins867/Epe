@@ -21,7 +21,7 @@ router.use('/testWebsite', async (req, res, next) => {
     let currentDate = new Date();
 
     // Convert to IST by adding 5 hours and 30 minutes to UTC
-    let istDate = new Date(currentDate.getTime() + 5.5 * 60 * 60 * 1000);
+    let istDate = new Date(currentDate.getTime())// + 5.5 * 60 * 60 * 1000);
 
     // Format the IST date and time
     let formattedISTDate = istDate.toLocaleString('en-IN', {
