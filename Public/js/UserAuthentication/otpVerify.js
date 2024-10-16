@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const otpType = localStorage.getItem("otpType");
 
     try {
-      const obj = { userPhoneOtp, otpAuthenticationToken,otpType };
+      const obj = { userPhoneOtp, otpAuthenticationToken, otpType };
       otpSubmitButton.disabled = true;
       let response;
       if (otpType === "signUp") {
@@ -64,6 +64,15 @@ document.addEventListener("DOMContentLoaded", function () {
         //console.log("What happend just now!");
         if (response.status === 200) {
           const message = `Customer Id:-${data.candidateId}\nName :- ${data.name}`;
+          alert(message);
+          window.location.replace("/user/auth/login");
+        }
+      } else if (otpType === "activateAccount") {
+        response = await postRequest("user/auth/post/activateAccount", obj);
+        const data = response.data;
+        //console.log("What happend just now!");
+        if (response.status === 200) {
+          const message = `Account activated successfully! Customer Id:-${data.user.candidateId}`;
           alert(message);
           window.location.replace("/user/auth/login");
         }

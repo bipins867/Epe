@@ -14,15 +14,21 @@ exports.getForgetPasswordPage = async (req, res, next) => {
   );
 };
 exports.getCandidateIdPage = async (req, res, next) => {
-    res.sendFile(
-      path.resolve("views", "UserAuthentication", "getCandidateId.html")
-    );
-  };
-  exports.getResetPasswordPage = async (req, res, next) => {
-    res.sendFile(
-      path.resolve("views", "UserAuthentication", "resetPassword.html")
-    );
-  };
+  res.sendFile(
+    path.resolve("views", "UserAuthentication", "getCandidateId.html")
+  );
+};
+exports.getResetPasswordPage = async (req, res, next) => {
+  res.sendFile(
+    path.resolve("views", "UserAuthentication", "resetPassword.html")
+  );
+};
+
+exports.getActivateAccountPage = async (req, res, next) => {
+  res.sendFile(
+    path.resolve("views", "UserAuthentication", "activateAccount.html")
+  );
+};
 
 exports.getOtpVerifyPage = async (req, res, next) => {
   res.sendFile(path.resolve("views", "UserAuthentication", "otpVerify.html"));

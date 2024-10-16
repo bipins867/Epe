@@ -55,6 +55,13 @@ router.post(
   userAuthenticationController.getUserInfo
 );
 
+router.post(
+  "/activateAccount",
+  middlewareSendOtp,
+  middlewareVerifyOtp,
+  userAuthenticationController.activateUserAccount
+);
+
 router.post("/resendOtp", userAuthenticationController.userResendOtp);
 
 //Here changes are made to upside only ---

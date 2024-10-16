@@ -417,7 +417,7 @@ exports.userResendOtp = async (req, res, next) => {
 
     // Generate a new OTP for the phone
     const newOtp = crypto.randomInt(100000, 999999).toString();
-    otpStore[phone] = { otp:newOtp, count: otpStore[phone].count-1 };
+    otpStore[phone] = { otp: newOtp, count: otpStore[phone].count - 1 };
 
     if (otpType === "forgetCandidateId" || otpType === "resetPassword") {
       sendOtpAccountVerifyMessage(phone, newOtp);
@@ -442,5 +442,101 @@ exports.userResendOtp = async (req, res, next) => {
     return res
       .status(500)
       .json({ message: "Internal server error. Please try again later." });
+  }
+};
+
+exports.activateUserAccount = async (req, res) => {
+  const { phone } = req.body;
+
+  // Validate that the phone is provided
+  if (!phone) {
+    return res.status(400).json({
+      success: false,
+      message: "Phone number is required.",
+    });
+  }
+
+  let t; // Start a transaction
+
+  try {
+    // Find the user by phone number
+    const user = await User.findOne({ where: { phone } });
+
+    // If the user is not found
+    if (!user) {
+      //await t.rollback(); // Rollback transaction on error
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    // Check if the user is blocked
+    if (user.isBlocked) {
+      //await t.rollback(); // Rollback transaction on error
+      return res.status(403).json({
+        success: false,
+        message: "User account is blocked. Please contact support.",
+      });
+    }
+
+    // Check if the user is already active
+    if (user.isActive) {
+      //await t.rollback(); // Rollback transaction on error
+      return res.status(403).json({
+        success: true,
+        message: "User account is already active.",
+      });
+    }
+
+    // Find the user's Piggybox
+    const piggybox = await Piggybox.findOne({
+      where: { UserId: user.id },
+      //transaction: t,
+    });
+
+    if (!piggybox) {
+      //await t.rollback(); // Rollback transaction if Piggybox is not found
+      return res.status(404).json({
+        success: false,
+        message: "User's Piggybox not found.",
+      });
+    }
+    t = await sequelize.transaction();
+
+    // Update the user's status to active
+    user.isActive = true;
+    await user.save({ transaction: t });
+
+    // Update Piggybox's isFundedFirst to false
+    piggybox.isFundedFirst = false;
+    await piggybox.save({ transaction: t });
+
+    // Commit the transaction
+    await t.commit();
+
+    return res.status(200).json({
+      success: true,
+      message: "User account activated and Piggybox updated successfully.",
+      user: {
+        phone: user.phone,
+        isActive: user.isActive,
+        candidateId: user.candidateId,
+      },
+    });
+  } catch (error) {
+    // Rollback transaction on any error
+    console.error(
+      "Error activating user account and updating Piggybox:",
+      error
+    );
+    if (t) {
+      await t.rollback();
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error. Please try again later.",
+    });
   }
 };

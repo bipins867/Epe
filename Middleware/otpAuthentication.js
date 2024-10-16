@@ -42,7 +42,7 @@ exports.middlewareSendOtp = async (req, res, next) => {
         console.log(otpStore);
       }
 
-      if (otpType === "forgetCandidateId" || otpType === "resetPassword") {
+      if (otpType === "forgetCandidateId" || otpType === "resetPassword" || otpType==='activateAccount') {
         sendOtpAccountVerifyMessage(phone, phoneOtp);
       } else if (otpType === "login") {
         sendLoginOtpMessage(phone, phoneOtp);
