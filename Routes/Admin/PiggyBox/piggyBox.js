@@ -8,7 +8,11 @@ const customerRouter = require("./Customer/customer");
 const referralRouter = require("./Referral/referral");
 const requestWithdrawalRouter = require("./RequestWithdrawal/requestWithdrawal");
 const transactionHistoryRouter = require("./TransactionHistory/transactionHistory");
-const { adminAuthentication } = require("../../../Middleware/auth");
+const {
+  adminAuthentication,
+  roleAuthentication,
+} = require("../../../Middleware/auth");
+const { piggyBoxRole } = require("../../../Middleware/role");
 
 const router = express.Router();
 
@@ -17,7 +21,13 @@ router.use("/requestWithdrawal", requestWithdrawalRouter);
 router.use("/referral", referralRouter);
 router.use("/customer", customerRouter);
 router.use("/accountClouser", accountClouserRouter);
-router.use("/post",adminAuthentication, postRouter);
+router.use(
+  "/post",
+  adminAuthentication,
+  piggyBoxRole,
+  roleAuthentication,
+  postRouter
+);
 router.use("/", getRouter);
 
 module.exports = router;
