@@ -37,7 +37,7 @@ body {
 .sidebar-btn {
     display: flex;
     align-items: center;
-    padding: 15px;
+    padding: 8px;
     margin-bottom: 10px;
     background-color: #4da6ff; /* Default button background */
     color: #fff;
@@ -46,7 +46,6 @@ body {
     font-size: 16px;
     transition: background-color 0.3s ease;
 }
-
 .sidebar-btn i {
     margin-right: 10px; /* Space between icon and text */
     font-size: 18px; /* Icon size */
