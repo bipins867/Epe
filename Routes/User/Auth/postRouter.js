@@ -1,6 +1,8 @@
 const express = require("express");
 
 const userAuthenticationController = require("../../../Controller/Users/Auth/users");
+const userActivityController=require('../../../Controller/Users/Auth/userActivity')
+
 const {
   checkValidationErrors,
   validateLogin,
@@ -16,6 +18,7 @@ const {
   initialSignuUserAuthentication,
   initialForgetCustomerIdUserAuthentication,
   initialResetPasswordUserAuthentication,
+  userAuthentication,
 } = require("../../../Middleware/auth");
 
 const router = express.Router();
@@ -61,6 +64,8 @@ router.post(
   middlewareVerifyOtp,
   userAuthenticationController.activateUserAccount
 );
+
+router.post('/getUserActivity',userAuthentication,userActivityController.getUserActivityHistory)
 
 router.post("/resendOtp", userAuthenticationController.userResendOtp);
 

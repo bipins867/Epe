@@ -171,42 +171,42 @@ exports.createAdmin = async (req, res, next) => {
 
 exports.deactivateAdmin = async (req, res, next) => {
   try {
-    return res.status(402).json({
-      message:
-        "Can't Delete any Admins. Because of secureity & privacy issues.",
-    });
     // Extract the userName from request parameters
     const { userName } = req.params;
     const admin = req.admin;
 
-    if (!(admin.adminType == "SSA" || admin.adminType == "SA")) {
+    // Check if the requesting admin has the right privileges (only SSA or SA can deactivate)
+    if (!(admin.adminType === "SSA" || admin.adminType === "SA")) {
       return res.status(401).json({ message: "Unauthorized Access!" });
     }
 
-    // Find the admin by userName and delete
-    const deletedAdmin = await Admin.destroy({
-      where: { userName: userName },
-    });
+    // Find the admin by userName
+    const adminToDeactivate = await Admin.findOne({ where: { userName: userName } });
 
     // If no admin found with the provided userName
-    if (!deletedAdmin) {
+    if (!adminToDeactivate) {
       return res.status(404).json({
         message: `Admin with userName ${userName} not found.`,
       });
     }
 
+    // Update isDeactivated to true instead of deleting the admin
+    adminToDeactivate.isDeactivated = true;
+    await adminToDeactivate.save();
+
     // Return success response
     return res.status(200).json({
-      message: `Admin with userName ${userName} deleted successfully.`,
+      message: `Admin with userName ${userName} has been deactivated successfully.`,
     });
   } catch (error) {
-    console.error("Error deleting admin:", error);
+    console.error("Error deactivating admin:", error);
     return res.status(500).json({
       message: "Internal server error",
       error: error.message,
     });
   }
 };
+
 
 exports.changePassword = async (req, res, next) => {
   let transaction;

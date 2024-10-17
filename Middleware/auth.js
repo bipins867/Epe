@@ -225,6 +225,17 @@ exports.adminAuthentication = async (req, res, next) => {
     // Check freeze status for admin types 'SA' and 'A'
     if (
       (admin.adminType === "SA" || admin.adminType === "A") &&
+      admin.isDeactivated
+    ) {
+      return res
+        .status(403)
+        .json({ error: "Access denied. Admin account is Deactivated!" });
+    }
+
+
+    // Check freeze status for admin types 'SA' and 'A'
+    if (
+      (admin.adminType === "SA" || admin.adminType === "A") &&
       admin.freezeStatus
     ) {
       return res
