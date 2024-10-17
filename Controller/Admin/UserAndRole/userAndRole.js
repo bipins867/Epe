@@ -241,7 +241,7 @@ exports.changePassword = async (req, res, next) => {
       transaction
     );
     await createAdminActivity(
-      req,
+      null,
       updateAdmin,
       "yourInfo",
       `Password changed by admin :-${req.admin.userName}`,
@@ -303,7 +303,7 @@ exports.updateAdminStatus = async (req, res, next) => {
       transaction
     );
     await createAdminActivity(
-      req,
+      null,
       admin,
       "yourInfo",
       `Freeze Status :- ${freezeStatus} changed by admin :-${req.admin.userName}`,

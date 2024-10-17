@@ -143,6 +143,6 @@ exports.verifyPaymentRequest = async function verifyPaymentRequest(
   };
 
   const response = await axios.request(options);
-
+  
   return response;
 };

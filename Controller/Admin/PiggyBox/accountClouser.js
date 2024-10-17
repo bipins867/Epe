@@ -6,7 +6,14 @@ const SavedAddress = require("../../../Models/PiggyBox/savedAddress");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
 const AdminActivity = require("../../../Models/User/adminActivity");
 const User = require("../../../Models/User/users");
-const { sendUserBlockMessage, sendDebitMessage } = require("../../../Utils/MailService");
+const {
+  sendUserBlockMessage,
+  sendDebitMessage,
+} = require("../../../Utils/MailService");
+const {
+  createAdminActivity,
+  createUserActivity,
+} = require("../../../Utils/activityUtils");
 const sequelize = require("../../../database");
 const Sequelize = require("sequelize");
 
@@ -241,7 +248,7 @@ exports.approveCustomerClouserRequest = async (req, res, next) => {
     transaction = await sequelize.transaction();
 
     // Update the user status
-    
+
     // // Check if the user has a referral and hasn't used it yet
     // if (!user.isFundedFirst && user.byReferralId) {
     //   user.isByReferralUsed = true; // Mark referral as used
@@ -277,6 +284,23 @@ exports.approveCustomerClouserRequest = async (req, res, next) => {
       await recentTransactionHistory.save({ transaction });
     }
 
+    await createAdminActivity(
+      req,
+      req.admin,
+      "accountClouser",
+      `Approved the account clouser request of user customer Id:- ${user.candidateId}`,
+      user.candidateId,
+      transaction
+    );
+
+    await createUserActivity(
+      null,
+      user,
+      "accountClouser",
+      `Approved the account clouser request by Admin :- ${req.admin.userName}`,
+      transaction
+    );
+
     // Commit the transaction
     await transaction.commit();
 
@@ -287,6 +311,7 @@ exports.approveCustomerClouserRequest = async (req, res, next) => {
       `WID-35${recentTransactionHistory.id}`,
       piggyBox.piggyBalance.toFixed(2)
     );
+
     sendUserBlockMessage(user.phone);
     // Send a success response
     res.status(200).json({
@@ -301,7 +326,6 @@ exports.approveCustomerClouserRequest = async (req, res, next) => {
       await transaction.rollback();
     }
 
-    
     res.status(500).json({
       success: false,
       message: "Server error while approving account closure request.",
@@ -402,9 +426,26 @@ exports.rejectCustomerClouserRequest = async (req, res, next) => {
 
     user.isActive = true; // Mark the user as inactive
     user.isRequestedClouser = false; // Reset closure request
-    user.adminRemark=adminRemark;
-    
+    user.adminRemark = adminRemark;
+
     await user.save({ transaction });
+
+    await createAdminActivity(
+      req,
+      req.admin,
+      "accountClouser",
+      `Rejected the account clouser request of user customer Id:- ${user.candidateId}`,
+      user.candidateId,
+      transaction
+    );
+
+    await createUserActivity(
+      null,
+      user,
+      "accountClouser",
+      `Rejected the account clouser request by Admin :- ${req.admin.userName}`,
+      transaction
+    );
 
     // Commit the transaction
     await transaction.commit();
@@ -422,7 +463,6 @@ exports.rejectCustomerClouserRequest = async (req, res, next) => {
     // Rollback the transaction on error
     if (transaction) await transaction.rollback();
 
-    
     res.status(500).json({
       success: false,
       message: "Server error while rejecting account closure request.",

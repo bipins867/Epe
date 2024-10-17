@@ -5,6 +5,7 @@ const BankDetails = require("../../../Models/PiggyBox/bankDetails");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
 const { Op } = require("sequelize"); // Sequelize operator for date filtering
 const { sendDebitMessage, sendCreditMessage } = require("../../../Utils/MailService");
+const { createUserActivity, createAdminActivity } = require("../../../Utils/activityUtils");
 
 exports.getSearchCustomerResult = async (req, res, next) => {
   try {
@@ -208,17 +209,13 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
         .json({ success: false, message: "Invalid amount provided." });
     }
 
-    // Start a Sequelize transaction
-
     // Fetch the user based on candidateId
     const user = await User.findOne({
       where: { candidateId },
-      // transaction,
     });
 
     // Check if the user exists
     if (!user) {
-      //await transaction.rollback();
       return res
         .status(404)
         .json({ success: false, message: "User not found." });
@@ -227,23 +224,23 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
     // Fetch the user's PiggyBox
     const piggyBox = await Piggybox.findOne({
       where: { UserId: user.id },
-      // transaction,
     });
 
     // Check if the PiggyBox exists
     if (!piggyBox) {
-      // await transaction.rollback();
       return res
         .status(404)
         .json({ success: false, message: "PiggyBox not found for the user." });
     }
 
-    // Add the amount to piggyBalance
+    // Parse the amount
     const parsedAmount = parseFloat(amount);
-    piggyBox.piggyBalance += parsedAmount;
 
-    //Initilizing the tranasction
+    // Start the transaction
     transaction = await sequelize.transaction();
+
+    // Add the amount to piggyBalance
+    piggyBox.piggyBalance += parsedAmount;
 
     // Update the PiggyBox
     await piggyBox.save({ transaction });
@@ -252,7 +249,7 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
     const thistory = await TransactionHistory.create(
       {
         transactionType: "adminUpdate",
-        remark: `Admin is adding funds of amount: ${parsedAmount}`,
+        remark: `Admin added funds of amount: ${parsedAmount}`,
         debit: 0,
         credit: parsedAmount,
         balance: piggyBox.piggyBalance, // Updated balance after addition
@@ -261,11 +258,29 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
       { transaction }
     );
 
-    
+    // Log Admin Activity
+    await createAdminActivity(
+      req,
+      req.admin, // Assuming req.admin contains the admin's details
+      "piggyBox",
+      `Admin ${req.admin.userName} added ${parsedAmount} to user ${user.candidateId}'s wallet. Admin remark: ${remark}`,
+      user.candidateId,
+      transaction
+    );
+
+    // Log User Activity
+    await createUserActivity(
+      null, // Assuming this action is initiated by the admin
+      user,
+      "adminUpdate",
+      `Funds of amount ${parsedAmount} added to your wallet by admin. Admin remark: ${remark}`,
+      transaction
+    );
 
     // Commit the transaction
     await transaction.commit();
 
+    // Send a confirmation message to the user
     sendCreditMessage(
       user.phone,
       parsedAmount.toFixed(2),
@@ -284,8 +299,6 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
     });
   } catch (error) {
     // Rollback the transaction on error
-
-    
     console.error("Error adding funds to customer wallet:", error);
     if (transaction) {
       await transaction.rollback();
@@ -296,6 +309,7 @@ exports.addFundsToCustomerWallet = async (req, res, next) => {
     });
   }
 };
+
 
 exports.deductFundsFromCustomerWallet = async (req, res, next) => {
   let transaction;
@@ -313,12 +327,10 @@ exports.deductFundsFromCustomerWallet = async (req, res, next) => {
     // Fetch the user based on candidateId
     const user = await User.findOne({
       where: { candidateId },
-      // transaction,
     });
 
     // Check if the user exists
     if (!user) {
-      // await transaction.rollback();
       return res
         .status(404)
         .json({ success: false, message: "User not found." });
@@ -327,23 +339,20 @@ exports.deductFundsFromCustomerWallet = async (req, res, next) => {
     // Fetch the user's PiggyBox
     const piggyBox = await Piggybox.findOne({
       where: { UserId: user.id },
-      //  transaction,
     });
 
     // Check if the PiggyBox exists
     if (!piggyBox) {
-      // await transaction.rollback();
       return res
         .status(404)
         .json({ success: false, message: "PiggyBox not found for the user." });
     }
 
-    // Add the amount to piggyBalance
+    // Parse the amount
     const parsedAmount = parseFloat(amount);
 
     // Check if there are sufficient funds to deduct
     if (piggyBox.piggyBalance < parsedAmount) {
-      //await transaction.rollback();
       return res.status(400).json({
         success: false,
         message: "Insufficient funds in the piggy box.",
@@ -360,7 +369,7 @@ exports.deductFundsFromCustomerWallet = async (req, res, next) => {
     await piggyBox.save({ transaction });
 
     // Create a TransactionHistory entry
-    const thistory=await TransactionHistory.create(
+    const thistory = await TransactionHistory.create(
       {
         transactionType: "adminUpdate",
         remark: `Admin is deducting funds of amount: ${parsedAmount}`,
@@ -372,9 +381,29 @@ exports.deductFundsFromCustomerWallet = async (req, res, next) => {
       { transaction }
     );
 
-    
+    // Log Admin Activity
+    await createAdminActivity(
+      req,
+      req.admin, // Assuming req.admin contains the admin's details
+      "piggyBox",
+      `Admin ${req.admin.userName} deducted ${parsedAmount} from user ${user.candidateId}'s wallet. Admin remark: ${remark}`,
+      user.candidateId,
+      transaction
+    );
+
+    // Log User Activity
+    await createUserActivity(
+      null, // Assuming this action is initiated by the admin
+      user,
+      "adminUpdate",
+      `Funds of amount ${parsedAmount} were deducted from your wallet by admin. Admin remark: ${remark}`,
+      transaction
+    );
+
     // Commit the transaction
     await transaction.commit();
+
+    // Send a confirmation message to the user
     sendDebitMessage(
       user.phone,
       parsedAmount.toFixed(2),
@@ -382,7 +411,7 @@ exports.deductFundsFromCustomerWallet = async (req, res, next) => {
       `ADM-35${thistory.id}`,
       piggyBox.piggyBalance.toFixed(2)
     );
-    
+
     // Send a success response
     res.status(200).json({
       success: true,
@@ -393,7 +422,6 @@ exports.deductFundsFromCustomerWallet = async (req, res, next) => {
     });
   } catch (error) {
     // Rollback the transaction on error
-    
     console.error("Error deducting funds from customer wallet:", error);
     if (transaction) {
       await transaction.rollback();

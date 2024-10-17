@@ -6,9 +6,12 @@ const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory"
 const AdminActivity = require("../../../Models/User/adminActivity");
 const User = require("../../../Models/User/users");
 const { sendDebitMessage } = require("../../../Utils/MailService");
+const {
+  createAdminActivity,
+  createUserActivity,
+} = require("../../../Utils/activityUtils");
 const sequelize = require("../../../database");
 const Sequelize = require("sequelize");
-
 
 //Status will be passed based no the situation like -> pending /  non pendings
 exports.getWithdrawalRequestList = async (req, res, next) => {
@@ -107,7 +110,7 @@ exports.getCustomerInformation = async (req, res, next) => {
       attributes: ["piggyBalance", "unclearedBalance", "interestBalance"], // Return relevant piggyBox details
     });
 
-    const userKyc=await UserKyc.findOne({where:{UserId:user.id}})
+    const userKyc = await UserKyc.findOne({ where: { UserId: user.id } });
     // Fetch BankDetails for the user
     const bankDetails = await BankDetails.findOne({
       where: { UserId: user.id },
@@ -156,7 +159,7 @@ exports.getCustomerInformation = async (req, res, next) => {
         name: user.name,
         email: user.email,
         phone: user.phone,
-        kycStatus:userKyc?userKyc.userAggreementAccepted:false,
+        kycStatus: userKyc ? userKyc.userAggreementAccepted : false,
       },
       piggyBox, // Return PiggyBox info
       bankDetails, // Return BankDetails info
@@ -274,6 +277,26 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
 
       await transactionHistory.update({ transaction });
 
+      await createAdminActivity(
+        req,
+        req.admin,
+        "requestWithdrawal",
+        `Approved withdrawal request for user ${
+          user.candidateId
+        }. Amount: ${amount.toFixed(2)}. Admin Remark: ${adminRemark}`,
+        user.candidateId,
+        transaction
+      );
+
+      await createUserActivity(
+        null,
+        user,
+        "adminUpdate",
+        `Withdrawal request approved. Amount: ${amount.toFixed(2)}. By Admin: ${
+          req.admin.userName
+        }`,
+        transaction
+      );
       sendDebitMessage(
         user.phone,
         amount.toFixed(2),
@@ -304,6 +327,27 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
       withdrawalRequest.status = "Rejected";
       withdrawalRequest.adminRemark = adminRemark;
       withdrawalRequest.userRemark = `Admin :- ${adminRemark}`;
+
+      await createAdminActivity(
+        req,
+        req.admin,
+        "requestWithdrawal",
+        `Rejected withdrawal request for user ${
+          user.candidateId
+        }. Amount: ${amount.toFixed(2)}. Admin Remark: ${adminRemark}`,
+        user.candidateId,
+        transaction
+      );
+
+      await createUserActivity(
+        null,
+        user,
+        "adminUpdate",
+        `Withdrawal request rejected. Amount: ${amount.toFixed(2)}. By Admin: ${
+          req.admin.userName
+        }. Admin Remark :- ${adminRemark}`,
+        transaction
+      );
     }
 
     // Save changes to the database

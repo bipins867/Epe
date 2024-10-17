@@ -5,6 +5,10 @@ const BankDetails = require("../../../Models/PiggyBox/bankDetails");
 const SavedAddress = require("../../../Models/PiggyBox/savedAddress");
 const sequelize = require("../../../database");
 const { sendUserUnblockMessage } = require("../../../Utils/MailService");
+const {
+  createUserActivity,
+  createAdminActivity,
+} = require("../../../Utils/activityUtils");
 
 exports.getSearchCustomerResult = async (req, res, next) => {
   try {
@@ -148,6 +152,7 @@ exports.getCustomerInformation = async (req, res, next) => {
 };
 
 exports.updateCustomerInformation = async (req, res, next) => {
+  let transaction;
   try {
     // Extract candidateId and updated fields from the request body
     const { candidateId, name, email, phone, employeeId } = req.body;
@@ -164,15 +169,70 @@ exports.updateCustomerInformation = async (req, res, next) => {
         .json({ success: false, message: "User not found." });
     }
 
-    // Update user information
-    user.name = name || user.name; // Only update if a new value is provided
-    user.email = email || user.email; // Only update if a new value is provided
-    user.phone = phone || user.phone; // Only update if a new value is provided
-    user.employeeId = employeeId || user.employeeId; // Only update if a new value is provided
-    //user.adminId=req.admin.userName;
+    transaction = await sequelize.transaction();
+
+    // Store the changes that will be logged
+    let changes = [];
+
+    // Check and log changes
+    if (name && name !== user.name) {
+      changes.push(`Name: '${user.name}' -> '${name}'`);
+      user.name = name; // Update if changed
+    }
+    if (email && email !== user.email) {
+      changes.push(`Email: '${user.email}' -> '${email}'`);
+      user.email = email; // Update if changed
+    }
+    if (phone && phone !== user.phone) {
+      changes.push(`Phone: '${user.phone}' -> '${phone}'`);
+      
+      const newUserPhone=await User.findOne({where:{phone}})
+      if(newUserPhone){
+        return res.status(403).json({error:"Mobile number already exists!"})
+      }
+
+      user.phone = phone; // Update if changed
+    }
+    if (employeeId && employeeId !== user.employeeId) {
+      changes.push(`Employee ID: '${user.employeeId}' -> '${employeeId}'`);
+      user.employeeId = employeeId; // Update if changed
+    }
+    if(changes.length==0){
+      return res.status(402).json({error:"Nothing to update!"})
+    }
+
+    // If there are changes, construct the activity description
+    const activityDescription = changes.length > 0
+      ? `Updated fields: ${changes.join(", ")}`
+      : "No changes in user information.";
+
+    // Update adminRemark if applicable
     user.adminRemark = "Admin updated the user information.";
+
     // Save the updated user to the database
-    await user.save();
+    await user.save({ transaction });
+
+    // Create AdminActivity for logging
+    await createAdminActivity(
+      req,
+      req.admin,
+      "customer",
+      `Admin updated customer (ID: ${user.candidateId}). ${activityDescription}`,
+      user.candidateId,
+      transaction
+    );
+
+    // Create UserActivity for logging
+    await createUserActivity(
+      null, // Since this is an admin action, req is null
+      user,
+      "adminUpdate",
+      `Admin ${req.admin.userName} updated your account. ${activityDescription}`,
+      transaction
+    );
+
+    // Commit the transaction
+    await transaction.commit();
 
     // Send a success response
     res.status(200).json({
@@ -182,12 +242,16 @@ exports.updateCustomerInformation = async (req, res, next) => {
     });
   } catch (error) {
     console.error("Error updating customer information:", error);
+    if (transaction) {
+      await transaction.rollback();
+    }
     res.status(500).json({
       success: false,
       message: "Server error while updating customer information.",
     });
   }
 };
+
 
 exports.updateBlockedStatus = async (req, res) => {
   const { candidateId, isBlocked, adminRemark } = req.body;
@@ -201,6 +265,7 @@ exports.updateBlockedStatus = async (req, res) => {
     });
   }
 
+  let transaction;
   try {
     // Find the user by candidateId
     const user = await User.findOne({ where: { candidateId } });
@@ -212,11 +277,41 @@ exports.updateBlockedStatus = async (req, res) => {
       });
     }
 
-    // Update the isBlocked status
+    if(user.isBlocked===isBlocked){
+      return res.status(403).json({error:"Status is already as it's!"})
+    }
+
+    transaction = await sequelize.transaction();
+
+    // Check if there is any change in the blocked status
+    const previousStatus = user.isBlocked;
     user.isBlocked = isBlocked;
-    // user.adminId=req.admin.userName;
     user.adminRemark = adminRemark;
-    await user.save();
+    
+    // Save the updated status in the database
+    await user.save({ transaction });
+
+    // Log the activity in AdminActivity
+    await createAdminActivity(
+      req,
+      req.admin, // Assuming `req.admin` contains the admin performing the action
+      "customer",
+      `Admin ${req.admin.userName} ${isBlocked ? "blocked" : "unblocked"} user (ID: ${user.candidateId}). Previous status: ${previousStatus ? "blocked" : "unblocked"}. Admin remark: ${adminRemark}`,
+      user.candidateId,
+      transaction
+    );
+
+    // Log the activity in UserActivity
+    await createUserActivity(
+      null, // Since it's an admin action, req is null
+      user,
+      "adminUpdate",
+      `Your account has been ${isBlocked ? "blocked" : "unblocked"} by admin ${req.admin.userName}. Admin remark: ${adminRemark}`,
+      transaction
+    );
+
+    // Commit the transaction
+    await transaction.commit();
 
     return res.status(200).json({
       success: true,
@@ -228,6 +323,11 @@ exports.updateBlockedStatus = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating user blocked status:", error);
+
+    if (transaction) {
+      await transaction.rollback();
+    }
+
     return res.status(500).json({
       success: false,
       message: "Internal server error. Please try again later.",
@@ -254,13 +354,13 @@ exports.updateActiveStatus = async (req, res) => {
     const user = await User.findOne({ where: { candidateId } });
 
     if (!user) {
-      //await transaction.rollback(); // Rollback if user is not found
       return res.status(404).json({
         success: false,
         message: "User not found",
       });
     }
 
+    // Prevent admin from deactivating the user
     if (!isActive) {
       return res.status(403).json({
         success: false,
@@ -268,28 +368,49 @@ exports.updateActiveStatus = async (req, res) => {
       });
     }
 
-    // Update the isActive status
-    user.isActive = isActive;
-    user.adminRemark = adminRemark;
-
-    // Find the user's Piggybox
+    // Fetch user's Piggybox
     const piggybox = await PiggyBox.findOne({ where: { UserId: user.id } });
 
     if (!piggybox) {
-      res.status(404).json({ success: false, message: "PiggyBox not found!" });
+      return res.status(404).json({ success: false, message: "PiggyBox not found!" });
     }
 
     transaction = await sequelize.transaction();
 
-    // If the user is inactive, set isFundedFirst to false in Piggybox
+    // Update the isActive status and other user details
+    const previousStatus = user.isActive;
+    user.isActive = isActive;
+    user.adminRemark = adminRemark;
+
+    // Update Piggybox if needed
     piggybox.isFundedFirst = false;
     await piggybox.save({ transaction });
 
     await user.save({ transaction });
 
+    // Log Admin Activity
+    await createAdminActivity(
+      req,
+      req.admin, // Assuming req.admin contains the admin's details
+      "customer",
+      `Admin ${req.admin.userName} activated user (ID: ${user.candidateId}). Previous status: ${previousStatus ? "active" : "inactive"}. Admin remark: ${adminRemark}`,
+      user.candidateId,
+      transaction
+    );
+
+    // Log User Activity
+    await createUserActivity(
+      null, // Since this is an admin action, req is null
+      user,
+      "adminUpdate",
+      `Your account has been activated by admin ${req.admin.userName}. Admin remark: ${adminRemark}`,
+      transaction
+    );
+
     // Commit the transaction after successful updates
     await transaction.commit();
 
+    // If user is active, send an unblock message
     if (isActive) {
       sendUserUnblockMessage(user.phone);
     }
