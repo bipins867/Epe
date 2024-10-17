@@ -26,6 +26,31 @@ exports.userSignUpLimiter = rateLimit({
   },
 });
 
+// Sign-Up Route Limiter
+exports.userAuthLimiter = rateLimit({
+  windowMs: windowMs,
+  max: 10, // 5 attempts per 15 minutes
+
+  handler: (req, res, next) => {
+    res.status(429).json({
+      message: "Too many auth attempts, please try again after 15 minutes",
+    });
+  },
+});
+
+exports.userResendOtpimiter = rateLimit({
+  windowMs: windowMs,
+  max: 20, // 5 attempts per 15 minutes
+
+  handler: (req, res, next) => {
+    res.status(429).json({
+      message: "Too many Resend Otp attempts, please try again after 15 minutes",
+    });
+  },
+});
+
+
+
 // KYC Update Limiter
 exports.kycUpdateLimiter = rateLimit({
   windowMs: windowMs,

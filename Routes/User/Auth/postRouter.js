@@ -1,7 +1,7 @@
 const express = require("express");
 
 const userAuthenticationController = require("../../../Controller/Users/Auth/users");
-const userActivityController=require('../../../Controller/Users/Auth/userActivity')
+const userActivityController = require("../../../Controller/Users/Auth/userActivity");
 
 const {
   checkValidationErrors,
@@ -20,11 +20,18 @@ const {
   initialResetPasswordUserAuthentication,
   userAuthentication,
 } = require("../../../Middleware/auth");
+const {
+  userLoginLimiter,
+  userSignUpLimiter,
+  userAuthLimiter,
+  userResendOtpimiter,
+} = require("../../../Middleware/rateLimiter");
 
 const router = express.Router();
 
 router.post(
   "/login",
+  userLoginLimiter,
   initialLoginUserAuthentication,
   middlewareSendOtp,
   middlewareVerifyOtp,
@@ -32,6 +39,7 @@ router.post(
 );
 router.post(
   "/signUp",
+  userSignUpLimiter,
   validateSignUp,
   checkValidationErrors,
   initialSignuUserAuthentication,
@@ -42,6 +50,7 @@ router.post(
 
 router.post(
   "/changeUserPassword",
+  userAuthLimiter,
   initialResetPasswordUserAuthentication,
   middlewareSendOtp,
   middlewareVerifyOtp,
@@ -52,6 +61,7 @@ router.post(
 
 router.post(
   "/getUserInfo",
+  userAuthLimiter,
   initialForgetCustomerIdUserAuthentication,
   middlewareSendOtp,
   middlewareVerifyOtp,
@@ -60,14 +70,19 @@ router.post(
 
 router.post(
   "/activateAccount",
+  userAuthLimiter,
   middlewareSendOtp,
   middlewareVerifyOtp,
   userAuthenticationController.activateUserAccount
 );
 
-router.post('/getUserActivity',userAuthentication,userActivityController.getUserActivityHistory)
+router.post(
+  "/getUserActivity",
+  userAuthentication,
+  userActivityController.getUserActivityHistory
+);
 
-router.post("/resendOtp", userAuthenticationController.userResendOtp);
+router.post("/resendOtp",userResendOtpimiter, userAuthenticationController.userResendOtp);
 
 //Here changes are made to upside only ---
 
