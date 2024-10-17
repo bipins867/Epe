@@ -20,9 +20,11 @@ body {
    
 }
 
+
 /* Adjust sidebar's width */
 #sidebar-wrapper {
     width: 280px; /* Set your desired width */
+
 }
 
 .sidebar {
