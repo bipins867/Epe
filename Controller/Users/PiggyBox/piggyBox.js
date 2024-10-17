@@ -59,6 +59,9 @@ exports.addFunds = async (req, res, next) => {
     ) {
       const redirectInfo = paymentResult.data.instrumentResponse.redirectInfo; // Get the redirect URL from response
       t = await sequelize.transaction();
+
+      
+
       // Create a new Transaction
       const transaction = await Transaction.create(
         {

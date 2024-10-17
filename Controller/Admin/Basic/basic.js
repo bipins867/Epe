@@ -17,6 +17,7 @@ exports.updateContactUsByAdmin = async (req, res) => {
     }
 
     // Update the entry with admin's remark and statusChecked value
+    contactUsEntry.adminId=req.admin.userName
     contactUsEntry.adminRemark = adminRemark || contactUsEntry.adminRemark;
     contactUsEntry.statusChecked = statusChecked !== undefined ? statusChecked : contactUsEntry.statusChecked;
 
@@ -53,6 +54,7 @@ exports.updateApplyLoanByAdmin = async (req, res) => {
     }
 
     // Update the entry with admin's remark and statusChecked value
+    loanEntry.adminId=req.admin.userName
     loanEntry.adminRemark = adminRemark || loanEntry.adminRemark;
     loanEntry.statusChecked = statusChecked !== undefined ? statusChecked : loanEntry.statusChecked;
 

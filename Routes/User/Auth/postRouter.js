@@ -66,21 +66,21 @@ router.post("/resendOtp", userAuthenticationController.userResendOtp);
 
 //Here changes are made to upside only ---
 
-router.post(
-  "/verifyOtp",
-  validateSignUp,
-  checkValidationErrors,
-  userAuthenticationController.userOtpVerify
-);
+// router.post(
+//   "/verifyOtp",
+//   validateSignUp,
+//   checkValidationErrors,
+//   userAuthenticationController.userOtpVerify
+// );
 
-router.post(
-  "/verifyUserResetOrForgetPasswordOtp",
-  userAuthenticationController.userResetOrForgetPasswordOtpVerify
-);
+// router.post(
+//   "/verifyUserResetOrForgetPasswordOtp",
+//   userAuthenticationController.userResetOrForgetPasswordOtpVerify
+// );
 
-router.post(
-  "/verifyUserForgetCandidateIdOtp",
-  userAuthenticationController.userForgetCandidateIdOtpVerify
-);
+// router.post(
+//   "/verifyUserForgetCandidateIdOtp",
+//   userAuthenticationController.userForgetCandidateIdOtpVerify
+// );
 
 module.exports = router;

@@ -5,6 +5,7 @@ const sequelize = require("../../../database");
 const { generateRandomRequestId } = require("./requestWithdrawal");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
 const BankDetails = require("../../../Models/PiggyBox/bankDetails");
+const { createUserActivity } = require("../../../Utils/activityUtils");
 
 exports.userAccountClouserRequest = async (req, res, next) => {
   let transaction; // Start a transaction
@@ -100,6 +101,15 @@ exports.userAccountClouserRequest = async (req, res, next) => {
     // Update the user's closure request flag
     user.isRequestedClouser = true;
     await user.save({ transaction });
+
+    await createUserActivity(
+      req,
+      user,
+      "accountClouser",
+      "Requested for Account Clouser.",
+      transaction
+    );
+
 
     // Commit the transaction
     await transaction.commit();
@@ -199,6 +209,16 @@ exports.cancelAccountClouserRequest = async (req, res, next) => {
     user.isRequestedClouser = false;
     await user.save({ transaction });
 
+
+    await createUserActivity(
+      req,
+      user,
+      "accountClouser",
+      "Cancel Requested for account clouser.",
+      transaction
+    );
+
+
     // Commit the transaction
     await transaction.commit();
 
@@ -252,7 +272,14 @@ exports.userAccountOpen = async (req, res, next) => {
     user.isRequestedClouser = false;
     user.isByReferralUsed = true;
     await user.save({ transaction });
-
+    
+    await createUserActivity(
+      req,
+      user,
+      "accountClouser",
+      "User Account opening attempted!",
+      transaction
+    );
     // Commit the transaction
     await transaction.commit();
 

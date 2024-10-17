@@ -19,7 +19,8 @@ const Role = sequelize.define(
     },
     identifier:{
       type:Sequelize.STRING,
-      allowNull:false
+      allowNull:false,
+      unique:true,
     }
   },
   {

@@ -1,12 +1,14 @@
 const adminAndRole = require("../../../Models/User/adminAndRole");
 const Admin = require("../../../Models/User/admins");
 const Role = require("../../../Models/User/role");
+const sequelize = require("../../../database");
 
 const {
   generateRandomUsername,
   generateRandomRoleId,
 } = require("../../../Utils/utils");
 const bcrypt = require("bcrypt");
+const { createAdminActivity } = require("../../../Utils/activityUtils");
 
 exports.createSSAdmin = async (req, res, next) => {
   try {
@@ -47,6 +49,7 @@ exports.createSSAdmin = async (req, res, next) => {
 };
 
 exports.createSAdmin = async (req, res, next) => {
+  let transaction;
   try {
     // Extract name, email, and password from the request body
     const { name, email, password } = req.body;
@@ -63,15 +66,30 @@ exports.createSAdmin = async (req, res, next) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    transaction = await sequelize.transaction();
     // Create the new SA admin
-    const newSSAAdmin = await Admin.create({
+    const newSSAAdmin = await Admin.create(
+      {
+        userName,
+        adminType: "SA",
+        password: hashedPassword,
+        freezeStatus: false,
+        name,
+        email,
+      },
+      { transaction }
+    );
+
+    await createAdminActivity(
+      req,
+      req.admin,
+      "userAndRole",
+      `Created SA admin with userName :-${userName}`,
       userName,
-      adminType: "SA",
-      password: hashedPassword,
-      freezeStatus: false,
-      name,
-      email,
-    });
+      transaction
+    );
+
+    await transaction.commit();
 
     return res.status(201).json({
       message: "SA type admin created successfully.",
@@ -79,6 +97,10 @@ exports.createSAdmin = async (req, res, next) => {
     });
   } catch (error) {
     console.error("Error creating SA admin:", error);
+
+    if (transaction) {
+      await transaction.rollback();
+    }
     return res.status(500).json({
       message: "Internal server error",
       error: error.message,
@@ -87,6 +109,7 @@ exports.createSAdmin = async (req, res, next) => {
 };
 
 exports.createAdmin = async (req, res, next) => {
+  let transaction;
   try {
     // Extract name, email, and password from the request body
     const { name, email, password } = req.body;
@@ -103,15 +126,30 @@ exports.createAdmin = async (req, res, next) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    transaction = await sequelize.transaction();
     // Create the new A admin
-    const newAdmin = await Admin.create({
+    const newAdmin = await Admin.create(
+      {
+        userName,
+        adminType: "A",
+        password: hashedPassword,
+        freezeStatus: false,
+        name,
+        email,
+      },
+      { transaction }
+    );
+
+    await createAdminActivity(
+      req,
+      req.admin,
+      "userAndRole",
+      `Created SA admin with userName :-${userName}`,
       userName,
-      adminType: "A",
-      password: hashedPassword,
-      freezeStatus: false,
-      name,
-      email,
-    });
+      transaction
+    );
+
+    await transaction.commit();
 
     return res.status(201).json({
       message: "A type admin created successfully.",
@@ -119,6 +157,11 @@ exports.createAdmin = async (req, res, next) => {
     });
   } catch (error) {
     console.error("Error creating A admin:", error);
+
+    if (transaction) {
+      await transaction.rollback();
+    }
+
     return res.status(500).json({
       message: "Internal server error",
       error: error.message,
@@ -126,10 +169,12 @@ exports.createAdmin = async (req, res, next) => {
   }
 };
 
-exports.deleteAdmin = async (req, res, next) => {
+exports.deactivateAdmin = async (req, res, next) => {
   try {
-
-    return res.status(402).json({message:"Can't Delete any Admins. Because of secureity & privacy issues."})
+    return res.status(402).json({
+      message:
+        "Can't Delete any Admins. Because of secureity & privacy issues.",
+    });
     // Extract the userName from request parameters
     const { userName } = req.params;
     const admin = req.admin;
@@ -164,6 +209,7 @@ exports.deleteAdmin = async (req, res, next) => {
 };
 
 exports.changePassword = async (req, res, next) => {
+  let transaction;
   try {
     // Extract userName and new password from request body
     const { userName, password } = req.body;
@@ -172,18 +218,38 @@ exports.changePassword = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Find the admin by userName and update the password
-    const updatedAdmin = await Admin.update(
-      { password: hashedPassword },
-      { where: { userName: userName } }
-    );
 
-    // Check if any admin was updated
-    if (updatedAdmin[0] === 0) {
+    const updateAdmin = await Admin.findOne({ where: { userName: userName } });
+
+    if (!updateAdmin) {
       // `updatedAdmin[0]` is the number of affected rows
       return res.status(404).json({
         message: `Admin with userName ${userName} not found.`,
       });
     }
+
+    transaction = await sequelize.transaction();
+
+    await updateAdmin.update({ password: hashedPassword }, { transaction });
+
+    await createAdminActivity(
+      req,
+      req.admin,
+      "userAndRole",
+      `Password changed of admin :-${userName}`,
+      updateAdmin.userName,
+      transaction
+    );
+    await createAdminActivity(
+      req,
+      updateAdmin,
+      "yourInfo",
+      `Password changed by admin :-${req.admin.userName}`,
+      null,
+      transaction
+    );
+
+    await transaction.commit();
 
     // Return success response
     return res.status(200).json({
@@ -191,6 +257,9 @@ exports.changePassword = async (req, res, next) => {
     });
   } catch (error) {
     console.error("Error changing password:", error);
+    if (transaction) {
+      await transaction.rollback();
+    }
     return res.status(500).json({
       message: "Internal server error",
       error: error.message,
@@ -199,6 +268,7 @@ exports.changePassword = async (req, res, next) => {
 };
 
 exports.updateAdminStatus = async (req, res, next) => {
+  let transaction;
   try {
     const { adminId, freezeStatus } = req.body; // Extract admin ID and new freeze status from request body
 
@@ -217,18 +287,42 @@ exports.updateAdminStatus = async (req, res, next) => {
       return res.status(404).json({ error: "Admin not found." });
     }
 
+    transaction = await sequelize.transaction();
     // Update the admin's freeze status
     admin.freezeStatus = freezeStatus;
 
     // Save the changes to the database
-    await admin.save();
+    await admin.save({transaction});
 
+    await createAdminActivity(
+      req,
+      req.admin,
+      "userAndRole",
+      `Freeze Status :- ${freezeStatus} changed of admin :-${admin.userName}`,
+      admin.userName,
+      transaction
+    );
+    await createAdminActivity(
+      req,
+      admin,
+      "yourInfo",
+      `Freeze Status :- ${freezeStatus} changed by admin :-${req.admin.userName}`,
+      null,
+      transaction
+    );
+
+
+
+    await transaction.commit();
     // Return a success message
     return res
       .status(200)
       .json({ message: "Admin freeze status updated successfully.", admin });
   } catch (err) {
     console.error(err);
+    if(transaction){
+      await transaction.rollback();
+    }
     return res
       .status(500)
       .json({ error: "An error occurred while updating the admin status." });
@@ -236,6 +330,7 @@ exports.updateAdminStatus = async (req, res, next) => {
 };
 
 exports.updateAdminRoles = async (req, res, next) => {
+  let transaction;
   try {
     const { userName, roles } = req.body;
 
@@ -243,6 +338,10 @@ exports.updateAdminRoles = async (req, res, next) => {
     const admin = await Admin.findOne({ where: { userName } });
     if (!admin) {
       return res.status(404).json({ message: "Admin not found" });
+    }
+
+    if(admin.adminType!=='A'){
+      return res.status(402).json({error:"Can't update the roles of SA admins."})
     }
 
     // Find roles by roleNames
@@ -268,15 +367,41 @@ exports.updateAdminRoles = async (req, res, next) => {
       (role) => !newRoleIds.has(role.id)
     );
 
+
+    transaction = await sequelize.transaction();
     // Remove roles
-    await admin.removeRoles(rolesToRemove);
+    await admin.removeRoles(rolesToRemove,{transaction});
 
     // Add new roles
-    await admin.addRoles(rolesToAdd);
+    await admin.addRoles(rolesToAdd,{transaction});
+
+
+    await createAdminActivity(
+      req,
+      req.admin,
+      "userAndRole",
+      `Role List updated of admin :-${admin.userName}`,
+      admin.userName,
+      transaction
+    );
+    await createAdminActivity(
+      req,
+      admin,
+      "yourInfo",
+      `Role List updated by admin :-${req.admin.userName}`,
+      null,
+      transaction
+    );
+
+    await transaction.commit();
 
     return res.status(200).json({ message: "Roles updated successfully." });
   } catch (error) {
     console.error("Error updating roles:", error);
+
+    if(transaction){
+      await transaction.rollback();
+    }
     return res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
@@ -284,13 +409,16 @@ exports.updateAdminRoles = async (req, res, next) => {
 };
 
 exports.createRoles = async (req, res, next) => {
+  
   try {
     // Extract roles array from request body
     const { roles } = req.body;
 
     // Validate that roles is an array and contains at least one role
     if (!Array.isArray(roles) || roles.length === 0) {
-      return res.status(400).json({ message: "Invalid input, roles array is required." });
+      return res
+        .status(400)
+        .json({ message: "Invalid input, roles array is required." });
     }
 
     // Loop through each role in the array and create a new role entry
@@ -298,6 +426,11 @@ exports.createRoles = async (req, res, next) => {
     for (const role of roles) {
       const { roleName, identifier } = role;
 
+
+      const existingRole=await Role.findOne({where:{identifier}})
+      if(existingRole){
+        continue;
+      }
       // Generate a unique roleId for each role
       const roleId = generateRandomRoleId();
 
@@ -321,7 +454,6 @@ exports.createRoles = async (req, res, next) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
-
 
 exports.deleteRole = async (req, res, next) => {
   try {

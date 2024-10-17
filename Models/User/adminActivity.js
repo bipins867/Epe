@@ -12,8 +12,12 @@ const AdminActivity = sequelize.define('AdminActivity', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  activitySubType:{
+    type:DataTypes.STRING,
+    allowNull:true
+  },
   affectedUserId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: true, // Nullable if the action doesn't involve a specific user
   },
   activityDescription: {

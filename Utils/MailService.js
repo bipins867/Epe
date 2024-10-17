@@ -45,14 +45,16 @@ exports.generateOtp = (min, max) => {
 };
 
 async function sendSms(mobileNumber, message) {
-  const apikey = process.env.SMS_API_KEY;
-  const senderid = process.env.SMS_SENDER_ID;
-  const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${mobileNumber}&message=${message}&format=json`;
-  const response = await axios.get(url);
-  // console.log(url)
-  // console.log("*************")
-  // console.log(response.data);
-  return response;
+  if (process.env.NODE_ENV !== "testing") {
+    const apikey = process.env.SMS_API_KEY;
+    const senderid = process.env.SMS_SENDER_ID;
+    const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${mobileNumber}&message=${message}&format=json`;
+    const response = await axios.get(url);
+    // console.log(url)
+    // console.log("*************")
+    // console.log(response.data);
+    return response;
+  }
 }
 
 exports.sendRegistrationTemplate = async (mobileNumber, candidateId) => {
@@ -142,4 +144,3 @@ exports.sendLoginOtpMessage = async (mobileNumber, otp) => {
   message = message.replace("{otp}", otp);
   return await sendSms(mobileNumber, message);
 };
-

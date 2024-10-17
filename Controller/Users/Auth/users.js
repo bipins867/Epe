@@ -16,6 +16,7 @@ const Referrals = require("../../../Models/PiggyBox/referrals");
 const ReferredUser = require("../../../Models/PiggyBox/referredUsers");
 const Piggybox = require("../../../Models/PiggyBox/piggyBox");
 const sequelize = require("../../../database");
+const { createUserActivity } = require("../../../Utils/activityUtils");
 
 function generateRandomCandidateId() {
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Only letters
@@ -117,6 +118,14 @@ exports.userSignUp = async (req, res, next) => {
       { transaction }
     );
 
+    await createUserActivity(
+      req,
+      newUser,
+      "auth",
+      "SignUp Successfull!",
+      transaction
+    );
+
     // If everything is successful, commit the transaction
     await transaction.commit();
 
@@ -141,23 +150,26 @@ exports.userSignUp = async (req, res, next) => {
 };
 
 exports.userLogin = async (req, res, next) => {
-  const { phone, password } = req.payload;
-  //console.log(req.payload);
+  const { phone, password } = req.body;
+
   try {
-    // User will log in only with their phone number
+    // Find the user by phone number
     const user = await User.findOne({ where: { phone } });
 
     if (!user) {
       return res.status(404).json({ error: "User doesn't exist" });
     }
 
-    bcrypt.compare(password, user.password, (err, isMatch) => {
+    // Compare the provided password with the stored password hash
+    bcrypt.compare(password, user.password, async (err, isMatch) => {
       if (err) {
         return res
           .status(500)
           .json({ error: "Internal server error. Please try again later." });
       }
+
       const expiresIn = process.env.NODE_ENV === "testing" ? "2d" : "5m";
+
       if (isMatch) {
         // Generate a JWT token
         const token = jwt.sign(
@@ -166,10 +178,22 @@ exports.userLogin = async (req, res, next) => {
           { expiresIn: expiresIn }
         );
 
-        return res
-          .status(200)
-          .json({ status: "Login Successful", token, userId: user.id });
+        // Log successful login attempt in UserActivity
+        await createUserActivity(req, user, "auth", "Login Successfull!");
+        return res.status(200).json({
+          status: "Login Successful",
+          token,
+          userId: user.id,
+        });
       } else {
+        // Log unsuccessful login attempt due to incorrect password in UserActivity
+        await createUserActivity(
+          req,
+          user,
+          "auth",
+          "Login failed: Incorrect password !"
+        );
+
         return res.status(401).json({ error: "Invalid Password" });
       }
     });
@@ -196,6 +220,12 @@ exports.getUserInfo = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ message: "User not found!" });
     }
+    await createUserActivity(
+      req,
+      user,
+      "auth",
+      "Forget Customer Id attempted!"
+    );
 
     return res.status(200).json({
       candidateId: user.candidateId,
@@ -214,6 +244,8 @@ exports.getUserInfo = async (req, res, next) => {
 exports.changeUserPassword = async (req, res, next) => {
   const { phone } = req.payload;
   const { password } = req.body;
+
+  let transaction;
 
   try {
     // Find the user by phone number
@@ -234,13 +266,26 @@ exports.changeUserPassword = async (req, res, next) => {
     // Update the user's password
     user.password = hashedPassword; // Assuming 'password' is a field in your User model
 
-    await user.save(); // Save the updated user record
+    transaction = await sequelize.transaction();
 
+    await user.save({ transaction }); // Save the updated user record
+
+    await createUserActivity(
+      req,
+      user,
+      "auth",
+      "Change password successfull!",
+      transaction
+    );
+
+    transaction.commit();
     // Optionally, you can return a success message
     return res.status(200).json({ message: "Password changed successfully." });
   } catch (err) {
     console.error("Error during password change:", err);
-
+    if (transaction) {
+      await transaction.rollback();
+    }
     // Handle specific error cases
     if (err instanceof jwt.JsonWebTokenError) {
       return res.status(400).json({ message: "Invalid or expired token." });
@@ -249,149 +294,6 @@ exports.changeUserPassword = async (req, res, next) => {
     return res
       .status(500)
       .json({ message: "Internal server error. Please try again later." });
-  }
-};
-
-exports.userOtpVerify = async (req, res, next) => {
-  try {
-    const { phone } = req.body;
-
-    // Use Sequelize to find an existing user by phone or email
-    const existingUser = await User.findOne({
-      where: {
-        phone,
-      },
-    });
-
-    if (existingUser) {
-      return res.status(409).json({
-        message:
-          "User already exists. Please log in instead or change email/phone.",
-      });
-    }
-
-    // Generate random 6-digit OTP for phone
-    const phoneOtp = crypto.randomInt(100000, 999999).toString();
-
-    // Store OTP based on the phone (email is optional)
-    otpStore[phone] = { phoneOtp };
-
-    setTimeout(() => {
-      delete otpStore[phone];
-    }, 5 * 60 * 1000);
-
-    // Send OTP to phone
-    await sendOtpToPhone(phone, phoneOtp);
-
-    const token = jwt.sign(req.body, process.env.JWT_SECRET_KEY, {
-      expiresIn: "5m",
-    });
-
-    res.status(200).send({
-      message: "OTP sent successfully.",
-      signUpToken: token,
-      type: "signUp",
-    });
-  } catch (err) {
-    console.log(err);
-    return res
-      .status(500)
-      .json({ error: "Internal server error. Please try again later." });
-  }
-};
-
-exports.userResetOrForgetPasswordOtpVerify = async (req, res, next) => {
-  try {
-    const { phone, candidateId } = req.body;
-
-    // Use Sequelize to find an existing user by phone or email
-    const existingUser = await User.findOne({
-      where: {
-        phone,
-        candidateId,
-      },
-    });
-
-    if (!existingUser) {
-      return res.status(409).json({
-        message: "User don't exists.",
-      });
-    }
-
-    // Generate random 6-digit OTP for phone
-    const phoneOtp = crypto.randomInt(100000, 999999).toString();
-
-    // Store OTP based on the phone (email is optional)
-    otpStore[phone] = { phoneOtp };
-
-    setTimeout(() => {
-      delete otpStore[phone];
-    }, 5 * 60 * 1000);
-
-    // Send OTP to phone
-    await sendOtpToPhone(phone, phoneOtp);
-
-    const token = jwt.sign(req.body, process.env.JWT_SECRET_KEY, {
-      expiresIn: "5m",
-    });
-
-    res.status(200).send({
-      message: "OTP sent successfully.",
-      signUpToken: token,
-      type: "resetPassword",
-    });
-  } catch (err) {
-    console.log(err);
-    return res
-      .status(500)
-      .json({ error: "Internal server error. Please try again later." });
-  }
-};
-
-exports.userForgetCandidateIdOtpVerify = async (req, res, next) => {
-  try {
-    const { phone } = req.body;
-
-    // Use Sequelize to find an existing user by phone or email
-    const existingUser = await User.findOne({
-      where: {
-        phone,
-      },
-    });
-
-    if (!existingUser) {
-      return res.status(409).json({
-        message: "User don't exists.",
-      });
-    }
-
-    // Generate random 6-digit OTP for phone
-    const phoneOtp = crypto.randomInt(100000, 999999).toString();
-
-    // Store OTP based on the phone (email is optional)
-    otpStore[phone] = { phoneOtp };
-
-    setTimeout(() => {
-      delete otpStore[phone];
-    }, 5 * 60 * 1000);
-
-    // Send OTP to phone
-    await sendOtpToPhone(phone, phoneOtp);
-
-    const token = jwt.sign(req.body, process.env.JWT_SECRET_KEY, {
-      expiresIn: "5m",
-    });
-
-    res.status(200).send({
-      message: "OTP sent successfully.",
-      signUpToken: token,
-      type: "forgetCandidateId",
-    });
-  } catch (err) {
-    console.log(err);
-    return res
-      .status(500)
-      .json({ error: "Internal server error. Please try again later." });
   }
 };
 
@@ -512,6 +414,14 @@ exports.activateUserAccount = async (req, res) => {
     piggybox.isFundedFirst = false;
     await piggybox.save({ transaction: t });
 
+    await createUserActivity(
+      req,
+      user,
+      "auth",
+      "Account Activation Successfull!",
+      t
+    );
+
     // Commit the transaction
     await t.commit();
 
@@ -540,3 +450,147 @@ exports.activateUserAccount = async (req, res) => {
     });
   }
 };
+
+
+// exports.userOtpVerify = async (req, res, next) => {
+//   try {
+//     const { phone } = req.body;
+
+//     // Use Sequelize to find an existing user by phone or email
+//     const existingUser = await User.findOne({
+//       where: {
+//         phone,
+//       },
+//     });
+
+//     if (existingUser) {
+//       return res.status(409).json({
+//         message:
+//           "User already exists. Please log in instead or change email/phone.",
+//       });
+//     }
+
+//     // Generate random 6-digit OTP for phone
+//     const phoneOtp = crypto.randomInt(100000, 999999).toString();
+
+//     // Store OTP based on the phone (email is optional)
+//     otpStore[phone] = { phoneOtp };
+
+//     setTimeout(() => {
+//       delete otpStore[phone];
+//     }, 5 * 60 * 1000);
+
+//     // Send OTP to phone
+//     await sendOtpToPhone(phone, phoneOtp);
+
+//     const token = jwt.sign(req.body, process.env.JWT_SECRET_KEY, {
+//       expiresIn: "5m",
+//     });
+
+//     res.status(200).send({
+//       message: "OTP sent successfully.",
+//       signUpToken: token,
+//       type: "signUp",
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     return res
+//       .status(500)
+//       .json({ error: "Internal server error. Please try again later." });
+//   }
+// };
+
+// exports.userResetOrForgetPasswordOtpVerify = async (req, res, next) => {
+//   try {
+//     const { phone, candidateId } = req.body;
+
+//     // Use Sequelize to find an existing user by phone or email
+//     const existingUser = await User.findOne({
+//       where: {
+//         phone,
+//         candidateId,
+//       },
+//     });
+
+//     if (!existingUser) {
+//       return res.status(409).json({
+//         message: "User don't exists.",
+//       });
+//     }
+
+//     // Generate random 6-digit OTP for phone
+//     const phoneOtp = crypto.randomInt(100000, 999999).toString();
+
+//     // Store OTP based on the phone (email is optional)
+//     otpStore[phone] = { phoneOtp };
+
+//     setTimeout(() => {
+//       delete otpStore[phone];
+//     }, 5 * 60 * 1000);
+
+//     // Send OTP to phone
+//     await sendOtpToPhone(phone, phoneOtp);
+
+//     const token = jwt.sign(req.body, process.env.JWT_SECRET_KEY, {
+//       expiresIn: "5m",
+//     });
+
+//     res.status(200).send({
+//       message: "OTP sent successfully.",
+//       signUpToken: token,
+//       type: "resetPassword",
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     return res
+//       .status(500)
+//       .json({ error: "Internal server error. Please try again later." });
+//   }
+// };
+
+// exports.userForgetCandidateIdOtpVerify = async (req, res, next) => {
+//   try {
+//     const { phone } = req.body;
+
+//     // Use Sequelize to find an existing user by phone or email
+//     const existingUser = await User.findOne({
+//       where: {
+//         phone,
+//       },
+//     });
+
+//     if (!existingUser) {
+//       return res.status(409).json({
+//         message: "User don't exists.",
+//       });
+//     }
+
+//     // Generate random 6-digit OTP for phone
+//     const phoneOtp = crypto.randomInt(100000, 999999).toString();
+
+//     // Store OTP based on the phone (email is optional)
+//     otpStore[phone] = { phoneOtp };
+
+//     setTimeout(() => {
+//       delete otpStore[phone];
+//     }, 5 * 60 * 1000);
+
+//     // Send OTP to phone
+//     await sendOtpToPhone(phone, phoneOtp);
+
+//     const token = jwt.sign(req.body, process.env.JWT_SECRET_KEY, {
+//       expiresIn: "5m",
+//     });
+
+//     res.status(200).send({
+//       message: "OTP sent successfully.",
+//       signUpToken: token,
+//       type: "forgetCandidateId",
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     return res
+//       .status(500)
+//       .json({ error: "Internal server error. Please try again later." });
+//   }
+// };

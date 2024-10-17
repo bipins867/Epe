@@ -24,10 +24,10 @@ router.post(
 );
 
 router.post(
-  "/deleteAdmin/:userName",
+  "/deactivateAdmin/:userName",
   adminAuthentication,
   roleSAuthentication,
-  userAndRoleController.deleteAdmin
+  userAndRoleController.deactivateAdmin
 );
 
 router.post(
@@ -42,7 +42,7 @@ router.post("/updateAdminStatus",adminAuthentication,roleSAuthentication, userAn
 router.post("/updateAdminRoles",adminAuthentication,roleSAuthentication, userAndRoleController.updateAdminRoles);
 
 router.post("/createRole", userAndRoleController.createRoles);
-router.post("/deleteRole", userAndRoleController.deleteRole);
+//router.post("/deleteRole", userAndRoleController.deleteRole);
 
 router.post(
   "/getRolesList",

@@ -6,6 +6,21 @@ const { sendKycSuccessfullMessage } = require("../../../Utils/MailService");
 
 exports.postFormSubmit = async (req, res, next) => {
   try {
+    const user = req.user;
+
+    // Fetch existing KYC entry for the user
+    const userKyc = await user.getUserKyc();
+
+    if (userKyc) {
+      if (userKyc.status === "Pending") {
+        return res
+          .status(402)
+          .json({
+            error: "Kyc is already in pending state wait for admin to verify.",
+          });
+      }
+    }
+
     // Extracting files
     const userImage = req.files["userImage"] ? req.files["userImage"][0] : null;
     const aadharFront = req.files["aadharFront"]
@@ -18,7 +33,7 @@ exports.postFormSubmit = async (req, res, next) => {
 
     // Extracting and formatting the phone
     const phone = req.body.phone;
-    const candidateId=req.user.candidateId;
+    const candidateId = req.user.candidateId;
     // Base directory for storing files
     const baseDir = path.join(
       __dirname,
@@ -71,14 +86,10 @@ exports.postFormSubmit = async (req, res, next) => {
     const aadharBackUrl =
       adharDirUrl + saveFile(aadharBack, adharDir, `${candidateId}_back`);
     const panUrl = panDirUrl + saveFile(panFile, panDir, `${candidateId}_pan`);
-    const userUrl = userDirUrl + saveFile(userImage, userDir, `${candidateId}_user`);
+    const userUrl =
+      userDirUrl + saveFile(userImage, userDir, `${candidateId}_user`);
 
     const obj = { ...req.body, aadharFrontUrl, aadharBackUrl, panUrl, userUrl };
-
-    const user = req.user;
-
-    // Fetch existing KYC entry for the user
-    const userKyc = await user.getUserKyc();
 
     // Check for duplicate Aadhaar or PAN numbers, excluding the current user's record
     const duplicateKyc = await UserKyc.findOne({
@@ -90,15 +101,13 @@ exports.postFormSubmit = async (req, res, next) => {
         id: { [Op.ne]: userKyc ? userKyc.id : null }, // Exclude the current user's record
       },
     });
-    
-    await user.update({email:req.body.email})
+
+    await user.update({ email: req.body.email });
 
     if (duplicateKyc) {
-      return res
-        .status(400)
-        .json({
-          error: "Aadhaar or PAN number already exists for another user.",
-        });
+      return res.status(400).json({
+        error: "Aadhaar or PAN number already exists for another user.",
+      });
     }
 
     obj.status = "Pending";
@@ -190,7 +199,7 @@ exports.acceptUserAgreement = async (req, res, next) => {
     userKyc.timeOfUserAggreementAccept = formattedDateTime;
     await userKyc.save();
 
-    await sendKycSuccessfullMessage(req.user.phone)
+    await sendKycSuccessfullMessage(req.user.phone);
 
     // Respond with a success message
     return res.status(200).json({
