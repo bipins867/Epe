@@ -95,7 +95,7 @@ app.use('/',infoRoutes)
 
 setupRoutes(app);
 
-db.sync({alter:true})
+db.sync()
   .then(() => {
     app.listen(process.env.APP_PORT);
     console.log(`Lisining to the port : ${process.env.APP_PORT}`);
