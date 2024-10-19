@@ -241,7 +241,7 @@ body {
     resize:none;
 }
 
-button {
+.search-btn {
     padding: 10px 15px;
     border: none;
     cursor: pointer;
