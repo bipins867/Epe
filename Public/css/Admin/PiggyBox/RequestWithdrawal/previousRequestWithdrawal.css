@@ -22,7 +22,7 @@ body {
 
 /* Adjust sidebar's width */
 #sidebar-wrapper {
-    width: 250px; /* Set your desired width */
+    width: 280px; /* Set your desired width */
 }
 
 .sidebar {
@@ -37,7 +37,7 @@ body {
 .sidebar-btn {
     display: flex;
     align-items: center;
-    padding: 15px;
+    padding: 8px;
     margin-bottom: 10px;
     background-color: #4da6ff; /* Default button background */
     color: #fff;
