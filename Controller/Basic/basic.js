@@ -1,3 +1,4 @@
+const Announcement = require("../../Models/Basic/announcement");
 const ApplyLoan = require("../../Models/Basic/applyLoan");
 const ContactUs = require("../../Models/Basic/contactUs");
 const Newsletter = require("../../Models/Basic/newsLetter");
@@ -36,9 +37,6 @@ exports.submitContactUs = async (req, res) => {
     });
   }
 };
-
-
-
 
 
 // Controller function to handle ApplyLoan form submission
@@ -109,3 +107,36 @@ exports.subscribeToNewsletter = async (req, res) => {
 };
 
 
+exports.getAllActiveAnnouncments = async (req, res) => {
+  try {
+    // Fetch all active announcements
+    const activeAnnouncements = await Announcement.findAll({
+      where: {
+        isActive: true, // Only get announcements that are active
+      },
+      order: [['createdAt', 'DESC']], // Order by the most recent announcements
+    });
+
+    // If no active announcements found
+    if (activeAnnouncements.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No active announcements found.',
+      });
+    }
+
+    // Return the active announcements
+    return res.status(200).json({
+      success: true,
+      message: 'Active announcements retrieved successfully.',
+      data: activeAnnouncements,
+    });
+  } catch (error) {
+    console.error('Error fetching active announcements:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error while fetching active announcements.',
+      error: error.message,
+    });
+  }
+};

@@ -72,3 +72,8 @@ exports.applyLoanRole = async (req, res, next) => {
   await applyRoleToRequest(req, identifier);
   next();
 };
+exports.announcementRole = async (req, res, next) => {
+  const identifier = "announcement";
+  await applyRoleToRequest(req, identifier);
+  next();
+};
