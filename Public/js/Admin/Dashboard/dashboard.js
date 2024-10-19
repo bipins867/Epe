@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             <td>${user.candidateId}</td>
             <td>${user.name}</td>
             <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+            <td>${getTimeFromTimeData(new Date(user.createdAt))}</td>
           </tr>
         `;
         membersTableBody.innerHTML += row;
