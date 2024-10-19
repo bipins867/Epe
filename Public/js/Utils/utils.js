@@ -148,7 +148,35 @@ document.addEventListener("DOMContentLoaded", async function () {
       resetPasswordRedirect();
     };
   }
+
+  if(document.getElementById("marquee-slider")){
+    await loadSliderAnnouncements();
+  }
 });
+
+const updateSlider = (announcements) => {
+  const marqueeSlider = document.getElementById("marquee-slider");
+  const messageSpan = marqueeSlider.querySelector("span");
+  
+  // Create a string to hold all announcement messages with separation
+  const announcementMessages = announcements.map((announcement) => announcement.message).join(' | ');
+
+  // Update the text of the span inside the marquee
+  messageSpan.innerText = announcementMessages;
+};
+const loadSliderAnnouncements = async () => {
+  try {
+    const result2 = await postRequestWithToken(
+      "basic/post/getAllActiveAnnouncments",
+      {}
+    );
+
+    const announcement2 = result2.data.data;
+    updateSlider(announcement2);
+  } catch (error) {
+    handleErrors(error);
+  }
+};
 
 function getDateFromTimeData(timeData) {
   return timeData.toLocaleDateString();
