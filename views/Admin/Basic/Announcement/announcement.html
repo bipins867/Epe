@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Announcement</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome for Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+    <link
+      rel="stylesheet"
+      href="/css/Admin/Basic/Announcement/announcement.css"
+    />
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="container-fluid" id="wrapper">
+      <div
+        class="bg-primary border-right sidebar sticky-sidebar"
+        id="sidebar-wrapper"
+      >
+        <div class="sidebar-heading text-center">
+          <img
+            src="/img/epeLogo.png"
+            alt="EPE Logo"
+            class="img-fluid"
+            style="height: 60px"
+          />
+        </div>
+        <div class="list-group list-group-flush">
+          <div class="sidebar">
+            <a href="/admin/dashboard/" class="sidebar-btn">
+              <i class="fas fa-tachometer-alt"></i>
+              Dashboard
+            </a>
+            <a href="/admin/basic/announcement/" class="sidebar-btn">
+              <i class="fas fa-tachometer-alt"></i>
+              Announcement
+            </a>
+
+            <a href="/admin/piggyBox/customer/" class="sidebar-btn">
+              <i class="fas fa-users"></i>
+              Customers
+            </a>
+            <a href="/admin/piggyBox/" class="sidebar-btn">
+              <i class="fas fa-lock"></i>
+              PiggyBox
+            </a>
+            <a href="/admin/piggyBox/accountClouser/" class="sidebar-btn">
+              <i class="fas fa-user-slash"></i>
+              Account Clouser Requests
+            </a>
+            <a href="/admin/piggyBox/requestWithdrawal/" class="sidebar-btn">
+              <i class="fas fa-file-invoice-dollar"></i>
+              Withdrawal Request
+            </a>
+            <a href="/admin/piggyBox/transactionHistory/" class="sidebar-btn">
+              <i class="fas fa-file-invoice"></i>
+              Transaction History
+            </a>
+            <a href="/admin/piggyBox/referral/" class="sidebar-btn">
+              <i class="fas fa-hand-holding-usd"></i>
+              EPE Referral Program
+            </a>
+            <a href="/admin/kyc/dashboard" class="sidebar-btn">
+              <i class="fas fa-user-check"></i>
+              KYC Module
+            </a>
+            <a href="/admin/customerSupport/dashboard" class="sidebar-btn">
+              <i class="fas fa-headset"></i>
+              Customer Support
+            </a>
+            <a href="/admin/basic/applyLoan" class="sidebar-btn">
+              <i class="fas fa-money-check-alt"></i>
+              Apply Loan
+            </a>
+            <a href="/admin/basic/contactUs" class="sidebar-btn">
+              <i class="fas fa-phone"></i>
+              Contact Us
+            </a>
+            <a href="#" class="sidebar-btn">
+              <i class="fas fa-chart-line"></i>
+              User Activity
+            </a>
+
+            <a href="/admin/editAdmin" class="sidebar-btn">
+              <i class="fas fa-user-plus"></i>
+              Edit Admin
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Page Content -->
+      <div id="page-content-wrapper">
+        <!-- Main Content -->
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card mt-4 shadow">
+                <div class="card-header bg-danger text-white">
+                  <i class="fas fa-bullhorn"></i> ANNOUNCEMENT
+                </div>
+                <div class="announcement">
+                  <div class="announcement-wrapper" id="announcement-wrapper">
+                    <b class="announcement-message">Welcome to EPE India!</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="deposit-balance">
+            <div class="section-title">
+              <i class="fas fa-wallet"></i> Create Announcement
+            </div>
+            <div class="section-body">
+              <div>
+                <textarea
+                  id="description"
+                  class="input-box"
+                  id="create-input"
+                ></textarea>
+              </div>
+              <button class="search-btn" id="create-announcement">
+                <i class="fas fa-plus"></i>Create Announcement
+              </button>
+            </div>
+          </div>
+
+          <div class="deposit-balance">
+            <div class="section-title">
+              <i class="fas fa-wallet"></i> Announcement List
+            </div>
+
+            <div class="section-body">
+              <table class="table table-striped" id="announcement-table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Message</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="members-table-body">
+                  <!-- Data will be dynamically inserted here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="bg-primary text-white text-center py-3 mt-4">
+        <div class="container">
+          <p class="mb-0">
+            &copy; 2024 EPE. All Rights Reserved. Create with ❤️ in India
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="/js/Admin/Basic/Announcement/announcement.js"></script>
+    <script src="/js/Utils/adminUtils.js"></script>
+  </body>
+</html>

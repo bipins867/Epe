@@ -10,8 +10,9 @@ exports.getContactUsDashobard=async(req,res,next)=>{
     res.sendFile(path.resolve('views','Admin','Basic','ContactUs','dashboard.html'))
 }
 
-
-
+exports.getAnnouncementPage=async(req,res,next)=>{
+    res.sendFile(path.resolve('views','Admin','Basic','Announcement','announcement.html'))
+}
 
 exports.getOpenApplyLoanList=async(req,res,next)=>{
 

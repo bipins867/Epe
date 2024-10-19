@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
     }
 
+    loadSliderAnnouncements();
     document.getElementById("logoutBtn").addEventListener("click", function () {
       // Handle logout logic here, e.g., clear session and redirect to login page
       localStorage.removeItem("adminToken");
@@ -64,3 +65,36 @@ document.addEventListener("DOMContentLoaded", async function () {
     handleErrors(err, mapFunction);
   }
 });
+
+
+const loadSliderAnnouncements = async () => {
+  try {
+    const result2 = await postRequestWithToken(
+      "basic/post/getAllActiveAnnouncments",
+      {}
+    );
+
+    const announcement2 = result2.data.data;
+    updateSlider(announcement2);
+  } catch (error) {
+    handleErrors(error);
+  }
+};
+
+const updateSlider = (announcements) => {
+  const wrapper = document.getElementById("announcement-wrapper");
+  wrapper.innerHTML = ""; // Clear previous announcements
+
+  // Create a string to hold all announcement messages with separation
+  const announcementMessages = announcements
+    .map((announcement) => announcement.message)
+    .join(" | ");
+
+  // Create a new element to hold the messages
+  const messageDiv = document.createElement("b");
+  messageDiv.className = "announcement-message";
+  messageDiv.innerText = announcementMessages; // Set the concatenated message
+
+  // Append the messageDiv to the wrapper
+  wrapper.appendChild(messageDiv);
+};
