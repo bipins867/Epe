@@ -71,6 +71,7 @@ function updateCustomerTable(customers) {
             <td>${customer.candidateId}</td>
             <td>${customer.name}</td>
             <td>${new Date(customer.createdAt).toLocaleDateString()}</td>
+            <td>${getTimeFromTimeData(new Date(customer.createdAt))}</td>
             <td>
              <a class="btn btn-primary" href="/admin/piggyBox/customer/editCustomer/${
                customer.candidateId

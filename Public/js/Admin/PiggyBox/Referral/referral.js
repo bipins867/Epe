@@ -28,6 +28,7 @@ async function loadCustomerList() {
             <td>${user.candidateId}</td>
             <td>${user.name}</td>
             <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+            <td>${getTimeFromTimeData(new Date(user.createdAt))}</td>
             <td><a href="/admin/piggyBox/referral/customerPanel/${
               user.candidateId
             }">View</a></td>

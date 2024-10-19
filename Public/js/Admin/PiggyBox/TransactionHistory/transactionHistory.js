@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         row.innerHTML = `
           <td>${index + 1}</td>
           <td>${new Date(transaction.createdAt).toLocaleDateString()}</td>
+          <td>${getTimeFromTimeData(new Date(transaction.createdAt))}</td>
           <td>${transaction.transactionType}</td>
           <td>${transaction.User.candidateId}</td>
           <td>${transaction.remark}</td>

@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <td>${customer.candidateId}</td>
               <td>${customer.name}</td>
                <td>${new Date(customer.createdAt).toLocaleDateString()}</td>
+               <td>${getTimeFromTimeData(new Date(customer.createdAt))}</td>
               <td><a href="/admin/piggyBox/accountClouser/customerPanel/${
                 customer.candidateId
               }">View</a></td>

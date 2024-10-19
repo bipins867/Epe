@@ -149,3 +149,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     };
   }
 });
+
+function getDateFromTimeData(timeData) {
+  return timeData.toLocaleDateString();
+}
+
+function getTimeFromTimeData(timeData) {
+  return timeData.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}

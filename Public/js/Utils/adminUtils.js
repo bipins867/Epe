@@ -104,3 +104,14 @@ async function postRequestWithToken(url, obj) {
 
   return result;
 }
+
+function getDateFromTimeData(timeData) {
+  return timeData.toLocaleDateString();
+}
+
+function getTimeFromTimeData(timeData) {
+  return timeData.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}

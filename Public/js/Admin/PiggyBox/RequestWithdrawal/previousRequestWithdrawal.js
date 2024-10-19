@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               <td>${request.User.candidateId}</td>
               <td>${request.User.name}</td>
               <td>${new Date(request.createdAt).toLocaleDateString()}</td>
+              <td>${getTimeFromTimeData(new Date(request.createdAt))}</td>
               <td><a href="/admin/piggyBox/requestWithdrawal/customerPanel/${
                 request.User.candidateId
               }">View Details</a></td>
