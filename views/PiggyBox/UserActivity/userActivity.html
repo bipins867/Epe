@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
-    <title>Request Withdrawal</title>
+    <title>User Activity</title>
 
     <!-- Bootstrap and Font Awesome -->
     <link
@@ -19,11 +19,9 @@
     />
 
     <!-- Custom CSS -->
-    <link
-      rel="stylesheet"
-      href="/css/PiggyBox/RequestWithdrawal/requestWithdrawal.css"
-    />
-
+    <link rel="stylesheet" href="/css/PiggyBox/userActivity/userActivity.css" />
+   
+    
     <!-- jQuery (if necessary) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
@@ -120,114 +118,103 @@
 
           <!-- Main Body Content -->
           <div class="body-details w-100">
-            <div class="welcome-heading text-white p-1 align-middle">
-              <h2>Request For withdrawal</h2>
+            <!-- Last 10 Activity -->
+            <div class="piggybox-heading text-white p-1 align-middle">
+              <h6>LAST ACTIVITY</h6>
             </div>
-            <div id="warning-container" class="alert alert-info">
-              <strong>Warning! </strong><span id="warning-content"></span>
-            </div>
-            <div id="withdrawalForm">
-              <label>Current Balance ₹</label>
-              <div id="currentBalance">0.00</div>
 
-              <div class="form-group">
-                <label>Account Holder Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="accountHolder"
-                  placeholder="Enter Account Holder Name"
-                  disabled
-                />
+            <div
+              class="d-flex align-items-center p-2 flex-wrap"
+              id="mobile-responsive"
+            >
+              <!-- From Date -->
+              <div class="me-2">
+                <label for="fromDate" class="form-label">From:</label>
+                <input type="date" id="fromDate" class="form-control" />
               </div>
-              <div class="form-group">
-                <label>Bank Name</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="bankName"
-                  placeholder="Enter Bank Name"
-                  disabled
-                />
+
+              <!-- To Date -->
+              <div class="me-2">
+                <label for="toDate" class="form-label">To:</label>
+                <input type="date" id="toDate" class="form-control" />
               </div>
-              <div class="form-group">
-                <label>Account No.</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="accountNo"
-                  placeholder="Enter Account No."
-                  disabled
-                />
+
+              <!-- Limit Dropdown -->
+              <div class="me-2">
+                <label for="limit" class="form-label">Limit:</label>
+                <select id="limit" class="form-select">
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="200">200</option>
+                </select>
               </div>
-              <div class="form-group">
-                <label>IFSC Code</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="ifscCode"
-                  placeholder="Enter IFSC Code"
-                  disabled
-                />
+
+              <!-- Type Dropdown -->
+              <div class="me-2">
+                <label for="type" class="form-label">Type:</label>
+                <select id="type" class="form-select">
+                  <option value="all">All</option>
+                  <option value="adminUpdate">Admin Update</option>
+                  <option value="customer">Customer</option>
+                  <option value="piggyBox">PiggyBox</option>
+                  <option value="auth">Auth</option>
+                  <option value="savedAddress">Saved Address</option>
+                  <option value="bankDetails">Bank Details</option>
+                  <option value="accountClouser">Account Clouser</option>
+                  
+                  
+                  
+                  
+                </select>
               </div>
-              <div class="form-group">
-                <label>Withdrawal Amount ₹</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="withdrawalAmount"
-                  placeholder="Enter Withdrawal Amount"
-                  required
-                />
+
+              <!-- Get Activity Button -->
+              <div class="ms-auto">
+                <button
+                  type="button"
+                  id="btnFetchActivity"
+                  class="btn btn-success"
+                >
+                  Get Activity
+                </button>
               </div>
-              <div class="form-group">
-                <label>Narration</label>
-                <textarea
-                  class="form-control"
-                  id="narration"
-                  rows="3"
-                  placeholder="Enter Narration"
-                ></textarea>
-              </div>
-              <button class="btn btn-primary" id="submitBtn">Submit</button>
-              <button class="btn btn-danger" id="cancelWithdrawalBtn">
-                Cancel Withdrawal Request
-              </button>
             </div>
-            <div id="requestHistory" class="mt-4">
-              <h4>Withdrawal Requests History</h4>
-              <table class="table">
+
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover mt-3">
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Requested ID</th>
-                    <th>Requested Date</th>
-                    <th>Candidate ID</th>
-                    <th>Mobile No</th>
-                    <th>Amount</th>
-                    <th>Remark</th>
-                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>IP Address</th>
+                    <th>Location</th>
+                    <th>Device Type</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <!-- Historical data will be filled here -->
+                <tbody id="transaction-table">
+                  <!-- JavaScript will populate the Activity here -->
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Footer Section -->
-      <div class="footer">
-        <div class="footer-content bg-dark text-white text-center p-2">
-          &copy; 2024 by Techfin Innovations Private Limited, All Rights
-          Reserved. Created with ❤️ in INDIA
-        </div>
+    <!-- Footer Section -->
+    <div class="footer">
+      <div class="footer-content bg-dark text-white text-center p-2">
+        &copy; 2024 by Techfin Innovations Private Limited, All Rights Reserved.
+        Created with ❤️ in INDIA
       </div>
     </div>
 
     <!-- Custom JS -->
+    <script src="/js/PiggyBox/userActivity/userActivity.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
       integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
@@ -235,7 +222,6 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="/js/Utils/utils.js"></script>
-    <script src="/js/PiggyBox/RequestWithdrawal/requestWithdrawal.js"></script>
     <script>
       const anchors = document.querySelectorAll("a.menu-item"); // Select all anchor tags with class 'abc'
       const currentUrl = window.location.href; // Get the current window URL

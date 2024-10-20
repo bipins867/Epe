@@ -1,7 +1,7 @@
 const express = require("express");
 
 const userAuthenticationController = require("../../../Controller/Users/Auth/users");
-const userActivityController = require("../../../Controller/Users/Auth/userActivity");
+
 
 const {
   checkValidationErrors,
@@ -76,11 +76,7 @@ router.post(
   userAuthenticationController.activateUserAccount
 );
 
-router.post(
-  "/getUserActivity",
-  userAuthentication,
-  userActivityController.getUserActivityHistory
-);
+
 
 router.post("/resendOtp",userResendOtpimiter, userAuthenticationController.userResendOtp);
 

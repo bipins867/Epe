@@ -42,6 +42,7 @@ exports.getRequestWithdrawalPage = async (req, res, next) => {
   );
 };
 
+
 exports.getReferralPage = async (req, res, next) => {
   res.sendFile(
     path.resolve(
@@ -52,6 +53,7 @@ exports.getReferralPage = async (req, res, next) => {
     )
   );
 };
+
 exports.getLoansPage = async (req, res, next) => {
   res.sendFile(
     path.resolve(
@@ -63,6 +65,7 @@ exports.getLoansPage = async (req, res, next) => {
   );
 };
 
+
 exports.getTransferMoneyPage = async (req, res, next) => {
   res.sendFile(
     path.resolve(
@@ -73,6 +76,7 @@ exports.getTransferMoneyPage = async (req, res, next) => {
     )
   );
 };
+
 exports.getSavedAddressPage = async (req, res, next) => {
   res.sendFile(
     path.resolve(
@@ -83,6 +87,7 @@ exports.getSavedAddressPage = async (req, res, next) => {
     )
   );
 };
+
 exports.getSettlementPage = async (req, res, next) => {
   res.sendFile(
     path.resolve(
@@ -90,6 +95,17 @@ exports.getSettlementPage = async (req, res, next) => {
       "PiggyBox",
       "Settlement",
       "settlement.html"
+    )
+  );
+};
+
+exports.getUserActivityPage = async (req, res, next) => {
+  res.sendFile(
+    path.resolve(
+      "views",
+      "PiggyBox",
+      "UserActivity",
+      "userActivity.html"
     )
   );
 };

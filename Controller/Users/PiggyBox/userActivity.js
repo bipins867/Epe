@@ -1,7 +1,7 @@
 const UserActivity = require("../../../Models/User/userActivity")
 const {Op} =require('sequelize')
 
-exports.getUserActivityHistory = async (req, res, next) => {
+exports.getUserActivity = async (req, res, next) => {
   const { fromDate, toDate, limit, activityType } = req.body; // Extract filter parameters from request body
   const userId = req.user.id; // Get the user's ID from req.user
   
@@ -31,13 +31,7 @@ exports.getUserActivityHistory = async (req, res, next) => {
       limit: resultLimit,
     });
 
-    // If no activities found
-    if (userActivities.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "No activities found for the user."
-      });
-    }
+    
 
     // Respond with the activities
     res.status(200).json({
