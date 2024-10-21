@@ -36,11 +36,12 @@ exports.addFunds = async (req, res, next) => {
       throw new Error("Piggybox not found for the user.");
     }
 
+    const minimumAmount=849;
     if (!userPiggybox.isFundedFirst) {
-      if (amount < 2000) {
+      if (amount < minimumAmount) {
         return res.status(403).json({
           message:
-            "First time payment must be greater than or equal to ₹2000.00",
+            `First time payment must be greater than or equal to ${minimumAmount}.00`,
         });
       }
     }
