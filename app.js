@@ -37,6 +37,8 @@ app.use(
 );
 
 app.use(bodyParser.json({ extends: false }));
+app.set('trust proxy', 1);  // 1 means trust the first proxy, usually Nginx or another load balancer
+
 
 // const apiLimiter = rateLimit({
 //   windowMs: 15 * 60 * 1000, // 15 minutes
