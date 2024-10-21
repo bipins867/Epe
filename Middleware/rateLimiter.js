@@ -6,7 +6,7 @@ const windowMs = 15 * 60 * 1000;
 exports.userLoginLimiter = rateLimit({
   windowMs: windowMs, // 15 minutes
   max: 6, // 10 attempts per 15 minutes
-
+  trustProxy: 1,
   handler: (req, res, next) => {
     res.status(429).json({
       message: "Too many login attempts, please try again after 15 minutes",
@@ -18,7 +18,7 @@ exports.userLoginLimiter = rateLimit({
 exports.userSignUpLimiter = rateLimit({
   windowMs: windowMs,
   max: 10, // 5 attempts per 15 minutes
-
+  trustProxy: 1,
   handler: (req, res, next) => {
     res.status(429).json({
       message: "Too many sign-up attempts, please try again after 15 minutes",
@@ -30,7 +30,7 @@ exports.userSignUpLimiter = rateLimit({
 exports.userAuthLimiter = rateLimit({
   windowMs: windowMs,
   max: 10, // 5 attempts per 15 minutes
-
+  trustProxy: 1,
   handler: (req, res, next) => {
     res.status(429).json({
       message: "Too many auth attempts, please try again after 15 minutes",
@@ -41,7 +41,7 @@ exports.userAuthLimiter = rateLimit({
 exports.userResendOtpimiter = rateLimit({
   windowMs: windowMs,
   max: 20, // 5 attempts per 15 minutes
-
+  trustProxy: 1,
   handler: (req, res, next) => {
     res.status(429).json({
       message: "Too many Resend Otp attempts, please try again after 15 minutes",
@@ -55,7 +55,7 @@ exports.userResendOtpimiter = rateLimit({
 exports.kycUpdateLimiter = rateLimit({
   windowMs: windowMs,
   max: 3,
-
+  trustProxy: 1,
   handler: (req, res, next) => {
     res.status(429).json({
       message:
@@ -68,7 +68,7 @@ exports.kycUpdateLimiter = rateLimit({
 exports.piggyBoxLimiter = rateLimit({
   windowMs: windowMs,
   max: 10,
-
+  trustProxy: 1,
   handler: (req, res, next) => {
     res.status(429).json({
       message:
@@ -81,7 +81,7 @@ exports.piggyBoxLimiter = rateLimit({
 exports.transferMoneyLimiter = rateLimit({
   windowMs: windowMs,
   max: 5,
-
+  trustProxy: 1,
   handler: (req, res, next) => {
     res.status(429).json({
       message:
