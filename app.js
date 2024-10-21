@@ -66,7 +66,7 @@ const activityLogger = (req, res, next) => {
   const primaryIpAddress = ipAddresses[0];
 
   // Extracting User-Agent
-  const userAgent = req.headers["user-agent"];
+  const userAgent = req.headers["user-agent"]|| "Unknown";
 
   // Device Type (Desktop/Mobile/Tablet)
   const ua = useragent.parse(userAgent);
