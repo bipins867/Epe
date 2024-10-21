@@ -26,8 +26,8 @@ require("./cronTimerFunctionController");
 // Just check
 app = express();
 
-//app.set('trust proxy', 1);  // 1 means trust the first proxy, usually Nginx or another load balancer
-app.enable('trust proxy')
+app.set('trust proxy', 1);  // 1 means trust the first proxy, usually Nginx or another load balancer
+//app.enable('trust proxy')
 
 app.use(express.static(path.join(__dirname, "Public")));
 app.use(express.static(path.join(__dirname, "CustomerFiles")));
