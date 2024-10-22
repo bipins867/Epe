@@ -22,11 +22,11 @@ if (nodeEnv) {
     socketUrl = `${protocol}${host}:${socketPort}`;
   } else {
     // In production or other environments, use the /socket endpoint
-    socketUrl = `${protocol}${host}:3030`;
+    socketUrl = `${protocol}${host}:8443`;
   }
 } else {
   // Default to production-like behavior if no environment is set
-  socketUrl = `${protocol}${host}:3030`;
+  socketUrl = `${protocol}${host}:8443`;
 }
 
 console.log(socketUrl);
