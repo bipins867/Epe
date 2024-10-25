@@ -59,7 +59,7 @@ exports.savePaymentRequest = async function savePaymentRequest(
     saltKey = process.env.PHONE_PAY_PRODUCTION_SALT_KEY;
     merchantId = process.env.PHONE_PAY_PRODUCTION_MERCHANT_ID;
     saltIndex = process.env.PHONE_PAY_PRODUCTION_SALT_INDEX;
-    baseUrl = "https://apigaming.epeindia.in";
+    baseUrl = "https://epeindia.in";
   }
 
   merchantUserId = generateMerchantUserId();
