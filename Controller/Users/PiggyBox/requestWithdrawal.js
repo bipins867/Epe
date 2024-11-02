@@ -5,6 +5,7 @@ const Piggybox = require("../../../Models/PiggyBox/piggyBox");
 const RequestWithdrawal = require("../../../Models/PiggyBox/requestWithdrawal");
 const sequelize = require("../../../database");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
+const { MINIMUM_AMOUNT_IN_ACCOUNT } = require("../../../importantSetup");
 
 function generateRandomRequestId() {
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Only letters
@@ -142,11 +143,11 @@ exports.requestForWithdrawal = async (req, res, next) => {
     const remainingBalance =
       parseFloat(piggyBox.piggyBalance) - parseFloat(amount); // Calculate remaining balance after withdrawal
 
-    if (remainingBalance < 2000) {
+    if (remainingBalance < MINIMUM_AMOUNT_IN_ACCOUNT) {
       //await transaction.rollback();
       return res.status(400).json({
         message:
-          "Insufficient funds. Minimum balance of 2000 must be maintained after withdrawal.",
+          `Insufficient funds. Minimum balance of ${MINIMUM_AMOUNT_IN_ACCOUNT} must be maintained after withdrawal.`,
       });
     }
 

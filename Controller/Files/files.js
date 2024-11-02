@@ -15,7 +15,7 @@ exports.getFile = (req, res, next) => {
     if (err) {
       res.status(404).send("File not found");
     } else {
-      console.log("File served successfully.");
+     // console.log("File served successfully.");
     }
   });
 };
@@ -33,7 +33,7 @@ exports.getChatSupportFile = (req, res, next) => {
     if (err) {
       res.status(404).send("File not found");
     } else {
-      console.log("File served successfully.");
+      //console.log("File served successfully.");
     }
   });
 };

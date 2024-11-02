@@ -1,0 +1,3 @@
+
+
+exports.MINIMUM_AMOUNT_IN_ACCOUNT=849

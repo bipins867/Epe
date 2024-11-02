@@ -9,6 +9,7 @@ const {
 const sequelize = require("../../../database");
 
 const { Op } = require("sequelize"); // For using comparison operators like Op.between
+const { MINIMUM_AMOUNT_IN_ACCOUNT } = require("../../../importantSetup");
 
 exports.getTransferInfo = async (req, res, next) => {
   const userId = req.user.id; // Get the user ID from the request
@@ -107,10 +108,10 @@ exports.transferMoney = async (req, res, next) => {
     // Check if the piggybox balance is sufficient after the transfer
     const newSenderBalance =
       parseFloat(senderPiggybox.piggyBalance) - parseFloat(amount);
-    if (newSenderBalance < 2000) {
+    if (newSenderBalance < MINIMUM_AMOUNT_IN_ACCOUNT) {
       return res.status(400).json({
         message:
-          "Insufficient funds. Minimum balance should be maintained at 2000 after withdrawal.",
+          `Insufficient funds. Minimum balance should be maintained at ${MINIMUM_AMOUNT_IN_ACCOUNT} after withdrawal.`,
       });
     }
 

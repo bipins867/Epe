@@ -12,6 +12,7 @@ const {
   sendRewardMessage,
   sendCreditMessage,
 } = require("../../../Utils/MailService");
+const { MINIMUM_AMOUNT_IN_ACCOUNT } = require("../../../importantSetup");
 
 exports.addFunds = async (req, res, next) => {
   const { amount } = req.body; // Get amount from request body
@@ -36,7 +37,7 @@ exports.addFunds = async (req, res, next) => {
       throw new Error("Piggybox not found for the user.");
     }
 
-    const minimumAmount=849;
+    const minimumAmount=MINIMUM_AMOUNT_IN_ACCOUNT;
     if (!userPiggybox.isFundedFirst) {
       if (amount < minimumAmount) {
         return res.status(403).json({
