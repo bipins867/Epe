@@ -37,10 +37,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    if (piggyBoxBalance <= 2000) {
+    if (piggyBoxBalance <= 849) {
       toggleWarning(true);
       setWarningContent(
-        "Insufficient Funds!. Minimum balance should be maintained ₹2000.00."
+        "Insufficient Funds!. Minimum balance should be maintained ₹849.00."
       );
       return;
     }
