@@ -85,6 +85,7 @@ router.use('/testWebsite', async (req, res, next) => {
           </ul>
           <p><strong>User-Agent:</strong> ${req.clientInfo.userAgent}</p>
           <p><strong>Device Type:</strong> ${req.clientInfo.deviceType}</p>
+          <center>Info updated!</center>
         </div>
       </body>
       </html>
