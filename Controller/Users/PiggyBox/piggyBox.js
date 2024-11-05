@@ -123,7 +123,7 @@ exports.redirectedPaymentInfo = async (req, res, next) => {
 };
 
 exports.callbackPaymentInfo = async (req, res, next) => {
-  console.log(req.body);
+  //console.log(req.body);
   return res.json({ id: 1 });
 };
 
