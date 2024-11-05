@@ -124,6 +124,7 @@ exports.redirectedPaymentInfo = async (req, res, next) => {
 
 exports.callbackPaymentInfo = async (req, res, next) => {
   //console.log(req.body);
+  //this is callback from phonepay payment gateway ...
   return res.json({ id: 1 });
 };
 
