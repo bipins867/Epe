@@ -1,27 +1,7 @@
 {
     "liveServer.settings.port": 5502,
-    "workbench.colorCustomizations": {
-        "activityBar.activeBackground": "#deb358",
-        "activityBar.background": "#deb358",
-        "activityBar.foreground": "#15202b",
-        "activityBar.inactiveForeground": "#15202b99",
-        "activityBarBadge.background": "#1a8563",
-        "activityBarBadge.foreground": "#e7e7e7",
-        "commandCenter.border": "#15202b99",
-        "sash.hoverBorder": "#deb358",
-        "statusBar.background": "#d6a02d",
-        "statusBar.foreground": "#15202b",
-        "statusBarItem.hoverBackground": "#ae8122",
-        "statusBarItem.remoteBackground": "#d6a02d",
-        "statusBarItem.remoteForeground": "#15202b",
-        "titleBar.activeBackground": "#d6a02d",
-        "titleBar.activeForeground": "#15202b",
-        "titleBar.inactiveBackground": "#d6a02d99",
-        "titleBar.inactiveForeground": "#15202b99"
-    },
-    "peacock.color": "#d6a02d",
     "window.autoDetectColorScheme": false,
     "workbench.activityBar.iconClickBehavior": "toggle",
     "workbench.activityBar.location": "default",
-    "workbench.colorTheme": "Visual Studio Dark - C++"
+    "workbench.colorTheme": "Default Dark Modern"
 }

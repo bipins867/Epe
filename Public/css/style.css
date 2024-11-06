@@ -826,6 +826,12 @@
         height: 35px;
     }
 
+
+    .footer img{
+        width: 200px;
+        height: inherit;
+    }
+
     .footer .footer-menu a {
         margin-right: 10px;
         padding-right: 10px;
