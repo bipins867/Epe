@@ -12,7 +12,10 @@ const {
   sendRewardMessage,
   sendCreditMessage,
 } = require("../../../Utils/MailService");
-const { MINIMUM_AMOUNT_IN_ACCOUNT } = require("../../../importantSetup");
+const {
+  MINIMUM_AMOUNT_IN_ACCOUNT,
+  REFERRAL_REWARD_AMOUNT,
+} = require("../../../importantSetup");
 
 exports.addFunds = async (req, res, next) => {
   const { amount } = req.body; // Get amount from request body
@@ -37,12 +40,11 @@ exports.addFunds = async (req, res, next) => {
       throw new Error("Piggybox not found for the user.");
     }
 
-    const minimumAmount=MINIMUM_AMOUNT_IN_ACCOUNT;
+    const minimumAmount = MINIMUM_AMOUNT_IN_ACCOUNT;
     if (!userPiggybox.isFundedFirst) {
       if (amount < minimumAmount) {
         return res.status(403).json({
-          message:
-            `First time payment must be greater than or equal to ${minimumAmount}.00`,
+          message: `First time payment must be greater than or equal to ${minimumAmount}.00`,
         });
       }
     }
@@ -61,8 +63,6 @@ exports.addFunds = async (req, res, next) => {
     ) {
       const redirectInfo = paymentResult.data.instrumentResponse.redirectInfo; // Get the redirect URL from response
       t = await sequelize.transaction();
-
-      
 
       // Create a new Transaction
       const transaction = await Transaction.create(
@@ -199,26 +199,12 @@ exports.checkPaymentStatus = async (req, res, next) => {
               where: { UserId: referringUser.id },
               // transaction: t,
             });
-            const rewardAmount = 800;
-            if (referringPiggyBox) {
+            const rewardAmount = REFERRAL_REWARD_AMOUNT;
+            if (referringPiggyBox && rewardAmount > 0) {
               const updatedBalance =
                 parseFloat(referringPiggyBox.piggyBalance) + rewardAmount;
               referringPiggyBox.piggyBalance = updatedBalance;
               await referringPiggyBox.save({ transaction: t });
-
-              referral.pendingReferrals -= 1;
-              await referral.save({ transaction: t });
-
-              await ReferredUser.update(
-                {
-                  status: "completed",
-                  dateOfCompletion: new Date(),
-                },
-                {
-                  where: { candidateId: user.candidateId },
-                  transaction: t,
-                }
-              );
 
               // Create a transaction history for the referring user
               await TransactionHistory.create(
@@ -233,10 +219,22 @@ exports.checkPaymentStatus = async (req, res, next) => {
                 { transaction: t }
               );
 
-              await user.update({ isByReferralUsed: true }, { transaction: t });
-
               sendRewardMessage(referringUser.phone, rewardAmount.toFixed(2));
             }
+            referral.pendingReferrals -= 1;
+            await referral.save({ transaction: t });
+
+            await ReferredUser.update(
+              {
+                status: "completed",
+                dateOfCompletion: new Date(),
+              },
+              {
+                where: { candidateId: user.candidateId },
+                transaction: t,
+              }
+            );
+            await user.update({ isByReferralUsed: true }, { transaction: t });
           }
         }
       }
