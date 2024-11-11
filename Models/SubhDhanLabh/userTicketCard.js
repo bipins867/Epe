@@ -28,6 +28,16 @@ const UserTicketCard = sequelize.define(
       allowNull: false,
       defaultValue: 0,
     },
+    affiliateBonus: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    goldBonus: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+      defaultValue: 0,
+    },
   },
   {
     tableName: "userTicketCards", // Optional table name
