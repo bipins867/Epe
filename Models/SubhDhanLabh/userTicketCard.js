@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../../database"); // Make sure to replace with your actual sequelize instance
 // Replace with your actual sequelize instance
-const User = require("./User");
+
 
 const UserTicketCard = sequelize.define(
   "UserTicketCard",

@@ -3,6 +3,8 @@ const { createAdminActivity } = require("../../../Utils/activityUtils");
 const { Sequelize } = require("sequelize");
 const path = require("path");
 const { baseDir } = require("../../../importantSetup");
+const { saveFile } = require("../../../Utils/fileHandler");
+const sequelize = require("../../../database");
 
 exports.createTicketCard = async (req, res, next) => {
   const { title, price } = req.body;
@@ -30,13 +32,12 @@ exports.createTicketCard = async (req, res, next) => {
     }
 
     if (existingTicketCard) {
-      await transaction.rollback();
       return res
         .status(400)
         .json({ message: "A ticket card with this title already exists." });
     }
 
-    transaction = await Sequelize.transaction();
+    transaction = await sequelize.transaction();
 
     // Create the new TicketCard
     const newTicketCard = await TicketCard.create(
@@ -63,7 +64,9 @@ exports.createTicketCard = async (req, res, next) => {
     });
   } catch (error) {
     // Rollback transaction in case of any error
-    if (transaction) await transaction.rollback();
+    if (transaction) {
+      await transaction.rollback();
+    }
     console.error("Error creating ticket card:", error);
     return res
       .status(500)

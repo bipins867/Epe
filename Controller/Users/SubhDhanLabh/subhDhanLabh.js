@@ -12,6 +12,7 @@ const {
   SUBH_DHAN_LABH_PERCENTAGE_DISTRIBUTION,
 } = require("../../../importantSetup");
 const { sendCreditMessage } = require("../../../Utils/MailService");
+const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
 
 exports.getTicketCardList = async (req, res, next) => {
   try {
@@ -170,9 +171,15 @@ exports.getUserTicketReferrallList = async (req, res, next) => {
 exports.activateTicketCard = async (req, res, next) => {
   const { ticketTitle } = req.body;
   const userId = req.user.id;
+  const user=req.user;
   // Start a sequelize transaction
   let transaction;
   try {
+    if (!ticketTitle) {
+      return res
+        .status(404)
+        .json({ error: "Ticket Card information not found!" });
+    }
     // Find the requested TicketCard by ticketTitle
     const ticketCard = await TicketCard.findOne({
       where: { title: ticketTitle },
@@ -223,7 +230,7 @@ exports.activateTicketCard = async (req, res, next) => {
     await piggybox.update({ piggyBalance: newPiggyBalance }, { transaction });
 
     // Create a TransactionHistory record
-    await createTransactionHistory(
+    await TransactionHistory.create(
       {
         UserId: userId,
         merchantTransactionId: null,

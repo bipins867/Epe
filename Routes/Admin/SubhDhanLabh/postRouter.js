@@ -6,7 +6,7 @@ const { fileHandlerRouter } = require("../../FileHandler/fileHandler");
 const router = express.Router();
 
 router.post(
-  "/create",
+  "/createTicketCard",
   fileHandlerRouter("image", 0.5),
   subhDhanLabhController.createTicketCard
 );
