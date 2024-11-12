@@ -72,3 +72,43 @@ a {
         font-size: 16px;
     }
 }
+
+/* Responsive styling for mobile view */
+@media (max-width: 768px) {
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  
+    .table th, .table td {
+      font-size: 0.9rem; /* Adjust font size for smaller screens */
+      white-space: nowrap; /* Prevent text from wrapping */
+    }
+  
+    /* Style labels and inputs for date selection */
+    #mobile-responsive {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    #mobile-responsive label, 
+    #mobile-responsive input,
+    #mobile-responsive button {
+      width: 100%;
+    }
+  
+    /* Adjust header and button alignment */
+    .piggybox-heading h6 {
+      font-size: 1rem;
+      text-align: center;
+    }
+  
+    /* Center close account buttons */
+    #close-button-div, #cancel-button-div {
+      display: block; /* Ensure visibility */
+      margin: 10px auto;
+      width: 90%;
+    }
+  }
+  
