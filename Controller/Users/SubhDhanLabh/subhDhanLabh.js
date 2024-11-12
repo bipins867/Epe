@@ -11,7 +11,10 @@ const {
   SUBH_DHAN_LABH_USER_COUNT,
   SUBH_DHAN_LABH_PERCENTAGE_DISTRIBUTION,
 } = require("../../../importantSetup");
-const { sendCreditMessage } = require("../../../Utils/MailService");
+const {
+  sendCreditMessage,
+  sendDebitMessage,
+} = require("../../../Utils/MailService");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
 
 exports.getTicketCardList = async (req, res, next) => {
@@ -70,11 +73,11 @@ exports.getUserTicketInfo = async (req, res, next) => {
       success: false,
       message: "Error fetching user ticket information",
     });
-    next(error);
+    console.log(error);
   }
 };
 
-exports.getUserTicketReferrallList = async (req, res, next) => {
+exports.getUserTicketReferralList = async (req, res, next) => {
   const { ticketTitle } = req.body;
 
   try {
@@ -101,7 +104,6 @@ exports.getUserTicketReferrallList = async (req, res, next) => {
     // Step 3: Find all ReferredUsers associated with this referral
     const referredUsers = await ReferredUser.findAll({
       where: { ReferralId: referralInfo.id },
-      include: [{ model: User, as: "user" }],
     });
 
     // Step 4: Classify referred users into three categories
@@ -109,8 +111,20 @@ exports.getUserTicketReferrallList = async (req, res, next) => {
     const activeButNotCompletedUsers = [];
     const completedUsers = [];
 
+    // Step 5: Iterate over each ReferredUser to get the associated User information
     for (const referredUser of referredUsers) {
-      const referredUserInfo = referredUser.user;
+      // // Fetch the Referral associated with the current ReferredUser
+      // const referral = await Referrals.findOne({
+      //   where: { id: referredUser.ReferralId },
+      // });
+
+      // if (!referral) continue;
+
+      // Fetch the associated User for each referral
+      const referredUserInfo = await User.findOne({
+        where: { candidateId: referredUser.candidateId },
+      });
+
       if (!referredUserInfo) continue;
 
       // Fetch the UserTicketCard for each referred user
@@ -118,8 +132,9 @@ exports.getUserTicketReferrallList = async (req, res, next) => {
         where: { UserId: referredUserInfo.id, TicketCardId: ticketCard.id },
       });
 
+      //console.log(userTicketCard);
       // Categorize based on UserTicketCard status
-      if (!userTicketCard || userTicketCard.rechargeCount === 0) {
+      if (!userTicketCard || !userTicketCard.isFundedFirst) {
         // User who hasn't activated the wallet
         notActivatedUsers.push({
           candidateId: referredUserInfo.candidateId,
@@ -149,7 +164,7 @@ exports.getUserTicketReferrallList = async (req, res, next) => {
       }
     }
 
-    // Step 5: Respond with the categorized lists
+    // Step 6: Respond with the categorized lists
     res.status(200).json({
       success: true,
       data: {
@@ -164,121 +179,8 @@ exports.getUserTicketReferrallList = async (req, res, next) => {
       success: false,
       message: "Error fetching user ticket referral list",
     });
-    next(error);
-  }
-};
 
-exports.activateTicketCard = async (req, res, next) => {
-  const { ticketTitle } = req.body;
-  const userId = req.user.id;
-  const user=req.user;
-  // Start a sequelize transaction
-  let transaction;
-  try {
-    if (!ticketTitle) {
-      return res
-        .status(404)
-        .json({ error: "Ticket Card information not found!" });
-    }
-    // Find the requested TicketCard by ticketTitle
-    const ticketCard = await TicketCard.findOne({
-      where: { title: ticketTitle },
-    });
-    if (!ticketCard) {
-      return res.status(404).json({ message: "Ticket card not found." });
-    }
-
-    // Check if the user already has an associated UserTicketCard for this TicketCard
-    let userTicketCard = await UserTicketCard.findOne({
-      where: { UserId: userId, TicketCardId: ticketCard.id },
-    });
-
-    // Check if the ticket is already active for this user
-    if (userTicketCard && userTicketCard.isTicketActive) {
-      return res.status(400).json({ message: "Ticket is already active." });
-    }
-
-    transaction = await sequelize.transaction();
-
-    // If no UserTicketCard exists, create it with default values
-    if (!userTicketCard) {
-      userTicketCard = await UserTicketCard.create(
-        {
-          UserId: userId,
-          TicketCardId: ticketCard.id,
-          isTicketActive: false,
-          isFundedFirst: false,
-          isCompleted: false,
-          rechargeCount: 0,
-          affiliateBonus: 0,
-          goldBonus: 0,
-        },
-        { transaction }
-      );
-    }
-
-    // Fetch user's Piggybox to check balance
-    const piggybox = await Piggybox.findOne({ where: { UserId: userId } });
-    if (!piggybox || piggybox.piggyBalance < ticketCard.price) {
-      await transaction.commit(); // Commit if UserTicketCard was created but no sufficient balance
-      return res.status(400).json({ message: "Insufficient funds in wallet." });
-    }
-
-    // Deduct the ticket price from user's Piggybox balance
-    const newPiggyBalance =
-      parseFloat(piggybox.piggyBalance) - parseFloat(ticketCard.price);
-    await piggybox.update({ piggyBalance: newPiggyBalance }, { transaction });
-
-    // Create a TransactionHistory record
-    await TransactionHistory.create(
-      {
-        UserId: userId,
-        merchantTransactionId: null,
-        merchantUserId: null,
-        transactionType: "subDhanLabh",
-        remark: `User purchased ${ticketCard.title} of Amount:- ${ticketCard.price}`,
-        credit: 0,
-        debit: ticketCard.price,
-        balance: newPiggyBalance,
-      },
-      transaction
-    );
-
-    // Update UserTicketCard to activate the ticket and increment rechargeCount
-    await userTicketCard.update(
-      {
-        isTicketActive: true,
-        isFundedFirst: true,
-        rechargeCount: userTicketCard.rechargeCount + 1,
-      },
-      { transaction }
-    );
-
-    // Create a user activity log
-    await createUserActivity(
-      req,
-      req.user,
-      "subhDhanLabh",
-      `User ${req.user.userName} activated the ticket ${ticketCard.title}`,
-      transaction
-    );
-
-    if (req.user.byReferralId != null && !userTicketCard.isCompleted) {
-      await updateTopUserInfo(user.byReferralId, ticketCard.title, transaction);
-    }
-
-    await updateBelowUserInfo(req.user, ticketCard.title, transaction);
-
-    // Commit the transaction
-    await transaction.commit();
-    res.status(200).json({ message: "Ticket activated successfully." });
-  } catch (error) {
-    // Rollback in case of any error
-    if (transaction) await transaction.rollback();
-    console.error("Error activating ticket card:", error);
-    res
-      .status(500)
-      .json({ message: "Internal Server Error! in activating the ticket" });
+    console.log(error);
   }
 };
 
@@ -410,15 +312,121 @@ exports.activateMultipleTimesTicketCard = async (req, res, next) => {
       success: false,
       message: "Failed to activate TicketCard for all referred users.",
     });
-    next(error);
+  }
+};
+
+exports.activateTicketCard = async (req, res, next) => {
+  const { ticketTitle } = req.body;
+  const userId = req.user.id;
+  const user = req.user;
+  let transaction;
+  try {
+    if (!ticketTitle) {
+      return res
+        .status(404)
+        .json({ error: "Ticket Card information not found!" });
+    }
+
+    const ticketCard = await TicketCard.findOne({
+      where: { title: ticketTitle },
+    });
+    if (!ticketCard) {
+      return res.status(404).json({ message: "Ticket card not found." });
+    }
+
+    let userTicketCard = await UserTicketCard.findOne({
+      where: { UserId: userId, TicketCardId: ticketCard.id },
+    });
+
+    if (userTicketCard && userTicketCard.isTicketActive) {
+      return res.status(400).json({ message: "Ticket is already active." });
+    }
+
+    transaction = await sequelize.transaction();
+
+    if (!userTicketCard) {
+      userTicketCard = await UserTicketCard.create(
+        {
+          UserId: userId,
+          TicketCardId: ticketCard.id,
+          isTicketActive: false,
+          isFundedFirst: false,
+          isCompleted: false,
+          rechargeCount: 0,
+          affiliateBonus: 0,
+          goldBonus: 0,
+        },
+        { transaction }
+      );
+    }
+
+    await userTicketCard.update(
+      { isFundedFirst: true, rechargeCount: userTicketCard.rechargeCount + 1 },
+      { transaction }
+    );
+
+    const piggybox = await Piggybox.findOne({ where: { UserId: userId } });
+    if (!piggybox || piggybox.piggyBalance < ticketCard.price) {
+      await transaction.commit();
+      return res.status(400).json({ message: "Insufficient funds in wallet." });
+    }
+
+    const newPiggyBalance =
+      parseFloat(piggybox.piggyBalance) - parseFloat(ticketCard.price);
+    await piggybox.update({ piggyBalance: newPiggyBalance }, { transaction });
+    await userTicketCard.update({ isTicketActive: true }, { transaction });
+
+    const thistory = await TransactionHistory.create(
+      {
+        UserId: userId,
+        transactionType: "purchase",
+        remark: `Ticket purchased - ${ticketTitle}`,
+        credit: 0,
+        debit: ticketCard.price,
+        balance: newPiggyBalance,
+        merchantTransactionId: null,
+        merchantUserId: null,
+        createAt:new Date(Date.now()+500)
+      },
+      { transaction }
+    );
+
+    await updateTopUserInfo(user.byReferallId, ticketTitle, transaction);
+    await updateBelowUserInfo(user, ticketTitle, transaction);
+
+    await transaction.commit();
+
+    sendDebitMessage(
+      user.phone,
+      ticketCard.price.toFixed(2),
+      user.candidateId,
+      `REF-25${thistory.id}`,
+      newPiggyBalance.toFixed(2)
+    );
+
+    res.status(200).json({
+      message: `${ticketTitle} activated successfully.`,
+      piggyBalance: newPiggyBalance.toFixed(2),
+    });
+  } catch (error) {
+    if (transaction) await transaction.rollback();
+
+    console.log(error);
   }
 };
 
 //---------------------------
-async function updateTopUserInfo(byReferralId, ticketTitle, transaction) {
+async function updateTopUserInfo(byReferallId, ticketTitle, transaction) {
+  if (!byReferallId) {
+    return;
+  }
   try {
+    const referralInfo = await Referrals.findOne({
+      where: { referralId: byReferallId },
+    });
+
     // Step 1: Find the user by referral ID
-    const user = await User.findOne({ where: { byReferralId } });
+    const user = await User.findOne({ where: { id: referralInfo.UserId } });
     if (!user) return;
 
     // Step 2: Get the ticket card information by title
@@ -429,7 +437,7 @@ async function updateTopUserInfo(byReferralId, ticketTitle, transaction) {
 
     // Step 3: Find or create UserTicketCard for this user and the specified TicketCard
     let userTicketCard = await UserTicketCard.findOne({
-      where: { UserId: user.id, ticketCardId: ticketCard.id },
+      where: { UserId: user.id, TicketCardId: ticketCard.id },
     });
 
     if (!userTicketCard) {
@@ -456,17 +464,26 @@ async function updateTopUserInfo(byReferralId, ticketTitle, transaction) {
       where: { UserId: user.id },
     });
 
+    if (!userReferrals) return;
+
     // Step 6: Find associated ReferredUsers for this referral
     const referredUsers = await ReferredUser.findAll({
       where: { ReferralId: userReferrals.id },
-      include: [{ model: User, as: "user" }],
     });
 
-    // Step 7: Filter for ReferredUsers with a funded and incomplete UserTicketCard
+    // Step 7: Get associated users via the Referral's UserId
     const activeReferredUsers = [];
-
     for (const referredUser of referredUsers) {
-      const referredUserInfo = referredUser.user;
+      // const referral = await Referrals.findOne({
+      //   where: { id: referredUser.ReferralId },
+      // });
+
+      // if (!referral) continue;
+
+      const referredUserInfo = await User.findOne({
+        where: { candidateId: referredUser.candidateId },
+      });
+
       if (!referredUserInfo) continue;
 
       const referredUserTicketCard = await UserTicketCard.findOne({
@@ -518,6 +535,7 @@ async function updateTopUserInfo(byReferralId, ticketTitle, transaction) {
           balance: newPiggyBoxBalance,
           merchantTransactionId: null,
           merchantUserId: null,
+          createdAt:new Date(Date.now()+1000),
         },
         { transaction }
       );
@@ -540,35 +558,42 @@ async function updateTopUserInfo(byReferralId, ticketTitle, transaction) {
         piggyBox.piggyBalance.toFixed(2)
       );
     }
+
+    // Continue with the remaining logic as in your original function...
   } catch (error) {
     console.error("Error updating top user information:", error);
     throw error;
   }
 }
-//Updating below lever user information
+
 async function updateBelowUserInfo(user, ticketTitle, transaction) {
   try {
     const ticketCard = await TicketCard.findOne({
       where: { title: ticketTitle },
     });
-    // Step 1: Find user referrals by user ID
+    if (!ticketCard) return;
+
     const userReferrals = await Referrals.findOne({
       where: { UserId: user.id },
     });
     if (!userReferrals) return;
 
-    // Step 2: Find associated ReferredUsers for this referral
     const referredUsers = await ReferredUser.findAll({
       where: { ReferralId: userReferrals.id },
-      include: [{ model: User, as: "user" }], // Fetch User info for each ReferredUser
-      transaction,
     });
 
-    // Step 3: Filter for ReferredUsers with a funded and incomplete UserTicketCard
     const activeReferredUsers = [];
-
     for (const referredUser of referredUsers) {
-      const referredUserInfo = referredUser.user;
+      // const referral = await Referrals.findOne({
+      //   where: { id: referredUser.ReferralId },
+      // });
+
+      // if (!referral) continue;
+
+      const referredUserInfo = await User.findOne({
+        where: { candidateId: referredUser.candidateId },
+      });
+
       if (!referredUserInfo) continue;
 
       const referredUserTicketCard = await UserTicketCard.findOne({
@@ -578,7 +603,6 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
           isCompleted: false,
           TicketCardId: ticketCard.id,
         },
-        transaction,
       });
 
       if (referredUserTicketCard) {
@@ -600,8 +624,8 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
       const bonusAmount =
         SUBH_DHAN_LABH_USER_COUNT *
         ticketCard.price *
-        (1 + SUBH_DHAN_LABH_PERCENTAGE_DISTRIBUTION / 100);
-
+        (SUBH_DHAN_LABH_PERCENTAGE_DISTRIBUTION / 100);
+      
       const piggyBox = await Piggybox.findOne({
         where: { UserId: user.id },
         transaction,
@@ -625,6 +649,7 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
           balance: newPiggyBoxBalance,
           merchantTransactionId: null,
           merchantUserId: null,
+          createdAt:new Date(Date.now()+1500),
         },
         { transaction }
       );
@@ -648,6 +673,8 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
         piggyBox.piggyBalance.toFixed(2)
       );
     }
+
+    // Continue with the remaining logic as in your original function...
   } catch (error) {
     console.error("Error updating below user information:", error);
     throw error;

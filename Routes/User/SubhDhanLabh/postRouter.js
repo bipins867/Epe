@@ -8,7 +8,7 @@ router.get("/ticketCardLists", subhDhanLabhController.getTicketCardList);
 router.get("/userTicketInfo", subhDhanLabhController.getUserTicketInfo);
 router.post(
   "/getUserTicketReferral",
-  subhDhanLabhController.getUserTicketReferrallList
+  subhDhanLabhController.getUserTicketReferralList
 );
 router.post("/activateTicketCard", subhDhanLabhController.activateTicketCard);
 // router.post(
