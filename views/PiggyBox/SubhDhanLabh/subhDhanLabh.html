@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
-    <title>Loans</title>
+    <title>Subh Dhan Labh</title>
 
     <!-- Bootstrap and Font Awesome -->
     <link
@@ -19,7 +19,7 @@
     />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/PiggyBox/Loans/loans.css" />
+    <link rel="stylesheet" href="/css/PiggyBox/SubhDhanLabh/subhDhanLabh.css" />
 
     <!-- jQuery (if necessary) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -137,11 +137,40 @@
           <!-- Main Body Content -->
           <div class="body-details w-100">
             <div class="welcome-heading text-white p-1 align-middle">
-              <h2>Loans</h2>
+              <h2>Subh Dhan Labh</h2>
             </div>
-
             <div class="container">
-              <h5>Currently you don’t have any pre-approved loan offers</h5>
+              <div class="ticket-cards-container">
+                <!-- Bronze Ticket -->
+                <a href="#" class="ticket-card card-style bronze-card">
+                  <h3>Bronze</h3>
+                  <p>Price: 2000 <span>(Inc. of GST)</span></p>
+                </a>
+
+                <!-- Silver Ticket -->
+                <a href="#" class="ticket-card card-style silver-card">
+                  <h3>Silver</h3>
+                  <p>Price: 5000 <span>(Inc. of GST)</span></p>
+                </a>
+
+                <!-- Gold Ticket -->
+                <a href="#" class="ticket-card card-style gold-card">
+                  <h3>Gold</h3>
+                  <p>Price: 15000 <span>(Inc. of GST)</span></p>
+                </a>
+
+                <!-- Diamond Ticket -->
+                <a href="#" class="ticket-card card-style diamond-card">
+                  <h3>Diamond</h3>
+                  <p>Price: 25000 <span>(Inc. of GST)</span></p>
+                </a>
+
+                <!-- Platinum Ticket -->
+                <a href="#" class="ticket-card card-style platinum-card">
+                  <h3>Platinum</h3>
+                  <p>Price: 50000 <span>(Inc. of GST)</span></p>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -157,6 +186,7 @@
     </div>
 
     <!-- Custom JS -->
+    <script src="/js/PiggyBox/SubhDhanLabh/subhDhanLabh.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
       integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
@@ -164,7 +194,6 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="/js/Utils/utils.js"></script>
-    <script src="/js/PiggyBox/Loans/loans.js"></script>
     <script>
       const anchors = document.querySelectorAll("a.menu-item"); // Select all anchor tags with class 'abc'
       const currentUrl = window.location.href; // Get the current window URL

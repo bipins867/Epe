@@ -109,3 +109,26 @@ exports.getUserActivityPage = async (req, res, next) => {
     )
   );
 };
+
+
+exports.getSubhDhanLabhPage=async(req,res,next)=>{
+  res.sendFile(
+    path.resolve(
+      "views",
+      "PiggyBox",
+      "SubhDhanLabh",
+      "subhDhanLabh.html"
+    )
+  );
+}
+
+exports.getTicketCardInfoPage=async(req,res,next)=>{
+  res.sendFile(
+    path.resolve(
+      "views",
+      "PiggyBox",
+      "SubhDhanLabh",
+      "ticketCardInfo.html"
+    )
+  );
+}

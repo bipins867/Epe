@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
-    <title>Loans</title>
+    <title>Subh Dhan Labh</title>
 
     <!-- Bootstrap and Font Awesome -->
     <link
@@ -19,7 +19,7 @@
     />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/PiggyBox/Loans/loans.css" />
+    <link rel="stylesheet" href="/css/PiggyBox/SubhDhanLabh/ticketCardInfo.css" />
 
     <!-- jQuery (if necessary) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -135,15 +135,79 @@
           </div>
 
           <!-- Main Body Content -->
+
           <div class="body-details w-100">
-            <div class="welcome-heading text-white p-1 align-middle">
-              <h2>Loans</h2>
+            <!-- Header for Ticket Card Info -->
+            <div class="welcome-heading text-white p-3 align-middle">
+              <h2>Ticket Card Info</h2>
             </div>
 
+            <!-- Ticket Information Section -->
             <div class="container">
-              <h5>Currently you don’t have any pre-approved loan offers</h5>
+              <div class="ticket-info">
+                <h3 class="ticket-title">Ticket: Bronze</h3>
+                <p class="ticket-price">
+                  Price: 2000 <span>(Inc. of GST)</span>
+                </p>
+              </div>
+
+              <!-- Status Information -->
+              <div class="status-info">
+                <p>Status: <span id="ticket-status">Active</span></p>
+                <p>PiggyBox Balance: <span id="piggybox-balance">1500</span></p>
+                <p>Affiliated Bonus: <span id="affiliated-bonus">200</span></p>
+                <p>Gold Bonus: <span id="gold-bonus">300</span></p>
+              </div>
+
+              <!-- Activate Button -->
+              <button class="activate-button" onclick="confirmActivation()">
+                Activate Ticket Card
+              </button>
+
+              <!-- User List Toggle Buttons -->
+              <div class="user-list-buttons">
+                <button onclick="showList('initiated')" class="toggle-button">
+                  Initiated
+                </button>
+                <button onclick="showList('pending')" class="toggle-button">
+                  Pending
+                </button>
+                <button onclick="showList('completed')" class="toggle-button">
+                  Completed
+                </button>
+              </div>
+
+              <!-- User Lists -->
+              <div id="initiated" class="user-list">
+                <h4>Initiated Users</h4>
+                <ul>
+                  <li>Customer ID: 001 | Name: John Doe</li>
+                  <li>Customer ID: 002 | Name: Jane Smith</li>
+                  <!-- Add more users as needed -->
+                </ul>
+              </div>
+
+              <div id="pending" class="user-list" style="display: none">
+                <h4>Pending Users</h4>
+                <ul>
+                  <li>Customer ID: 003 | Name: Alice Johnson</li>
+                  <li>Customer ID: 004 | Name: Bob Brown</li>
+                  <!-- Add more users as needed -->
+                </ul>
+              </div>
+
+              <div id="completed" class="user-list" style="display: none">
+                <h4>Completed Users</h4>
+                <ul>
+                  <li>Customer ID: 005 | Name: Charlie Green</li>
+                  <li>Customer ID: 006 | Name: Daisy White</li>
+                  <!-- Add more users as needed -->
+                </ul>
+              </div>
             </div>
           </div>
+
+          <!--flsflkdskflsdlkfs-->
         </div>
       </div>
     </div>
@@ -157,6 +221,7 @@
     </div>
 
     <!-- Custom JS -->
+    <script src="/js/PiggyBox/SubhDhanLabh/ticketCardInfo.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
       integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
@@ -164,7 +229,6 @@
       referrerpolicy="no-referrer"
     ></script>
     <script src="/js/Utils/utils.js"></script>
-    <script src="/js/PiggyBox/Loans/loans.js"></script>
     <script>
       const anchors = document.querySelectorAll("a.menu-item"); // Select all anchor tags with class 'abc'
       const currentUrl = window.location.href; // Get the current window URL
