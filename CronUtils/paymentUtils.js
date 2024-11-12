@@ -13,6 +13,7 @@ const {
   sendRewardMessage,
   sendCreditMessage,
 } = require("../Utils/MailService");
+const { REFERRAL_REWARD_AMOUNT } = require("../importantSetup");
 
 exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
   let t; // Start a Sequelize transaction
@@ -80,26 +81,12 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
             const referringPiggyBox = await Piggybox.findOne({
               where: { UserId: referringUser.id },
             });
-            const rewardAmount = 800;
-            if (referringPiggyBox) {
+            const rewardAmount = REFERRAL_REWARD_AMOUNT;
+            if (referringPiggyBox && rewardAmount > 0) {
               const updatedBalance =
                 parseFloat(referringPiggyBox.piggyBalance) + rewardAmount;
               referringPiggyBox.piggyBalance = updatedBalance;
               await referringPiggyBox.save({ transaction: t });
-
-              referral.pendingReferrals -= 1;
-              await referral.save({ transaction: t });
-
-              await ReferredUser.update(
-                {
-                  status: "completed",
-                  dateOfCompletion: new Date(),
-                },
-                {
-                  where: { candidateId: user.candidateId },
-                  transaction: t,
-                }
-              );
 
               // Create a transaction history for the referring user
               await TransactionHistory.create(
@@ -113,9 +100,24 @@ exports.verifyPaymentStatus = async (merchantTransactionId, userId) => {
                 },
                 { transaction: t }
               );
-              await user.update({ isByReferralUsed: true }, { transaction: t });
               sendRewardMessage(referringUser.phone, rewardAmount.toFixed(2));
             }
+
+            referral.pendingReferrals -= 1;
+            await referral.save({ transaction: t });
+
+            await ReferredUser.update(
+              {
+                status: "completed",
+                dateOfCompletion: new Date(),
+              },
+              {
+                where: { candidateId: user.candidateId },
+                transaction: t,
+              }
+            );
+
+            await user.update({ isByReferralUsed: true }, { transaction: t });
           }
         }
       }

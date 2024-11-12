@@ -6,9 +6,11 @@ const postRouter = require("./postRouter");
 const customerSupportRouter = require("./CustomerSupport/customerSupport");
 const basicRouter = require("./Basic/basic");
 const piggyBoxRouter = require("./PiggyBox/piggyBox");
+const subDhanLabhRouter = require("./SubhDhanLabh/subhDhanLabh");
 
 const router = express.Router();
 
+router.use("/subhDhanLabh", subDhanLabhRouter);
 router.use("/piggyBox", piggyBoxRouter);
 router.use("/basic", basicRouter);
 router.use("/customerSupport", customerSupportRouter);
