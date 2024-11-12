@@ -360,7 +360,7 @@ exports.activateTicketCard = async (req, res, next) => {
       );
     }
 
-    await userTicketCard.update(
+    const userCurrentTicketCard = await userTicketCard.update(
       { isFundedFirst: true, rechargeCount: userTicketCard.rechargeCount + 1 },
       { transaction }
     );
@@ -386,12 +386,17 @@ exports.activateTicketCard = async (req, res, next) => {
         balance: newPiggyBalance,
         merchantTransactionId: null,
         merchantUserId: null,
-        createAt:new Date(Date.now()+500)
+        createAt: new Date(Date.now() + 500),
       },
       { transaction }
     );
 
-    await updateTopUserInfo(user.byReferallId, ticketTitle, transaction);
+    await updateTopUserInfo(
+      user.byReferallId,
+      ticketTitle,
+      transaction,
+      userCurrentTicketCard
+    );
     await updateBelowUserInfo(user, ticketTitle, transaction);
 
     await transaction.commit();
@@ -416,10 +421,17 @@ exports.activateTicketCard = async (req, res, next) => {
 };
 
 //---------------------------
-async function updateTopUserInfo(byReferallId, ticketTitle, transaction) {
+async function updateTopUserInfo(
+  byReferallId,
+  ticketTitle,
+  transaction,
+  userCurrentTicketCard
+) {
+  
   if (!byReferallId) {
     return;
   }
+  
   try {
     const referralInfo = await Referrals.findOne({
       where: { referralId: byReferallId },
@@ -434,12 +446,12 @@ async function updateTopUserInfo(byReferallId, ticketTitle, transaction) {
       where: { title: ticketTitle },
     });
     if (!ticketCard) return;
-
+    
     // Step 3: Find or create UserTicketCard for this user and the specified TicketCard
     let userTicketCard = await UserTicketCard.findOne({
       where: { UserId: user.id, TicketCardId: ticketCard.id },
     });
-
+    
     if (!userTicketCard) {
       userTicketCard = await UserTicketCard.create(
         {
@@ -455,7 +467,7 @@ async function updateTopUserInfo(byReferallId, ticketTitle, transaction) {
         { transaction }
       );
     }
-
+    
     // Step 4: If UserTicketCard exists but is not active, exit
     if (!userTicketCard.isTicketActive) return;
 
@@ -471,6 +483,8 @@ async function updateTopUserInfo(byReferallId, ticketTitle, transaction) {
       where: { ReferralId: userReferrals.id },
     });
 
+    
+
     // Step 7: Get associated users via the Referral's UserId
     const activeReferredUsers = [];
     for (const referredUser of referredUsers) {
@@ -479,29 +493,39 @@ async function updateTopUserInfo(byReferallId, ticketTitle, transaction) {
       // });
 
       // if (!referral) continue;
-
+      
       const referredUserInfo = await User.findOne({
         where: { candidateId: referredUser.candidateId },
       });
 
       if (!referredUserInfo) continue;
 
-      const referredUserTicketCard = await UserTicketCard.findOne({
-        where: {
-          UserId: referredUserInfo.id,
-          isFundedFirst: true,
-          isCompleted: false,
-          TicketCardId: ticketCard.id,
-        },
-      });
+      let referredUserTicketCard;
 
+      if (referredUserInfo.id === userCurrentTicketCard.UserId) {
+        referredUserTicketCard = userCurrentTicketCard;
+      } else {
+        referredUserTicketCard = await UserTicketCard.findOne({
+          where: {
+            UserId: referredUserInfo.id,
+            isFundedFirst: true,
+            isCompleted: false,
+            TicketCardId: ticketCard.id,
+          },
+        });
+      }
+
+   
+      
       if (referredUserTicketCard) {
+        
         activeReferredUsers.push(referredUserTicketCard);
       }
     }
 
     // Step 8: Check if active referred users meet the threshold
     const activeReferredUserCount = activeReferredUsers.length;
+
     if (activeReferredUserCount >= SUBH_DHAN_LABH_USER_COUNT) {
       // Set user's isTicketActive to false
       await userTicketCard.update({ isTicketActive: false }, { transaction });
@@ -510,7 +534,7 @@ async function updateTopUserInfo(byReferallId, ticketTitle, transaction) {
       const bonusAmount =
         SUBH_DHAN_LABH_USER_COUNT *
         ticketCard.price *
-        (1 + SUBH_DHAN_LABH_PERCENTAGE_DISTRIBUTION / 100);
+        (SUBH_DHAN_LABH_PERCENTAGE_DISTRIBUTION / 100);
 
       const piggyBox = await Piggybox.findOne({
         where: { UserId: user.id },
@@ -535,7 +559,7 @@ async function updateTopUserInfo(byReferallId, ticketTitle, transaction) {
           balance: newPiggyBoxBalance,
           merchantTransactionId: null,
           merchantUserId: null,
-          createdAt:new Date(Date.now()+1000),
+          createdAt: new Date(Date.now() + 1000),
         },
         { transaction }
       );
@@ -625,7 +649,7 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
         SUBH_DHAN_LABH_USER_COUNT *
         ticketCard.price *
         (SUBH_DHAN_LABH_PERCENTAGE_DISTRIBUTION / 100);
-      
+
       const piggyBox = await Piggybox.findOne({
         where: { UserId: user.id },
         transaction,
@@ -649,7 +673,7 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
           balance: newPiggyBoxBalance,
           merchantTransactionId: null,
           merchantUserId: null,
-          createdAt:new Date(Date.now()+1500),
+          createdAt: new Date(Date.now() + 1500),
         },
         { transaction }
       );
