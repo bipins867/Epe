@@ -19,7 +19,10 @@
     />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/PiggyBox/SubhDhanLabh/ticketCardInfo.css" />
+    <link
+      rel="stylesheet"
+      href="/css/PiggyBox/SubhDhanLabh/ticketCardInfo.css"
+    />
 
     <!-- jQuery (if necessary) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -145,18 +148,19 @@
             <!-- Ticket Information Section -->
             <div class="container">
               <div class="ticket-info">
-                <h3 class="ticket-title">Ticket: Bronze</h3>
+                <h3 class="ticket-title" id="ticket-title">Ticket: Bronze</h3>
                 <p class="ticket-price">
-                  Price: 2000 <span>(Inc. of GST)</span>
+                  Price: <span id="ticket-price">2000</span>
+                  <span>(Inc. of GST)</span>
                 </p>
               </div>
 
               <!-- Status Information -->
               <div class="status-info">
-                <p>Status: <span id="ticket-status">Active</span></p>
+                <p>Status: <span id="ticket-status">Inactive</span></p>
                 <p>PiggyBox Balance: <span id="piggybox-balance">1500</span></p>
-                <p>Affiliated Bonus: <span id="affiliated-bonus">200</span></p>
-                <p>Gold Bonus: <span id="gold-bonus">300</span></p>
+                <p>Affiliated Bonus: <span id="affiliated-bonus">0</span></p>
+                <p>Gold Bonus: <span id="gold-bonus">0</span></p>
               </div>
 
               <!-- Activate Button -->
@@ -166,43 +170,44 @@
 
               <!-- User List Toggle Buttons -->
               <div class="user-list-buttons">
-                <button onclick="showList('initiated')" class="toggle-button">
+                <button
+                  onclick="showList('notActivatedUsers')"
+                  class="toggle-button"
+                >
                   Initiated
                 </button>
-                <button onclick="showList('pending')" class="toggle-button">
+                <button
+                  onclick="showList('activeButNotCompletedUsers')"
+                  class="toggle-button"
+                >
                   Pending
                 </button>
-                <button onclick="showList('completed')" class="toggle-button">
+                <button
+                  onclick="showList('completedUsers')"
+                  class="toggle-button"
+                >
                   Completed
                 </button>
               </div>
 
               <!-- User Lists -->
-              <div id="initiated" class="user-list">
+              <div id="notActivatedUsers" class="user-list">
                 <h4>Initiated Users</h4>
-                <ul>
-                  <li>Customer ID: 001 | Name: John Doe</li>
-                  <li>Customer ID: 002 | Name: Jane Smith</li>
-                  <!-- Add more users as needed -->
-                </ul>
+                <ul id="initiated-users-list"></ul>
               </div>
 
-              <div id="pending" class="user-list" style="display: none">
+              <div
+                id="activeButNotCompletedUsers"
+                class="user-list"
+                style="display: none"
+              >
                 <h4>Pending Users</h4>
-                <ul>
-                  <li>Customer ID: 003 | Name: Alice Johnson</li>
-                  <li>Customer ID: 004 | Name: Bob Brown</li>
-                  <!-- Add more users as needed -->
-                </ul>
+                <ul id="pending-users-list"></ul>
               </div>
 
-              <div id="completed" class="user-list" style="display: none">
+              <div id="completedUsers" class="user-list" style="display: none">
                 <h4>Completed Users</h4>
-                <ul>
-                  <li>Customer ID: 005 | Name: Charlie Green</li>
-                  <li>Customer ID: 006 | Name: Daisy White</li>
-                  <!-- Add more users as needed -->
-                </ul>
+                <ul id="completed-users-list"></ul>
               </div>
             </div>
           </div>
