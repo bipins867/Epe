@@ -142,15 +142,15 @@
           <div class="body-details w-100">
             <!-- Header for Ticket Card Info -->
             <div class="welcome-heading text-white p-3 align-middle">
-              <h2 id="h2-title">Ticket Card Info</h2>
+              <h2 id="h2-title">Pool Info</h2>
             </div>
 
             <!-- Ticket Information Section -->
             <div class="container">
-              <div class="ticket-info">
-                <h3 class="ticket-title" id="ticket-title">Ticket: Bronze</h3>
+              <div class="ticket-info" id="ticket-info">
+                <h3 class="ticket-title" id="ticket-title">Bronze Pool</h3>
                 <p class="ticket-price">
-                  MRP: <span id="ticket-price">2000</span>
+                  Price: ₹<span id="ticket-price">2000</span>
                   <span>(Inc. of GST)</span>
                 </p>
               </div>
@@ -170,9 +170,46 @@
 
               <!-- User List Toggle Buttons -->
 
-              <div id="completedUsers" class="div-user-list">
-                <h4>Users Information</h4>
-                <ul id="users-list"></ul>
+              <div id="referHistory" class="mt-4">
+                <h4>Referral History</h4>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Customer ID</th>
+                      <th>Name</th>
+                      <th>Pool Purchase count</th>
+                      <th>Pending Purchase Count</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colspan="6" class="text-center">
+                        No data available in table
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="pagination-controls">
+                  <div>
+                    <label>Show</label>
+                    <select name="recordsPerPage">
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                    </select>
+                    <label>records per page</label>
+                  </div>
+                  <ul class="pagination">
+                    <li class="page-item disabled">
+                      <a class="page-link" href="#">Previous</a>
+                    </li>
+                    <li class="page-item disabled">
+                      <a class="page-link" href="#">Next</a>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -216,5 +253,40 @@
       });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  
+ <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Get the ticket info and title elements
+    const ticketInfo = document.getElementById("ticket-info");
+    const ticketTitle = document.getElementById("ticket-title").innerText.toLowerCase(); // Convert to lowercase
+
+    // Function to set background color based on ticket title
+    function setTicketBackground() {
+      switch (ticketTitle) {
+        case "bronze":
+          ticketInfo.style.backgroundColor = "#cd7f32"; // Bronze color
+          break;
+        case "silver":
+          ticketInfo.style.backgroundColor = "#c0c0c0"; // Silver color
+          break;
+        case "gold":
+          ticketInfo.style.backgroundColor = "#ffd700"; // Gold color
+          break;
+        case "diamond":
+          ticketInfo.style.backgroundColor = "#b9f2ff"; // Diamond color
+          break;
+        case "platinum":
+          ticketInfo.style.backgroundColor = "#e5e4e2"; // Platinum color
+          break;
+        default:
+          ticketInfo.style.backgroundColor = "#ffffff"; // Default color
+      }
+    }
+
+    // Call the function to set the background color
+    setTicketBackground();
+  });
+</script>
   </body>
 </html>

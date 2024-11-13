@@ -25,7 +25,7 @@ function populateTicketData(data) {
   const usersList = data.usersLists;
   document.getElementById(
     "ticket-title"
-  ).textContent = `Ticket: ${data.ticketCard.title}`;
+  ).textContent = `${data.ticketCard.title} POOL`;
   document.getElementById("ticket-price").textContent = data.ticketCard.price;
   document.getElementById("ticket-status").textContent = userTicketCard
     ? userTicketCard.isTicketActive

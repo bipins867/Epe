@@ -126,7 +126,7 @@ body {
 
 .ticket-price {
     font-size: 1.2em;
-    color: #555;
+    color: #000000;
 }
 
 .ticket-price span {
@@ -181,6 +181,43 @@ body {
     background-color: #1C4D86;
 }
 
+
+/* Card Container */
+.ticket-info {
+    max-width: 300px;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2); /* Light transparent background */
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37); /* Soft shadow for depth */
+    backdrop-filter: blur(10px); /* Frosted glass effect */
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18); /* Subtle border for definition */
+    color: #fff; /* Light text for readability */
+    text-align: center;
+    font-family: 'Poppins', sans-serif; /* Matches with your existing font */
+    margin: 20px auto;
+  }
+  
+  /* Title Styling */
+  .ticket-info .ticket-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #000000; /* Light color for title */
+  }
+  
+  /* Price Styling */
+  .ticket-info .ticket-price {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+  }
+  
+  .ticket-info .ticket-price span {
+    font-size: 0.9em;
+    color: #000000; /* Slightly muted color for GST text */
+  }
+  
+
 .user-list {
     display: none;
     margin-top: 20px;
@@ -206,3 +243,95 @@ body {
     font-size: 1em;
     color: #333;
 }
+
+
+#referHistory {
+    width: 100%;
+    padding: 10px;
+    overflow-x: auto; /* Enable horizontal scrolling */
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px; /* Set a minimum width to force scrolling */
+  }
+  
+  .table th, .table td {
+    padding: 8px;
+    text-align: left;
+    white-space: nowrap; /* Prevent text from wrapping */
+  }
+  
+  /* Center header for better presentation */
+  #referHistory h4 {
+    text-align: center;
+    font-size: 1.2em;
+    margin-bottom: 1em;
+  }
+  
+  /* Pagination Controls */
+  .pagination-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1em;
+  }
+  
+  .pagination-controls select,
+  .pagination-controls label {
+    margin-bottom: 0.5em;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  /* Mobile View */
+  @media (max-width: 768px) {
+    /* Make the wrapper scrollable instead of stacking */
+    #referHistory {
+      overflow-x: auto;
+    }
+  
+    .table {
+      display: table;
+      min-width: 600px; /* Keeps the table from compressing too much */
+    }
+  }
+  
+
+
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .body-content {
+        width: 100%;
+    }
+    .form-control {
+        width: 100%;
+    }
+    .share-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    .share-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* Responsive Styles */
+@media(max-width:576px) {
+    .header-containt, .body-containt, .sidebar-menu {
+        flex-direction: column;
+    }
+    .btn-responsive {
+        font-size: 16px;
+    }
+}
+
+
+
