@@ -112,9 +112,7 @@ exports.getUserTicketReferralList = async (req, res, next) => {
     });
 
     // Step 4: Classify referred users into three categories
-    const notActivatedUsers = [];
-    const activeButNotCompletedUsers = [];
-    const completedUsers = [];
+    const referredUsersInfo = [];
 
     // Step 5: Iterate over each ReferredUser to get the associated User information
     for (const referredUser of referredUsers) {
@@ -137,36 +135,12 @@ exports.getUserTicketReferralList = async (req, res, next) => {
         where: { UserId: referredUserInfo.id, TicketCardId: ticketCard.id },
       });
 
-      //console.log(userTicketCard);
-      // Categorize based on UserTicketCard status
-      if (!userTicketCard || !userTicketCard.isFundedFirst) {
-        // User who hasn't activated the wallet
-        notActivatedUsers.push({
-          candidateId: referredUserInfo.candidateId,
-          name: referredUserInfo.name,
-          email: referredUserInfo.email,
-          phone: referredUserInfo.phone,
-          ticketStatus: "Not Activated",
-        });
-      } else if (userTicketCard.isFundedFirst && !userTicketCard.isCompleted) {
-        // User with an active wallet but not yet completed
-        activeButNotCompletedUsers.push({
-          candidateId: referredUserInfo.candidateId,
-          name: referredUserInfo.name,
-          email: referredUserInfo.email,
-          phone: referredUserInfo.phone,
-          ticketStatus: "Active but Not Completed",
-        });
-      } else if (userTicketCard.isCompleted) {
-        // User with completed status
-        completedUsers.push({
-          candidateId: referredUserInfo.candidateId,
-          name: referredUserInfo.name,
-          email: referredUserInfo.email,
-          phone: referredUserInfo.phone,
-          ticketStatus: "Completed",
-        });
-      }
+      referredUsersInfo.push({
+        candidateId: referredUserInfo.candidateId,
+        name: referredUserInfo.name,
+        userTicketCard:userTicketCard,
+        d:34242
+      });
     }
 
     // Step 6: Respond with the categorized lists
@@ -175,11 +149,7 @@ exports.getUserTicketReferralList = async (req, res, next) => {
       userTicketCard,
       ticketCard,
       piggyBalance: piggyBox.piggyBalance,
-      usersLists: {
-        notActivatedUsers,
-        activeButNotCompletedUsers,
-        completedUsers,
-      },
+      usersLists: referredUsersInfo,
     });
   } catch (error) {
     console.error("Error fetching user ticket referral list:", error);
@@ -241,7 +211,7 @@ exports.activateTicketCard = async (req, res, next) => {
       { isFundedFirst: true, rechargeCount: userTicketCard.rechargeCount + 1 },
       { transaction }
     );
-
+    //console.log(userCurrentTicketCard);
     const piggybox = await Piggybox.findOne({ where: { UserId: userId } });
     if (!piggybox || piggybox.piggyBalance < ticketCard.price) {
       await transaction.commit();
@@ -274,8 +244,13 @@ exports.activateTicketCard = async (req, res, next) => {
       transaction,
       userCurrentTicketCard
     );
-    await updateBelowUserInfo(user, ticketTitle, transaction);
-
+    //console.log("FDFFFFFFFFFFFFFFFFFFFFFFFFF")
+    //console.log(userCurrentTicketCard);
+    //console.log("BELOW INFORMATION STUCK");
+    await updateBelowUserInfo(user, ticketTitle, transaction,userCurrentTicketCard,piggybox);
+    //console.log("LLLL");
+    //console.log("-------------------------")
+    //console.log(userCurrentTicketCard);
     await transaction.commit();
 
     sendDebitMessage(
@@ -382,14 +357,15 @@ async function updateTopUserInfo(
         referredUserTicketCard = await UserTicketCard.findOne({
           where: {
             UserId: referredUserInfo.id,
-            isFundedFirst: true,
-            isCompleted: false,
             TicketCardId: ticketCard.id,
           },
         });
       }
 
-      if (referredUserTicketCard) {
+      if (
+        referredUserTicketCard.completedCount <
+        referredUserTicketCard.rechargeCount
+      ) {
         activeReferredUsers.push(referredUserTicketCard);
       }
     }
@@ -406,7 +382,7 @@ async function updateTopUserInfo(
 
       const piggyBox = await Piggybox.findOne({
         where: { UserId: user.id },
-        transaction,
+      //  transaction,
       });
 
       const newPiggyBoxBalance =
@@ -449,7 +425,10 @@ async function updateTopUserInfo(
       );
 
       for (const referredUserTicket of oldestReferredUsers) {
-        await referredUserTicket.update({ isCompleted: true }, { transaction });
+        await referredUserTicket.update(
+          { completedCount: referredUserTicket.completedCount + 1 },
+          { transaction }
+        );
       }
 
       sendCreditMessage(
@@ -468,7 +447,7 @@ async function updateTopUserInfo(
   }
 }
 
-async function updateBelowUserInfo(user, ticketTitle, transaction) {
+async function updateBelowUserInfo(user, ticketTitle, transaction,currentUserTicketCard,currentUserPiggyBox) {
   try {
     const ticketCard = await TicketCard.findOne({
       where: { title: ticketTitle },
@@ -486,12 +465,7 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
 
     const activeReferredUsers = [];
     for (const referredUser of referredUsers) {
-      // const referral = await Referrals.findOne({
-      //   where: { id: referredUser.ReferralId },
-      // });
-
-      // if (!referral) continue;
-
+      
       const referredUserInfo = await User.findOne({
         where: { candidateId: referredUser.candidateId },
       });
@@ -501,13 +475,15 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
       const referredUserTicketCard = await UserTicketCard.findOne({
         where: {
           UserId: referredUserInfo.id,
-          isFundedFirst: true,
-          isCompleted: false,
           TicketCardId: ticketCard.id,
         },
       });
 
-      if (referredUserTicketCard) {
+       
+      if (referredUserTicketCard &&
+        referredUserTicketCard.completedCount <
+        referredUserTicketCard.rechargeCount
+      ) {
         activeReferredUsers.push(referredUserTicketCard);
       }
     }
@@ -515,10 +491,12 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
     // Step 4: Check if active referred users meet the threshold
     const activeReferredUserCount = activeReferredUsers.length;
     if (activeReferredUserCount >= SUBH_DHAN_LABH_USER_COUNT) {
+
+      await currentUserTicketCard.update({isTicketActive:false},{transaction})
       // Step 5: Set user's isTicketActive to false
       const userTicketCard = await UserTicketCard.findOne({
-        where: { UserId: user.id, ticketCardId: ticketCard.id },
-       // transaction,
+        where: { UserId: user.id, TicketCardId: ticketCard.id },
+        // transaction,
       });
 
       // Step 6: Update user piggyBox balance with calculated bonus
@@ -527,10 +505,7 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
         ticketCard.price *
         (SUBH_DHAN_LABH_PERCENTAGE_DISTRIBUTION / 100);
 
-      const piggyBox = await Piggybox.findOne({
-        where: { UserId: user.id },
-        //transaction,
-      });
+      const piggyBox = currentUserPiggyBox;
 
       const newPiggyBoxBalance =
         parseFloat(piggyBox.piggyBalance) + bonusAmount;
@@ -571,7 +546,10 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
       );
 
       for (const referredUserTicket of oldestReferredUsers) {
-        await referredUserTicket.update({ isCompleted: true }, { transaction });
+        await referredUserTicket.update(
+          { completedCount: referredUserTicket.completedCount + 1 },
+          { transaction }
+        );
       }
 
       // Step 9: Send a credit message to the user

@@ -125,15 +125,15 @@
                 </div></a
               >
               <a class="menu-item" href="/user/piggyBox/userActivity"
-              ><div class="sidebar-menu text-center">
-                <i class="fa-solid fa-user-check"></i> USER ACTIVITY
-              </div></a
-            >
-            <a class="menu-item" href="/user/subhDhanLabh/dashboard"
-              ><div class="sidebar-menu text-center">
-                <i class="fa-solid fa-user-group"></i> SHUBH DHAN LAABH
-              </div></a
-            >
+                ><div class="sidebar-menu text-center">
+                  <i class="fa-solid fa-user-check"></i> USER ACTIVITY
+                </div></a
+              >
+              <a class="menu-item" href="/user/subhDhanLabh/dashboard"
+                ><div class="sidebar-menu text-center">
+                  <i class="fa-solid fa-user-group"></i> SHUBH DHAN LAABH
+                </div></a
+              >
             </div>
           </div>
 
@@ -165,49 +165,14 @@
 
               <!-- Activate Button -->
               <button class="activate-button" onclick="confirmActivation()">
-                Activate Ticket Card
+                Activate Pool
               </button>
 
               <!-- User List Toggle Buttons -->
-              <div class="user-list-buttons">
-                <button
-                  onclick="showList('notActivatedUsers')"
-                  class="toggle-button"
-                >
-                  Initiated
-                </button>
-                <button
-                  onclick="showList('activeButNotCompletedUsers')"
-                  class="toggle-button"
-                >
-                  Pending
-                </button>
-                <button
-                  onclick="showList('completedUsers')"
-                  class="toggle-button"
-                >
-                  Completed
-                </button>
-              </div>
 
-              <!-- User Lists -->
-              <div id="notActivatedUsers" class="user-list">
-                <h4>Initiated Users</h4>
-                <ul id="initiated-users-list"></ul>
-              </div>
-
-              <div
-                id="activeButNotCompletedUsers"
-                class="user-list"
-                style="display: none"
-              >
-                <h4>Pending Users</h4>
-                <ul id="pending-users-list"></ul>
-              </div>
-
-              <div id="completedUsers" class="user-list" style="display: none">
-                <h4>Completed Users</h4>
-                <ul id="completed-users-list"></ul>
+              <div id="completedUsers" class="div-user-list">
+                <h4>Users Information</h4>
+                <ul id="users-list"></ul>
               </div>
             </div>
           </div>

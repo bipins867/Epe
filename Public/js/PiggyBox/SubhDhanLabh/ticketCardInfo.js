@@ -21,35 +21,44 @@ async function fetchTicketData(ticketTitle) {
 // Populate ticket and user data into the HTML
 function populateTicketData(data) {
   data = data.data;
+  const userTicketCard = data.userTicketCard;
+  const usersList = data.usersLists;
   document.getElementById(
     "ticket-title"
   ).textContent = `Ticket: ${data.ticketCard.title}`;
   document.getElementById("ticket-price").textContent = data.ticketCard.price;
-  document.getElementById("ticket-status").textContent = data.userTicketCard
-    .isTicketActive
-    ? "Active"
+  document.getElementById("ticket-status").textContent = userTicketCard
+    ? userTicketCard.isTicketActive
+      ? "Active"
+      : "Inactive"
     : "Inactive";
   document.getElementById("piggybox-balance").textContent =
     data.piggyBalance || 0;
-  document.getElementById("affiliated-bonus").textContent =
-    data.userTicketCard.affiliateBonus || 0;
+  document.getElementById("affiliated-bonus").textContent = userTicketCard
+    ? userTicketCard.affiliateBonus
+    : 0;
   document.getElementById("gold-bonus").textContent = "N/A";
 
-  populateUserList(data.usersLists.notActivatedUsers, "initiated-users-list");
-  populateUserList(
-    data.usersLists.activeButNotCompletedUsers,
-    "pending-users-list"
-  );
-  populateUserList(data.usersLists.completedUsers, "completed-users-list");
+  populateUserList(usersList, "users-list");
 }
 
 // Populate user list based on the status
 function populateUserList(users, listId) {
   const list = document.getElementById(listId);
   list.innerHTML = users
-    .map(
-      (user) => `<li>Customer ID: ${user.candidateId} | Name: ${user.name}</li>`
-    )
+    .map((user) => {
+      const userTicketCard = user.userTicketCard;
+
+      let rechargeCount = 0;
+      let completedCount = 0;
+
+      if (userTicketCard) {
+        rechargeCount = userTicketCard.rechargeCount;
+        completedCount = rechargeCount - userTicketCard.completedCount;
+      }
+
+      return `<li>Customer ID: ${user.candidateId} | Name: ${user.name}   | Pool purchase count: ${rechargeCount} | Pending Purchanse Count: ${completedCount}</li> `;
+    })
     .join("");
 }
 
@@ -75,10 +84,4 @@ async function activateTicketCard() {
   } catch (error) {
     handleErrors(error);
   }
-}
-// Show User List Based on Status
-function showList(status) {
-  const lists = document.querySelectorAll(".user-list");
-  lists.forEach((list) => (list.style.display = "none")); // Hide all lists
-  document.getElementById(status).style.display = "block"; // Show selected list
 }

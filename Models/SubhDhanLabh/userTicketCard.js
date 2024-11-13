@@ -18,10 +18,10 @@ const UserTicketCard = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-    isCompleted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
+    // isCompleted: {
+    //   type: DataTypes.BOOLEAN,
+    //   defaultValue: false,
+    // },
     rechargeCount: {
       type: DataTypes.INTEGER,
       allowNull: false,
