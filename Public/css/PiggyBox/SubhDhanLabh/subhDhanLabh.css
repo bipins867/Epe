@@ -64,6 +64,70 @@ a {
     border: #525253;
 }
 
+
+
+.ticket-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 2rem;
+    justify-items: center;
+  }
+  
+  .ticket-card {
+    text-align: center;
+    padding: 1rem;
+    width: 100%;
+    max-width: 200px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .ticket-card:hover {
+    transform: scale(1.05);
+    z-index: 1;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Individual Card Colors */
+  .bronze-card {
+    background-color: #cd7f32; /* Bronze color */
+  }
+  
+  .silver-card {
+    background-color: #c0c0c0; /* Silver color */
+  }
+  
+  .gold-card {
+    background-color: #ffd700; /* Gold color */
+  }
+  
+  .diamond-card {
+    background-color: #b9f2ff; /* Light blue for Diamond */
+    color: #333; /* Darker text color for readability */
+  }
+  
+  .platinum-card {
+    background-color: #e5e4e2; /* Platinum color */
+    color: #333; /* Darker text color for readability */
+  }
+  
+  /* Text Styling */
+  .ticket-card h3 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .ticket-card p {
+    margin: 0.5rem 0 0;
+    font-size: 1rem;
+  }
+  
+
 .footer-content {
     text-align: center;
     padding: 10px 0;
