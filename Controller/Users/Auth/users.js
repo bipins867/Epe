@@ -38,6 +38,26 @@ function generateRandomCandidateId() {
   // Combine both parts
   return letterPart + numberPart;
 }
+function generateRandomId() {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; // Only letters
+  const numbers = "0123456789"; // Only digits
+
+  let letterPart = "";
+  let numberPart = "";
+
+  // Generate the 5-letter part
+  for (let i = 0; i < 5; i++) {
+    letterPart += letters.charAt(Math.floor(Math.random() * letters.length));
+  }
+
+  // Generate the 5-digit part
+  for (let i = 0; i < 5; i++) {
+    numberPart += numbers.charAt(Math.floor(Math.random() * numbers.length));
+  }
+
+  // Combine both parts
+  return letterPart + numberPart;
+}
 
 exports.userSignUp = async (req, res, next) => {
   let transaction; // Start the transaction
@@ -99,7 +119,7 @@ exports.userSignUp = async (req, res, next) => {
     // Create a new referral for the new user with a UUID
     const newReferral = await Referrals.create(
       {
-        referralId: uuidv4(), // Generate a UUID for the referral ID
+        referralId: generateRandomId(), // Generate a UUID for the referral ID
         noOfReferrals: 0, // Initially 0
         pendingReferrals: 0, // Initially 0
         UserId: newUser.id, // Associate the referral with the new user
@@ -450,7 +470,6 @@ exports.activateUserAccount = async (req, res) => {
     });
   }
 };
-
 
 // exports.userOtpVerify = async (req, res, next) => {
 //   try {

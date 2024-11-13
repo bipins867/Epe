@@ -6,7 +6,8 @@ function setBackgroundColor () {
   const ticketTitle = document
     .getElementById("ticket-title")
     .innerText.toLowerCase(); // Convert to lowercase
-  console.log(ticketTitle)
+ 
+    
   // Function to set background color based on ticket title
   function setTicketBackground() {
     switch (ticketTitle) {
@@ -57,9 +58,11 @@ function populateTicketData(data) {
   data = data.data;
   const userTicketCard = data.userTicketCard;
   const usersList = data.usersLists;
+  let poolTitle=data.ticketCard.title;
+  poolTitle=poolTitle.toUpperCase()
   document.getElementById(
     "ticket-title"
-  ).textContent = `${data.ticketCard.title} POOL`;
+  ).textContent = `${poolTitle} POOL`;
   document.getElementById("ticket-price").textContent = parseFloat(data.ticketCard.price).toFixed(2);
   document.getElementById("ticket-status").textContent = userTicketCard
     ? userTicketCard.isTicketActive
