@@ -53,7 +53,7 @@ exports.getReferalInfo = async (req, res, next) => {
     let baseUrl;
 
     if (process.env.NODE_ENV === "testing") {
-      baseUrl = `http://localhost:3000/`;
+      baseUrl = `${process.env.HOSTNAME}3000/`;
     } else {
       baseUrl = `https://epeindia.in/`;
     }
