@@ -53,7 +53,7 @@ exports.savePaymentRequest = async function savePaymentRequest(
     saltKey = process.env.PHONE_PAY_TEST_SALT_KEY;
     merchantId = process.env.PHONE_PAY_TEST_MERCHANT_ID;
     saltIndex = process.env.PHONE_PAY_TEST_SALT_INDEX;
-    baseUrl = `http://localhost:${process.env.APP_PORT}`;
+    baseUrl = `${process.env.HOSTNAME}${process.env.APP_PORT}`;
   } else {
     apiUrl = process.env.PHONE_PAY_PRODUCTION_URL;
     saltKey = process.env.PHONE_PAY_PRODUCTION_SALT_KEY;
