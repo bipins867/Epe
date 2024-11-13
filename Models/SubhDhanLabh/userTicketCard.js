@@ -2,7 +2,6 @@ const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../../database"); // Make sure to replace with your actual sequelize instance
 // Replace with your actual sequelize instance
 
-
 const UserTicketCard = sequelize.define(
   "UserTicketCard",
   {
@@ -24,6 +23,11 @@ const UserTicketCard = sequelize.define(
       defaultValue: false,
     },
     rechargeCount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    completedCount: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,

@@ -192,137 +192,6 @@ exports.getUserTicketReferralList = async (req, res, next) => {
   }
 };
 
-exports.activateMultipleTimesTicketCard = async (req, res, next) => {
-  try {
-    // Step 1: Retrieve the user ID and ticket title from the request
-    const userId = req.user.id;
-    const { ticketTitle } = req.body;
-
-    // Step 2: Find the user's TicketCard by title
-    const ticketCard = await TicketCard.findOne({
-      where: { title: ticketTitle },
-    });
-    if (!ticketCard) {
-      return res
-        .status(404)
-        .json({ success: false, message: "TicketCard not found" });
-    }
-
-    // Step 3: Retrieve the UserTicketCard and check if it's already activated
-    const userTicketCard = await UserTicketCard.findOne({
-      where: { UserId: userId, TicketCardId: ticketCard.id },
-    });
-
-    if (!userTicketCard || !userTicketCard.isTicketActive) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "User must activate the ticket for the first time before re-activating.",
-      });
-    }
-
-    // Step 4: Get associated piggyBox and referral info
-    const piggyBox = await Piggybox.findOne({ where: { UserId: userId } });
-    const referralInfo = await Referrals.findOne({ where: { UserId: userId } });
-    if (!referralInfo) {
-      return res.status(404).json({
-        success: false,
-        message: "No referral information found for this user",
-      });
-    }
-
-    // Step 5: Get ReferredUsers who have funded but not completed their TicketCard
-    const referredUsers = await ReferredUser.findAll({
-      where: { ReferralId: referralInfo.id },
-      include: [{ model: User, as: "user" }],
-    });
-
-    const activeReferredUsers = [];
-    for (const referredUser of referredUsers) {
-      const referredUserInfo = referredUser.user;
-      if (!referredUserInfo) continue;
-
-      const referredUserTicketCard = await UserTicketCard.findOne({
-        where: {
-          UserId: referredUserInfo.id,
-          isFundedFirst: true,
-          isCompleted: false,
-          TicketCardId: ticketCard.id,
-        },
-      });
-
-      if (referredUserTicketCard) {
-        activeReferredUsers.push(referredUserTicketCard);
-      }
-    }
-
-    // Step 6: Calculate total group pairs
-    const userCount = activeReferredUsers.length;
-    const resultantUserCount = parseInt(userCount / SUBH_DHAN_LABH_USER_COUNT);
-    const requiredBalance = resultantUserCount * ticketCard.price;
-
-    // Step 7: Check if piggyBox balance is sufficient
-    if (piggyBox.piggyBalance < requiredBalance) {
-      return res.status(400).json({
-        success: false,
-        message: "Insufficient funds in PiggyBox to activate all TicketCards",
-      });
-    }
-
-    // Step 8: Begin transaction and update piggyBox balance
-    await sequelize.transaction(async (transaction) => {
-      // Deduct balance from piggyBox
-      const newPiggyBoxBalance = piggyBox.piggyBalance - requiredBalance;
-      await piggyBox.update(
-        { piggyBalance: newPiggyBoxBalance },
-        { transaction }
-      );
-
-      // Step 9: Create TransactionHistory entry with custom message
-      await TransactionHistory.create(
-        {
-          UserId: userId,
-          transactionType: "activation",
-          remark: `${ticketTitle} - Re-activating wallet as this ticket was previously activated.`,
-          credit: 0,
-          debit: requiredBalance,
-          balance: newPiggyBoxBalance,
-          merchantTransactionId: null,
-          merchantUserId: null,
-        },
-        { transaction }
-      );
-
-      // Step 10: Update UserTicketCard recharge count
-      await userTicketCard.update(
-        { rechargeCount: userTicketCard.rechargeCount + resultantUserCount },
-        { transaction }
-      );
-
-      // Step 11: Update the oldest referred users to complete status
-      const oldestReferredUsers = activeReferredUsers.slice(
-        0,
-        resultantUserCount * SUBH_DHAN_LABH_USER_COUNT
-      );
-      for (const referredUserTicket of oldestReferredUsers) {
-        await referredUserTicket.update({ isCompleted: true }, { transaction });
-      }
-    });
-
-    res.status(200).json({
-      success: true,
-      message:
-        "TicketCard re-activated successfully, and associated referred users updated.",
-    });
-  } catch (error) {
-    console.error("Error in activateForAllTicketCard:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to activate TicketCard for all referred users.",
-    });
-  }
-};
-
 exports.activateTicketCard = async (req, res, next) => {
   const { ticketTitle } = req.body;
   const userId = req.user.id;
@@ -649,7 +518,7 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
       // Step 5: Set user's isTicketActive to false
       const userTicketCard = await UserTicketCard.findOne({
         where: { UserId: user.id, ticketCardId: ticketCard.id },
-        transaction,
+       // transaction,
       });
 
       // Step 6: Update user piggyBox balance with calculated bonus
@@ -660,7 +529,7 @@ async function updateBelowUserInfo(user, ticketTitle, transaction) {
 
       const piggyBox = await Piggybox.findOne({
         where: { UserId: user.id },
-        transaction,
+        //transaction,
       });
 
       const newPiggyBoxBalance =
