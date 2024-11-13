@@ -45,7 +45,7 @@ exports.generateOtp = (min, max) => {
 };
 
 async function sendSms(mobileNumber, message) {
-  if (process.env.NODE_ENV !== "testing") {
+  if (process.env.SMS_ENV !== "testing") {
     const apikey = process.env.SMS_API_KEY;
     const senderid = process.env.SMS_SENDER_ID;
     const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${mobileNumber}&message=${message}&format=json`;
