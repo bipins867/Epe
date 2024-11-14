@@ -188,6 +188,12 @@ exports.activateTicketCard = async (req, res, next) => {
       return res.status(400).json({ message: "Ticket is already active." });
     }
 
+    //console.log(userCurrentTicketCard);
+    const piggybox = await Piggybox.findOne({ where: { UserId: userId } });
+    if (!piggybox || piggybox.piggyBalance < ticketCard.price) {
+      return res.status(400).json({ message: "Insufficient funds in wallet." });
+    }
+
     transaction = await sequelize.transaction();
 
     if (!userTicketCard) {
@@ -214,12 +220,6 @@ exports.activateTicketCard = async (req, res, next) => {
       },
       { transaction }
     );
-    //console.log(userCurrentTicketCard);
-    const piggybox = await Piggybox.findOne({ where: { UserId: userId } });
-    if (!piggybox || piggybox.piggyBalance < ticketCard.price) {
-      await transaction.commit();
-      return res.status(400).json({ message: "Insufficient funds in wallet." });
-    }
 
     const newPiggyBalance =
       parseFloat(piggybox.piggyBalance) - parseFloat(ticketCard.price);
@@ -515,8 +515,8 @@ async function updateBelowUserInfo(
 
       const newPiggyBoxBalance =
         parseFloat(piggyBox.piggyBalance) + bonusAmount;
-      
-        await piggyBox.update(
+
+      await piggyBox.update(
         { piggyBalance: newPiggyBoxBalance },
         { transaction }
       );
