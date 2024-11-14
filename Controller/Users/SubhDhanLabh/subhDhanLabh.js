@@ -138,8 +138,7 @@ exports.getUserTicketReferralList = async (req, res, next) => {
       referredUsersInfo.push({
         candidateId: referredUserInfo.candidateId,
         name: referredUserInfo.name,
-        userTicketCard:userTicketCard,
-        d:34242
+        userTicketCard: userTicketCard,
       });
     }
 
@@ -208,7 +207,11 @@ exports.activateTicketCard = async (req, res, next) => {
     }
 
     const userCurrentTicketCard = await userTicketCard.update(
-      { isFundedFirst: true, rechargeCount: userTicketCard.rechargeCount + 1 },
+      {
+        isFundedFirst: true,
+        rechargeCount: userTicketCard.rechargeCount + 1,
+        isTicketActive: true,
+      },
       { transaction }
     );
     //console.log(userCurrentTicketCard);
@@ -220,8 +223,8 @@ exports.activateTicketCard = async (req, res, next) => {
 
     const newPiggyBalance =
       parseFloat(piggybox.piggyBalance) - parseFloat(ticketCard.price);
+
     await piggybox.update({ piggyBalance: newPiggyBalance }, { transaction });
-    await userTicketCard.update({ isTicketActive: true }, { transaction });
 
     const thistory = await TransactionHistory.create(
       {
@@ -247,7 +250,13 @@ exports.activateTicketCard = async (req, res, next) => {
     //console.log("FDFFFFFFFFFFFFFFFFFFFFFFFFF")
     //console.log(userCurrentTicketCard);
     //console.log("BELOW INFORMATION STUCK");
-    await updateBelowUserInfo(user, ticketTitle, transaction,userCurrentTicketCard,piggybox);
+    await updateBelowUserInfo(
+      user,
+      ticketTitle,
+      transaction,
+      userCurrentTicketCard,
+      piggybox
+    );
     //console.log("LLLL");
     //console.log("-------------------------")
     //console.log(userCurrentTicketCard);
@@ -382,7 +391,7 @@ async function updateTopUserInfo(
 
       const piggyBox = await Piggybox.findOne({
         where: { UserId: user.id },
-      //  transaction,
+        //  transaction,
       });
 
       const newPiggyBoxBalance =
@@ -447,7 +456,13 @@ async function updateTopUserInfo(
   }
 }
 
-async function updateBelowUserInfo(user, ticketTitle, transaction,currentUserTicketCard,currentUserPiggyBox) {
+async function updateBelowUserInfo(
+  user,
+  ticketTitle,
+  transaction,
+  currentUserTicketCard,
+  currentUserPiggyBox
+) {
   try {
     const ticketCard = await TicketCard.findOne({
       where: { title: ticketTitle },
@@ -465,7 +480,6 @@ async function updateBelowUserInfo(user, ticketTitle, transaction,currentUserTic
 
     const activeReferredUsers = [];
     for (const referredUser of referredUsers) {
-      
       const referredUserInfo = await User.findOne({
         where: { candidateId: referredUser.candidateId },
       });
@@ -479,10 +493,10 @@ async function updateBelowUserInfo(user, ticketTitle, transaction,currentUserTic
         },
       });
 
-       
-      if (referredUserTicketCard &&
+      if (
+        referredUserTicketCard &&
         referredUserTicketCard.completedCount <
-        referredUserTicketCard.rechargeCount
+          referredUserTicketCard.rechargeCount
       ) {
         activeReferredUsers.push(referredUserTicketCard);
       }
@@ -491,14 +505,6 @@ async function updateBelowUserInfo(user, ticketTitle, transaction,currentUserTic
     // Step 4: Check if active referred users meet the threshold
     const activeReferredUserCount = activeReferredUsers.length;
     if (activeReferredUserCount >= SUBH_DHAN_LABH_USER_COUNT) {
-
-      await currentUserTicketCard.update({isTicketActive:false},{transaction})
-      // Step 5: Set user's isTicketActive to false
-      const userTicketCard = await UserTicketCard.findOne({
-        where: { UserId: user.id, TicketCardId: ticketCard.id },
-        // transaction,
-      });
-
       // Step 6: Update user piggyBox balance with calculated bonus
       const bonusAmount =
         SUBH_DHAN_LABH_USER_COUNT *
@@ -509,16 +515,17 @@ async function updateBelowUserInfo(user, ticketTitle, transaction,currentUserTic
 
       const newPiggyBoxBalance =
         parseFloat(piggyBox.piggyBalance) + bonusAmount;
-      await piggyBox.update(
+      
+        await piggyBox.update(
         { piggyBalance: newPiggyBoxBalance },
         { transaction }
       );
 
-      await userTicketCard.update(
+      await currentUserTicketCard.update(
         {
           isTicketActive: false,
           affiliateBonus:
-            parseFloat(userTicketCard.affiliateBonus) + bonusAmount,
+            parseFloat(currentUserTicketCard.affiliateBonus) + bonusAmount,
         },
         { transaction }
       );
