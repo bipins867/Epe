@@ -11,16 +11,15 @@ const geoip = require("geoip-lite");
 const { setupRoutes } = require("./Routes/setupRoutes");
 const db = require("./database");
 const infoRoutes=require('./infoRoutes')
-//const { sendOtp, sendKycSuccessfullMessage, sendRewardMessage, sendCreditMessage, sendDebitMessage } = require("./Utils/MailService");
+//const {  sendKycSuccessfullMessage, sendRewardMessage, sendCreditMessage, sendDebitMessage } = require("./Utils/MailService");
 
 require("./Models/setModels");
 require("./Server-Socket/server");
 require("./cronTimerFunctionController");
 
-//sendOtp(6393070710,5555)
-//sendKycSuccessfullMessage(6393070710)
-//sendRewardMessage(6393070710,500)
-//sendCreditMessage(6393070710,100,123456,'REF556',600)
+// sendKycSuccessfullMessage(6393070710)
+// sendRewardMessage(6393070710,500)
+// sendCreditMessage(6393070710,100,123456,'REF556',600)
 //sendDebitMessage(6393070710,100,123456,'REF1234',600)
 
 // Just check

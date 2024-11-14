@@ -48,12 +48,18 @@ async function sendSms(mobileNumber, message) {
   if (process.env.SMS_ENV !== "testing") {
     const apikey = process.env.SMS_API_KEY;
     const senderid = process.env.SMS_SENDER_ID;
-    const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${mobileNumber}&message=${message}&format=json`;
-    const response = await axios.get(url);
-    // console.log(url)
-    // console.log("*************")
-    // console.log(response.data);
-    return response;
+    try {
+      const url = `http://text.instavaluesms.in/V2/http-api.php?apikey=${apikey}&senderid=${senderid}&number=${mobileNumber}&message=${message}&format=json`;
+      const response = await axios.get(url);
+      const res = response.data;
+      if (res.status !== "OK") {
+        console.log("SMS API Error Response: ",res.message);
+      }
+      return response;
+    } catch (e) {
+      
+      console.log("Error in sending SMS :- ", e.toString());
+    }
   }
 }
 
