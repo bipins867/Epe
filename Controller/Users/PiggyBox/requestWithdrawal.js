@@ -1,4 +1,4 @@
-const { Sequelize } = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
 const UserKyc = require("../../../Models/Kyc/userKyc");
 const BankDetails = require("../../../Models/PiggyBox/bankDetails");
 const Piggybox = require("../../../Models/PiggyBox/piggyBox");
@@ -27,7 +27,7 @@ function generateRandomRequestId() {
   // Combine both parts
   return letterPart + numberPart;
 }
-exports.generateRandomRequestId=generateRandomRequestId;
+exports.generateRandomRequestId = generateRandomRequestId;
 
 exports.requestWithdrawalInfo = async (req, res, next) => {
   try {
@@ -77,17 +77,15 @@ exports.requestWithdrawalInfo = async (req, res, next) => {
 exports.requestForWithdrawal = async (req, res, next) => {
   const { amount, userRemark } = req.body; // Extract amount and user remark from the request body
   const userId = req.user.id; // Get the user ID from the request
-  const user=req.user;
+  const user = req.user;
   // Start a Sequelize transaction
   let transaction;
 
   try {
-
-    
     // Step 1: Check if KYC agreement is accepted
     const userKyc = await UserKyc.findOne({
       where: { customerId: req.user.candidateId }, // Use candidateId to find user KYC
-     // transaction,
+      // transaction,
     });
 
     if (!userKyc || !userKyc.userAggreementAccepted) {
@@ -113,17 +111,22 @@ exports.requestForWithdrawal = async (req, res, next) => {
     // Step 3: Check the user's piggybox balance
     const piggyBox = await Piggybox.findOne({
       where: { UserId: userId }, // Fetch the user's piggybox
-     // transaction,
+      // transaction,
     });
 
     if (!piggyBox) {
-     // await transaction.rollback();
+      // await transaction.rollback();
       return res.status(400).json({ message: "PiggyBox not found." });
     }
 
     const pendingWithdrawals = await RequestWithdrawal.findOne({
-      where: { UserId: user.id, status: "pending" },
-      //   transaction,
+      where: {
+        UserId: user.id,
+        status: {
+          [Op.or]: ["pending", "locked"], // Checks for status 'pending' or 'locked'
+        },
+      },
+      // transaction, (uncomment if using a transaction)
     });
 
     if (pendingWithdrawals) {
@@ -146,8 +149,7 @@ exports.requestForWithdrawal = async (req, res, next) => {
     if (remainingBalance < MINIMUM_AMOUNT_IN_ACCOUNT) {
       //await transaction.rollback();
       return res.status(400).json({
-        message:
-          `Insufficient funds. Minimum balance of ${MINIMUM_AMOUNT_IN_ACCOUNT} must be maintained after withdrawal.`,
+        message: `Insufficient funds. Minimum balance of ${MINIMUM_AMOUNT_IN_ACCOUNT} must be maintained after withdrawal.`,
       });
     }
 
@@ -201,7 +203,7 @@ exports.requestForWithdrawal = async (req, res, next) => {
         requestDate: new Date(), // Current date and time for the request
         amount,
         userRemark: userRemark || null, // User remark can be optional
-        status: "Pending", // Initial status for the withdrawal request
+        status: "pending", // Initial status for the withdrawal request
         UserId: userId,
         candidateId: req.user.candidateId,
         phone: req.user.phone, // Associate with the user
@@ -233,23 +235,34 @@ exports.requestForWithdrawal = async (req, res, next) => {
 // Controller to handle the cancellation of a pending withdrawal request
 exports.requestForCancelWithdrawal = async (req, res, next) => {
   const userId = req.user.id; // Get the user ID from the request
-  const user=req.user;
+  const user = req.user;
   // Start a Sequelize transaction
   let transaction;
 
   try {
+    const lockedWithdrawalRequest = await RequestWithdrawal.findOne({
+      where: { UserId: userId, status: "locked" },
+    });
 
-    
+    if (lockedWithdrawalRequest) {
+      return res
+        .status(402)
+        .json({
+          success: false,
+          message: "Can't cancel the locked Withdrawal Request.",
+        });
+    }
+
     // Step 1: Fetch the recent withdrawal request with a "pending" status
     const recentWithdrawalRequest = await RequestWithdrawal.findOne({
-      where: { UserId: userId, status: 'pending' },
+      where: { UserId: userId, status: "pending" },
     });
 
     if (!recentWithdrawalRequest) {
       // If no pending request is found, return an error response
       return res.status(404).json({
         success: false,
-        message: 'No pending withdrawal request found for cancellation.',
+        message: "No pending withdrawal request found for cancellation.",
       });
     }
 
@@ -259,12 +272,14 @@ exports.requestForCancelWithdrawal = async (req, res, next) => {
     const piggyBox = await Piggybox.findOne({ where: { UserId: userId } });
 
     if (!piggyBox) {
-      return res.status(400).json({ message: 'PiggyBox not found.' });
+      return res.status(400).json({ message: "PiggyBox not found." });
     }
 
     // Use parseFloat to handle balance calculations
-    const updatedPiggyBalance = parseFloat(piggyBox.piggyBalance) + parseFloat(amount);
-    const updatedUnclearedBalance = parseFloat(piggyBox.unclearedBalance) - parseFloat(amount);
+    const updatedPiggyBalance =
+      parseFloat(piggyBox.piggyBalance) + parseFloat(amount);
+    const updatedUnclearedBalance =
+      parseFloat(piggyBox.unclearedBalance) - parseFloat(amount);
 
     // Step 3: Start a transaction for atomic operations
     transaction = await sequelize.transaction();
@@ -284,8 +299,8 @@ exports.requestForCancelWithdrawal = async (req, res, next) => {
     // Step 4: Create a new TransactionHistory entry for the cancellation
     await TransactionHistory.create(
       {
-        transactionType: 'withdrawal',
-        remark: 'User Withdrawal Cancelled',
+        transactionType: "withdrawal",
+        remark: "User Withdrawal Cancelled",
         credit: amount, // Refund the withdrawn amount
         debit: 0,
         balance: updatedPiggyBalance,
@@ -296,7 +311,7 @@ exports.requestForCancelWithdrawal = async (req, res, next) => {
 
     // Step 5: Update the withdrawal request status to "canceled"
     await RequestWithdrawal.update(
-      { status: 'canceled' },
+      { status: "canceled" },
       {
         where: { id: recentWithdrawalRequest.id },
         transaction,
@@ -309,7 +324,7 @@ exports.requestForCancelWithdrawal = async (req, res, next) => {
     // Return success response
     return res.status(200).json({
       success: true,
-      message: 'Withdrawal request has been successfully canceled.',
+      message: "Withdrawal request has been successfully canceled.",
       newBalance: updatedPiggyBalance,
       requestId: recentWithdrawalRequest.requestId,
     });
@@ -319,9 +334,10 @@ exports.requestForCancelWithdrawal = async (req, res, next) => {
       await transaction.rollback();
     }
 
-    console.error('Error while cancelling withdrawal request:', err);
-    return res
-      .status(500)
-      .json({ success: false, message: 'Internal server error. Please try again later.' });
+    console.error("Error while cancelling withdrawal request:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error. Please try again later.",
+    });
   }
 };
