@@ -371,7 +371,7 @@ async function updateTopUserInfo(
         });
       }
 
-      if (
+      if (referredUserTicketCard &&
         referredUserTicketCard.completedCount <
         referredUserTicketCard.rechargeCount
       ) {
