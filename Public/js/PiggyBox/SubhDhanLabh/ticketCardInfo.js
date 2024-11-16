@@ -11,6 +11,12 @@ function setBackgroundColor () {
   // Function to set background color based on ticket title
   function setTicketBackground() {
     switch (ticketTitle) {
+      case "stone pool":
+        ticketInfo.style.backgroundColor = "#8C8C8C"; // Stone color
+        break;
+      case "iron pool":
+        ticketInfo.style.backgroundColor = "#3A3A3A"; // Iron color
+        break;
       case "bronze pool":
         ticketInfo.style.backgroundColor = "#cd7f32"; // Bronze color
         break;

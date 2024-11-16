@@ -81,7 +81,7 @@ a {
     max-width: 200px;
     border-radius: 8px;
     text-decoration: none;
-    color: #333;
+    color: #000000;
     font-weight: bold;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -94,6 +94,14 @@ a {
   }
   
   /* Individual Card Colors */
+  .stone-card {
+    background-color: #8C8C8C; /* Stone color */
+  }
+
+  .iron-card {
+    background-color: #690000; /* Iron color */
+  }
+
   .bronze-card {
     background-color: #cd7f32; /* Bronze color */
   }
