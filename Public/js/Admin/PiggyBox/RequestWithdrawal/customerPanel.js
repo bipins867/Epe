@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           bankDetails.ifscCode || "N/A";
       }
 
+      console.log(withdrawals);
       // Update pending withdrawal request if available
       if (withdrawals.pending.length > 0) {
         const pendingRequest = withdrawals.pending[0]; // Assuming there's only one pending request

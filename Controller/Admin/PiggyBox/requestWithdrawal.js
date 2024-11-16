@@ -3,7 +3,6 @@ const BankDetails = require("../../../Models/PiggyBox/bankDetails");
 const Piggybox = require("../../../Models/PiggyBox/piggyBox");
 const RequestWithdrawal = require("../../../Models/PiggyBox/requestWithdrawal");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
-const AdminActivity = require("../../../Models/User/adminActivity");
 const User = require("../../../Models/User/users");
 const { sendDebitMessage } = require("../../../Utils/MailService");
 const {
@@ -137,10 +136,10 @@ exports.getCustomerInformation = async (req, res, next) => {
 
       // Separate pending and non-pending requests
       pendingWithdrawals = withdrawalRequests.filter(
-        (req) => req.status === "Pending"
+        (req) => req.status === "pending"
       );
       nonPendingWithdrawals = withdrawalRequests.filter(
-        (req) => req.status !== "Pending"
+        (req) => req.status !== "pending"
       );
     }
     // If user requested closure, only return non-pending withdrawal requests
@@ -182,6 +181,7 @@ exports.getCustomerInformation = async (req, res, next) => {
 
 //Status update --
 exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
+  
   const { candidateId, status, adminRemark, requestId } = req.body;
 
   let transaction; // Start a new transaction
@@ -219,63 +219,50 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
     // Fetch the withdrawal request by requestId
     const withdrawalRequest = await RequestWithdrawal.findOne({
       where: { requestId: requestId, UserId: user.id },
-      // transaction, // Use the transaction
     });
 
-    // Check if the withdrawal request exists and is pending
+    // Check if the withdrawal request exists
     if (!withdrawalRequest) {
       return res.status(404).json({
         success: false,
-        message: "Pending Withdrawal request not found.",
+        message: "Withdrawal request not found.",
       });
     }
-    if (withdrawalRequest.status !== "Pending") {
+    if (
+      withdrawalRequest.status !== "pending" &&
+      withdrawalRequest.status !== "locked"
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Pending Withdrawal request not found.",
+        message: "Withdrawal request not in a modifiable state.",
       });
     }
 
     // Fetch the PiggyBox associated with the user
     const piggyBox = await Piggybox.findOne({
       where: { UserId: user.id },
-      //transaction,
     });
 
     transaction = await sequelize.transaction();
 
-    // Proceed based on the request status (Approved or Rejected)
+    // Proceed based on the request status (Approved, Rejected, or Locked)
     if (status === "Approved") {
-      // Deduct the amount from the unclearedBalance
       const amount = parseFloat(withdrawalRequest.amount);
       piggyBox.unclearedBalance -= amount;
 
-      // Update the withdrawal request status
       withdrawalRequest.status = "Approved";
 
-      // Fetch the most recent TransactionHistory entry of type 'withdrawal'
+      // Update the most recent transaction
       const recentWithdrawalTransaction = await TransactionHistory.findOne({
         where: { UserId: user.id, transactionType: "withdrawal" },
-        order: [["createdAt", "DESC"]], // Get the most recent transaction
-        //transaction, // Use the transaction
+        order: [["createdAt", "DESC"]],
       });
 
-      // Update the remark of the most recent transaction
       if (recentWithdrawalTransaction) {
         recentWithdrawalTransaction.remark =
           "User withdrawal request approved by Admin";
         await recentWithdrawalTransaction.save({ transaction });
       }
-
-      // Create a new TransactionHistory entry for the current withdrawal request
-
-      const transactionHistory = await TransactionHistory.findOne({
-        where: { UserId: user.id, transactionType: "withdrawal" },
-        order: [["createdAt", "DESC"]],
-      });
-      transactionHistory.remark = "	User withdrawal request approved by Admin";
-
-      await transactionHistory.update({ transaction });
 
       await createAdminActivity(
         req,
@@ -297,36 +284,34 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
         }`,
         transaction
       );
+
       sendDebitMessage(
         user.phone,
         amount.toFixed(2),
         user.candidateId,
-        `WID-35${transactionHistory.id}`,
+        `WID-35${recentWithdrawalTransaction?.id}`,
         piggyBox.piggyBalance.toFixed(2)
       );
     } else if (status === "Rejected") {
-      // Add the amount back to the piggyBalance
       const amount = parseFloat(withdrawalRequest.amount);
-      piggyBox.unclearedBalance -= amount; // Deduct from unclearedBalance
-      piggyBox.piggyBalance += amount; // Add to piggyBalance
+      piggyBox.unclearedBalance -= amount;
+      piggyBox.piggyBalance += amount;
 
-      // Create a TransactionHistory entry for rejection
       await TransactionHistory.create(
         {
           transactionType: "withdrawal",
           remark: "User withdrawal rejected",
           debit: 0,
           credit: amount,
-          balance: piggyBox.piggyBalance, // Updated balance
+          balance: piggyBox.piggyBalance,
           UserId: user.id,
         },
         { transaction }
       );
 
-      // Update the withdrawal request status
       withdrawalRequest.status = "Rejected";
       withdrawalRequest.adminRemark = adminRemark;
-      withdrawalRequest.userRemark = `Admin :- ${adminRemark}`;
+      withdrawalRequest.userRemark = `Admin: ${adminRemark}`;
 
       await createAdminActivity(
         req,
@@ -345,15 +330,27 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
         "adminUpdate",
         `Withdrawal request rejected. Amount: ${amount.toFixed(2)}. By Admin: ${
           req.admin.userName
-        }. Admin Remark :- ${adminRemark}`,
+        }. Admin Remark: ${adminRemark}`,
+        transaction
+      );
+    } else if (status === "Locked") {
+      withdrawalRequest.status = "Locked";
+      withdrawalRequest.adminRemark = adminRemark;
+
+      await createAdminActivity(
+        req,
+        req.admin,
+        "requestWithdrawal",
+        `Locked withdrawal request for user ${user.candidateId}. Admin Remark: ${adminRemark}`,
+        user.candidateId,
         transaction
       );
     }
 
     // Save changes to the database
     await Promise.all([
-      withdrawalRequest.save({ transaction }), // Save the updated withdrawal request
-      piggyBox.save({ transaction }), // Save the updated piggyBox
+      withdrawalRequest.save({ transaction }),
+      piggyBox.save({ transaction }),
     ]);
 
     // Commit the transaction
@@ -365,7 +362,6 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
       message: `Withdrawal request ${status.toLowerCase()} successfully.`,
     });
   } catch (error) {
-    // Rollback transaction in case of error
     if (transaction) {
       await transaction.rollback();
     }
@@ -373,6 +369,65 @@ exports.updateCustomerWithdrawalStatus = async (req, res, next) => {
     res.status(500).json({
       success: false,
       message: "Server error while processing withdrawal request.",
+    });
+  }
+};
+
+exports.lockPendingWithdrawalRequests = async (req, res, next) => {
+  let transaction;
+
+  try {
+    // Fetch all pending withdrawal requests
+    const pendingWithdrawals = await RequestWithdrawal.findAll({
+      where: { status: "Pending" },
+    });
+
+    // If no pending withdrawals, return a response
+    if (pendingWithdrawals.length === 0) {
+      return res.status(200).json({
+        success: true,
+        message: "No pending withdrawal requests found to lock.",
+      });
+    }
+
+    transaction = await sequelize.transaction();
+    // Update the status of all pending withdrawals to "Locked"
+    await Promise.all(
+      pendingWithdrawals.map(async (withdrawal) => {
+        withdrawal.status = "Locked";
+        await withdrawal.save({ transaction });
+
+        // Create an admin activity for each locked request
+        await createAdminActivity(
+          req,
+          req.admin,
+          "requestWithdrawal",
+          `Locked withdrawal request for user ${withdrawal.UserId}. Request ID: ${withdrawal.requestId}`,
+          withdrawal.UserId,
+          transaction
+        );
+      })
+    );
+
+    // Commit the transaction
+    await transaction.commit();
+
+    // Send success response
+    res.status(200).json({
+      success: true,
+      message: `${pendingWithdrawals.length} pending withdrawal requests locked successfully.`,
+    });
+  } catch (error) {
+    // Rollback the transaction in case of errors
+    if (transaction) {
+      await transaction.rollback();
+    }
+
+    console.error("Error locking pending withdrawal requests:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server error while locking pending withdrawal requests.",
     });
   }
 };
