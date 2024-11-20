@@ -15,7 +15,7 @@ function setBackgroundColor () {
         ticketInfo.style.backgroundColor = "#8C8C8C"; // Stone color
         break;
       case "iron pool":
-        ticketInfo.style.backgroundColor = "#3A3A3A"; // Iron color
+        ticketInfo.style.backgroundColor = "#690000"; // Iron color
         break;
       case "bronze pool":
         ticketInfo.style.backgroundColor = "#cd7f32"; // Bronze color

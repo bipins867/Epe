@@ -28,6 +28,10 @@
     transform: scale(1.02);
 }
 
+.admin{
+    width: 780px;
+}
+
 .dashboard-body {
     background: #EEEEEE;
     padding-top: 20px;
