@@ -1,13 +1,15 @@
 const express=require('express')
-const getRouter=require('./getRouter')
-const postRouter=require('./postRouter');
-const { adminAuthentication, roleAuthentication } = require('../../../../Middleware/auth');
-const { contactUsRole } = require('../../../../Middleware/role');
 
+const contactUsController=require('../../../../Controller/Admin/Basic/contactUs')
 
 const router=express.Router();
 
-router.use('/post',adminAuthentication,contactUsRole,roleAuthentication,postRouter)
-router.use('/',getRouter)
+router.post('/getCounts',contactUsController.getContactUsCounts)
+router.post('/getPendingList',contactUsController.getPendingContactUs)
+router.post('/contactUsInfo/:id',contactUsController.getContactUsInfo)
+router.post('/getClosedList',contactUsController.getClosedContactUs)
+router.post('/addAdminRemark/:id',contactUsController.addRemarkContactUs)
+
+
 
 module.exports=router;

@@ -1,13 +1,15 @@
 const express=require('express')
-const getRouter=require('./getRouter')
-const postRouter=require('./postRouter');
-const { adminAuthentication, roleAuthentication } = require('../../../../Middleware/auth');
-const { applyLoanRole } = require('../../../../Middleware/role');
+
+const applyLoanController=require('../../../../Controller/Admin/Basic/applyLoan')
 
 
 const router=express.Router();
 
-router.use('/post',adminAuthentication,applyLoanRole,roleAuthentication,postRouter)
-router.use('/',getRouter)
+
+router.post('/getCounts',applyLoanController.getApplyLoanCounts)
+router.post('/getPendingList',applyLoanController.getPendingApplyLoan)
+router.post('/applyLoanInfo/:id',applyLoanController.getApplyLoanInfo)
+router.post('/getClosedList',applyLoanController.getClosedApplyLoan)
+router.post('/addAdminRemark/:id',applyLoanController.addRemarkApplyLoan)
 
 module.exports=router;
