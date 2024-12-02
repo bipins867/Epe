@@ -262,8 +262,7 @@ exports.getUserInfo = async (req, res, next) => {
 };
 
 exports.changeUserPassword = async (req, res, next) => {
-  const { phone } = req.payload;
-  const { password } = req.body;
+  const { password, phone } = req.body;
 
   let transaction;
 
