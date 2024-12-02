@@ -1,7 +1,7 @@
 
 const express=require('express')
 
-const getRouter=require('./getRouter')
+
 const postRouter=require('./postRouter');
 
 const kitRouter=require('./Kit/kit')
@@ -25,7 +25,7 @@ router.use('/settlement',settlementRouter)
 router.use('/transferMoney',transferMoneyRouter)
 router.use('/userActivity',userActivityRouter)
 
-router.use('/post',postRouter);
-router.use('/',getRouter)
+router.use('/',postRouter);
+
 
 module.exports=router;
