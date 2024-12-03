@@ -1,12 +1,19 @@
 const express = require("express");
 
-const getRouter = require("./getRouter");
-const postRouter = require("./postRouter");
-const { userAuthentication } = require("../../../Middleware/auth");
+const subhDhanLabhController = require("../../../Controller/Users/SubhDhanLabh/subhDhanLabh");
 
 const router = express.Router();
 
-router.use("/post", userAuthentication, postRouter);
-router.use("/", getRouter);
+router.get("/ticketCardLists", subhDhanLabhController.getTicketCardList);
+router.get("/userTicketInfo", subhDhanLabhController.getUserTicketInfo);
+router.post(
+  "/getUserTicketReferral",
+  subhDhanLabhController.getUserTicketReferralList
+);
+router.post("/activateTicketCard", subhDhanLabhController.activateTicketCard);
+// router.post(
+//   "/activateMultipleTimesTicketCard",
+//   subhDhanLabhController.activateMultipleTimesTicketCard
+// );
 
 module.exports = router;
