@@ -1,13 +1,11 @@
+const express = require("express");
 
-const express=require('express')
+const requestWithdrawalController=require('../../../../Controller/Users/PiggyBox/requestWithdrawal');
+const { userInfoVerification } = require("../../../../Middleware/auth");
 
-const getRouter=require('./getRouter')
-const postRouter=require('./postRouter');
-const { userAuthentication } = require('../../../../Middleware/auth');
+const router = express.Router();
 
-const router=express.Router();
-
-router.use('/post',userAuthentication,postRouter);
-router.use('/',getRouter)
-
-module.exports=router;
+router.post('/withdrawalInfo',requestWithdrawalController.requestWithdrawalInfo)
+router.post('/addWithdrawalRequest',userInfoVerification,requestWithdrawalController.requestForWithdrawal)
+router.post('/cancelWithdrawalRequest',userInfoVerification,requestWithdrawalController.requestForCancelWithdrawal)
+module.exports = router;

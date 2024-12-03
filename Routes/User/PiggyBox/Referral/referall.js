@@ -1,13 +1,11 @@
+const express = require("express");
 
-const express=require('express')
+const referralController=require('../../../../Controller/Users/PiggyBox/referral');
+const { userAuthentication } = require("../../../../Middleware/auth");
 
-const getRouter=require('./getRouter')
-const postRouter=require('./postRouter');
-const { userAuthentication } = require('../../../../Middleware/auth');
+const router = express.Router();
 
-const router=express.Router();
+router.post('/userReferralInfo',referralController.getUserReferallInfo)
+router.post('/referralInfo',userAuthentication,referralController.getReferalInfo)
 
-router.use('/post',postRouter);
-router.use('/',getRouter)
-
-module.exports=router;
+module.exports = router;

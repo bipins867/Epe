@@ -19,7 +19,7 @@ const router=express.Router();
 
 router.use('/kit',kitRouter)
 router.use('/referral',referralRouter)
-router.use('/requestWithdrawal',requestWithdrawalRouter)
+router.use('/requestWithdrawal',userAuthentication,requestWithdrawalRouter)
 router.use('/savedAddress',savedAddressRouter)
 router.use('/settlement',settlementRouter)
 router.use('/transferMoney',transferMoneyRouter)
