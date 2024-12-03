@@ -1,13 +1,10 @@
+const express = require("express");
 
-const express=require('express')
+const userActivityController=require('../../../../Controller/Users/PiggyBox/userActivity');
+const { userAuthentication } = require("../../../../Middleware/auth");
 
-const getRouter=require('./getRouter')
-const postRouter=require('./postRouter');
-const { userAuthentication } = require('../../../../Middleware/auth');
+const router = express.Router();
 
-const router=express.Router();
+router.post('/getUserActivity',userAuthentication,userActivityController.getUserActivity)
 
-router.use('/post',userAuthentication,postRouter);
-router.use('/',getRouter)
-
-module.exports=router;
+module.exports = router;

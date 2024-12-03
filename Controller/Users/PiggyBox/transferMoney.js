@@ -37,7 +37,8 @@ exports.getTransferInfo = async (req, res, next) => {
 
     // Step 3: Prepare the response data
     const responseData = {
-      piggyBoxBalance: piggyBox.piggyBalance,
+      piggyBalance: piggyBox.piggyBalance,
+      unclearedBalance:piggyBox.unclearedBalance,
       kycStatus: userKyc ? userKyc.status : "Pending.", // You can customize what status to return if needed
       userKycAccepted: userKyc ? userKyc.userAggreementAccepted : false, // Check if KYC agreement is accepted
     };

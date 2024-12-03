@@ -1,13 +1,11 @@
+const express = require("express");
 
-const express=require('express')
+const settlementController=require('../../../../Controller/Users/PiggyBox/settlement');
+const { userInfoVerification } = require("../../../../Middleware/auth");
 
-const getRouter=require('./getRouter')
-const postRouter=require('./postRouter');
-const { userAuthentication } = require('../../../../Middleware/auth');
+const router = express.Router();
 
-const router=express.Router();
+router.post('/bankDetailsInfo',settlementController.getBankDetails)
+router.post('/updateBankDetails',userInfoVerification,settlementController.updateBankDetails)
 
-router.use('/post',userAuthentication,postRouter);
-router.use('/',getRouter)
-
-module.exports=router;
+module.exports = router;
