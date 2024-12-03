@@ -53,7 +53,7 @@ exports.savePaymentRequest = async function savePaymentRequest(
     saltKey = process.env.PHONE_PAY_TEST_SALT_KEY;
     merchantId = process.env.PHONE_PAY_TEST_MERCHANT_ID;
     saltIndex = process.env.PHONE_PAY_TEST_SALT_INDEX;
-    baseUrl = `${process.env.HOSTNAME_IP}${process.env.APP_PORT}`;
+    baseUrl = `http://localhost:4000`;
   } else {
     apiUrl = process.env.PHONE_PAY_PRODUCTION_URL;
     saltKey = process.env.PHONE_PAY_PRODUCTION_SALT_KEY;
@@ -69,8 +69,8 @@ exports.savePaymentRequest = async function savePaymentRequest(
     merchantUserId,
     merchantTransactionId,
     amount: amount * 100,
-    redirectUrl: `${baseUrl}/user/piggyBox/post/redirectedPaymentInfo/${merchantTransactionId}`,
-    redirectMode: "POST",
+    redirectUrl: `${baseUrl}/user/piggyBox/verifyTransaction/${merchantTransactionId}`,
+    redirectMode: "REDIRECT",
     callbackUrl: `${baseUrl}/user/piggyBox/post/callbackPaymentInfo/${merchantTransactionId}`,
     mobileNumber: mobile,
     paymentInstrument: { type: "PAY_PAGE" },

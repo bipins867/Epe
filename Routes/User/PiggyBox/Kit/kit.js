@@ -1,13 +1,10 @@
+const express = require("express");
 
-const express=require('express')
+const kitController=require('../../../../Controller/Users/PiggyBox/kit');
+const { userAuthentication } = require("../../../../Middleware/auth");
 
-const getRouter=require('./getRouter')
-const postRouter=require('./postRouter');
-const { userAuthentication } = require('../../../../Middleware/auth');
+const router = express.Router();
 
-const router=express.Router();
+router.post('/userInfo',userAuthentication,kitController.getUserInfo)
 
-router.use('/post',userAuthentication,postRouter);
-router.use('/',getRouter)
-
-module.exports=router;
+module.exports = router;
