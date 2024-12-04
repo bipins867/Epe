@@ -16,7 +16,7 @@ const UserKyc = sequelize.define(
     status: {
       type: Sequelize.STRING,
       allowNull: false,
-      default: "Pending",
+      default: "Initiated",
     },
     userUrl: {
       type: Sequelize.STRING,
@@ -38,6 +38,12 @@ const UserKyc = sequelize.define(
       type: Sequelize.STRING,
       allowNull: true, // Set to true if the URL is optional
     },
+    
+    panStatus: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      default: "Initiated",
+    },
     panNumber: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -49,9 +55,6 @@ const UserKyc = sequelize.define(
     panUrl: {
       type: Sequelize.STRING,
       allowNull: true, // Set to true if the URL is optional
-    },
-    adminMessage: {
-      type: Sequelize.STRING,
     },
     customerId: {
       type: Sequelize.STRING,
@@ -71,9 +74,33 @@ const UserKyc = sequelize.define(
     timeOfUserAggreementAccept: {
       type: Sequelize.STRING,
     },
-    officerId: {
+    adminIdForKyc: {
       type: Sequelize.STRING,
     },
+    
+    adminMessageForKyc: {
+      type: Sequelize.STRING,
+    },
+    adminIdForPan: {
+      type: Sequelize.STRING,
+    },
+    
+    adminMessageForPan: {
+      type: Sequelize.STRING,
+    },
+
+    kycVerificationCount:{
+      type:Sequelize.INTEGER,
+      defaultValue:0,
+      allowNull:false
+    },
+    panVerificationCount:{
+      type:Sequelize.INTEGER,
+      defaultValue:0,
+      allowNull:false
+    },
+    
+
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

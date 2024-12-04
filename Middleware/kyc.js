@@ -1,7 +1,7 @@
 const { check, validationResult } = require("express-validator");
 const multer = require("multer");
 // Manual file size validation middleware
-const fileSizeLimit = 20* 1024 * 1024; // 2MB in bytes
+const fileSizeLimit = 20 * 1024 * 1024; // 2MB in bytes
 
 exports.checkFileSize = (req, res, next) => {
   // Check if Content-Length header exists and is within the limit
@@ -55,13 +55,21 @@ exports.kycValidator = [
     .withMessage("Aadhar number must be 12 digits.")
     .isNumeric()
     .withMessage("Aadhar number must be numeric."),
+  // check("panNumber")
+  //   .isLength({ min: 10, max: 10 })
+  //   .withMessage("PAN number must be 10 characters.")
+  //   .matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/)
+  //   .withMessage("PAN number must be in a valid format (e.g., ABCDE1234F)."),
+  check("address").notEmpty().withMessage("Address is required."),
+  check("customerId").notEmpty().withMessage("Customer ID is required."),
+];
+
+exports.panValidator = [
   check("panNumber")
     .isLength({ min: 10, max: 10 })
     .withMessage("PAN number must be 10 characters.")
     .matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/)
     .withMessage("PAN number must be in a valid format (e.g., ABCDE1234F)."),
-  check("address").notEmpty().withMessage("Address is required."),
-  check("customerId").notEmpty().withMessage("Customer ID is required."),
 ];
 
 exports.validateKyc = (req, res, next) => {

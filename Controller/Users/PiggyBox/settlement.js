@@ -37,7 +37,6 @@ exports.updateBankDetails = async (req, res, next) => {
       // Update the existing bank details
       await existingBankDetails.update({
         bankName,
-        accountHolderName,
         accountNumber,
         ifscCode,
       });
@@ -62,7 +61,7 @@ exports.updateBankDetails = async (req, res, next) => {
       const newBankDetails = await BankDetails.create({
         UserId: req.user.id, // Associate with the user
         bankName,
-        accountHolderName,
+        accountHolderName:req.user.name,
         accountNumber,
         ifscCode,
       });

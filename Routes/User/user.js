@@ -14,7 +14,7 @@ const router=express.Router();
 router.use('/subhDhanLabh',userAuthentication,subhDhanLabhRouter)
 router.use('/piggyBox',piggyBoxRouter)
 router.use('/auth',authRouter)
-router.use('/kyc',kycRouter)
+router.use('/kyc',userAuthentication,kycRouter)
 router.use('/dashboard',dashboardRouter);
 
 module.exports=router;
