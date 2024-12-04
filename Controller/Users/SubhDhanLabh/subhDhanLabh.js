@@ -10,12 +10,14 @@ const ReferredUser = require("../../../Models/PiggyBox/referredUsers");
 const {
   SUBH_DHAN_LABH_USER_COUNT,
   SUBH_DHAN_LABH_PERCENTAGE_DISTRIBUTION,
+  GST_PERCENTAGE,
 } = require("../../../importantSetup");
 const {
   sendCreditMessage,
   sendDebitMessage,
 } = require("../../../Utils/MailService");
 const TransactionHistory = require("../../../Models/PiggyBox/transactionHistory");
+const PurchaseHistory = require("../../../Models/SubhDhanLabh/purchaseHistory");
 
 exports.getTicketCardList = async (req, res, next) => {
   try {
@@ -211,6 +213,18 @@ exports.activateTicketCard = async (req, res, next) => {
         { transaction }
       );
     }
+
+    const gstPercentage=(1+GST_PERCENTAGE/100)
+    const actualAmount=ticketCard.price/(gstPercentage)
+    const gstAmount=ticketCard.price-actualAmount;
+
+    await PurchaseHistory.create({
+      UserId:userId,
+      type:ticketCard.title,
+      description:"Purchased!",
+      amount:ticketCard.price,
+      gstAmount:gstAmount
+    },{transaction})
 
     const userCurrentTicketCard = await userTicketCard.update(
       {
