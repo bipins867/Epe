@@ -9,4 +9,4 @@ exports.baseDir=__dirname;
 
 exports.SUBH_DHAN_LABH_PERCENTAGE_DISTRIBUTION=70
 exports.SUBH_DHAN_LABH_USER_COUNT=3
-exports.GST_PERCENTAGE=28
+exports.GST_PERCENTAGE=18 //18%

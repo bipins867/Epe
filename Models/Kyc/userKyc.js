@@ -16,7 +16,7 @@ const UserKyc = sequelize.define(
     status: {
       type: Sequelize.STRING,
       allowNull: false,
-      default: "Initiated",
+      default: "Pending",
     },
     userUrl: {
       type: Sequelize.STRING,
@@ -42,7 +42,7 @@ const UserKyc = sequelize.define(
     panStatus: {
       type: Sequelize.STRING,
       allowNull: false,
-      default: "Initiated",
+      default: "Pending",
     },
     panNumber: {
       type: Sequelize.STRING,

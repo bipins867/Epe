@@ -16,7 +16,7 @@ exports.postFormSubmit = async (req, res, next) => {
     const userKyc = await user.getUserKyc();
 
     if (userKyc) {
-      if (userKyc.status === "Pending") {
+      if (userKyc.status === "Review") {
         return res.status(402).json({ error: "Your KYC is under review!" });
       } else if (userKyc.status === "Verified") {
         return res.status(402).json({ error: "KYC is already verified!" });
@@ -85,7 +85,7 @@ exports.postFormSubmit = async (req, res, next) => {
       aadharFrontUrl,
       aadharBackUrl,
       userUrl,
-      status: "Pending",
+      status: "Review",
     };
 
     // Check for duplicate Aadhaar or PAN numbers
@@ -243,7 +243,7 @@ exports.updatePanDetails = async (req, res, next) => {
       if (userKyc.status !== "Verified") {
         return res.status(404).json({ error: "User must be KYC verified!" });
       }
-      if (userKyc.panStatus === "Pending") {
+      if (userKyc.panStatus === "Review") {
         return res.status(402).json({ error: "Your PAN is under review!" });
       } else if (userKyc.panStatus === "Verified") {
         return res.status(402).json({ error: "PAN is already verified!" });
@@ -291,7 +291,7 @@ exports.updatePanDetails = async (req, res, next) => {
 
     const panUrl = panDirUrl + saveFile(panFile, panDir, `${candidateId}_pan`);
 
-    const obj = { panNumber: req.body.panNumber, panUrl, panStatus: "Pending" };
+    const obj = { panNumber: req.body.panNumber, panUrl, panStatus: "Review" };
 
     // Check for duplicate Aadhaar or PAN numbers
     const duplicateKyc = await UserKyc.findOne({

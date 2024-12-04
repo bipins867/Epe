@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database'); // Adjust the path to your database configuration
+const sequelize = require("../../database"); // Make sure to replace with your actual sequelize instance
 
 const PurchaseHistory = sequelize.define('PurchaseHistory', {
   id: {
