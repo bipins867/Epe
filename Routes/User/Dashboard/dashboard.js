@@ -4,8 +4,8 @@ const dashboardController=require('../../../Controller/Users/Dashboard/dashboard
 
 const router=express.Router();
 
-router.get('/info',dashboardController.getUserDasboardInfo)
-
+router.get('/getUserDetails',dashboardController.getUserDetails);
+router.post('/updateUserDetails',dashboardController.updateUserDetails);
 
 
 module.exports=router;

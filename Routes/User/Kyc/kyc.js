@@ -41,6 +41,8 @@ router.post(
 
 router.get("/userKycAgreementInfo", kycController.getUserAgreementInfo);
 router.get("/acceptUserAgreement", kycController.acceptUserAgreement);
-router.get('/kycAndPanInfo',kycController.getUserKycAndPanInfo)
+router.get('/kycInfo',kycController.getUserKycInfo)
+router.get('/panInfo',kycController.getUserPanInfo)
+
 
 module.exports = router;
